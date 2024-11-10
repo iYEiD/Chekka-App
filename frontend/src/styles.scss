@@ -1,1 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color-1: #e7f9f6;
+  --primary-color-2: #c4f0e9;
+  --primary-color-3: #96e5d7;
+  --primary-color-4: #65d9c4;
+  --primary-color-5: #37cdb3;
+  --primary-color-6: #0bc2a2;
+  --primary-color-7: #09a58a;
+  --primary-color-8: #088a73;
+  --primary-color-9: #066f5c;
+  --primary-color-10: #055749;
+
+  --secondary-color-1: #f0f1f3;
+  --secondary-color-2: #dadde2;
+  --secondary-color-3: #bdc2cb;
+  --secondary-color-4: #9fa5b2;
+  --secondary-color-5: #828a9b;
+  --secondary-color-6: #667085;
+  --secondary-color-7: #575f71;
+  --secondary-color-8: #48505e;
+  --secondary-color-9: #3a404c;
+  --secondary-color-10: #2e323c;
+
+  --error-color: #ff0000;
+  --error-bg-color: #ffe6e6;
+}
+
+body {
+  font-family: 'Rubik', sans-serif;
+  margin: 0;
+}
