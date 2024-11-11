@@ -10,11 +10,17 @@ export class AuthApiService {
   http = inject(HttpClient)
   baseUrl = `${environment.backendUrl}`
   signupUrl = `${this.baseUrl}/signup`;
+  loginUrl = `${this.baseUrl}/login`;
 
   constructor() { }
 
   signup(userInfo: any): Observable<any> {
     console.log(userInfo)
     return this.http.post(this.signupUrl, userInfo)
+  }
+
+  login(loginCredentials: any): Observable<any> {
+    console.log(loginCredentials)
+    return this.http.post(this.loginUrl, loginCredentials)
   }
 }

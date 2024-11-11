@@ -1,5 +1,6 @@
-import {Component, signal, WritableSignal} from '@angular/core';
+import {Component, inject, signal, WritableSignal} from '@angular/core';
 import {Validators} from "../../../helpers/validators";
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
   selector: 'app-page',
@@ -8,6 +9,7 @@ import {Validators} from "../../../helpers/validators";
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+  authService = inject(AuthService);
   passwordVisible: boolean = false;
 
   email = signal('');
@@ -36,7 +38,7 @@ export class LoginComponent {
         email: this.email(),
         password: this.password(),
       }
-      console.log(loginCredentials);
+      this.authService.login(loginCredentials)
     }
   }
 }
