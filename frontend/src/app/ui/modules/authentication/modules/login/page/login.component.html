@@ -1,0 +1,54 @@
+<div class="flex flex-col bg-white rounded-lg px-16 py-8">
+  <div class="mb-5 flex flex-col items-center">
+    <div class="text-2xl font-medium mb-1">Welcome Back</div>
+    <div class="text-sm text-secondary-7">Glad to see you again!</div>
+    <div class="text-sm text-secondary-7">Login to your account below</div>
+  </div>
+
+  <button nz-button nzSize="large" class="!flex items-center justify-center !text-base mb-7 !w-80">
+    <i class="bi bi-google"></i>
+    <div class="ml-2.5">Continue with Gmail</div>
+  </button>
+
+  <div class="mb-3 email-div">
+    <div class="text-sm mb-1">Email*</div>
+    <input [ngClass]="!isEmailValid() ? '!border-error': null" nz-input [value]="email()" (input)="onInputChange($event, email)" type="email" placeholder="Enter your email" />
+    @if (!isEmailValid()) {
+      <div class="flex text-error text-xs mt-0.5">
+        <i class="bi bi-exclamation-circle-fill mr-1"></i>
+        <div>Invalid email format</div>
+      </div>
+    }
+  </div>
+
+  <div class="password-div">
+    <div class="text-sm mb-1">Password*</div>
+
+    <nz-input-group [nzSuffix]="passwordToggle">
+      <input
+        nz-input
+        nzSize="large"
+        [value]="password()"
+        (input)="onInputChange($event, password)"
+        [type]="passwordVisible ? 'text' : 'password'"
+        placeholder="Enter your password"
+      />
+    </nz-input-group>
+    <ng-template #passwordToggle>
+      <i
+        [class]="!passwordVisible ? 'bi bi-eye-slash' : 'bi bi-eye'"
+        (click)="togglePasswordVisibility()"
+        class="cursor-pointer toggle-password-icon"
+      ></i>
+    </ng-template>
+  </div>
+
+  <div class="mt-8">
+    <button (click)="onLoginClick()" nz-button nzType="primary" class="!w-full !h-10">Login</button>
+  </div>
+
+  <div class="flex justify-center mt-3">
+    <div class="text-secondary-7">Don't have an account?</div>
+    <a routerLink="/auth/choose-signup-method" class="ml-1">Sign up for free</a>
+  </div>
+</div>

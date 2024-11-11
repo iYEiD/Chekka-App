@@ -1,0 +1,15 @@
+.toggle-password-icon {
+  transition: color 0.4s ease;
+}
+
+.toggle-password-icon:hover {
+  color: var(--primary-color-6)
+}
+
+.password-div ::ng-deep .ant-input-affix-wrapper {
+  height: 40px !important;
+}
+
+.email-div > input {
+  height: 40px !important;
+}

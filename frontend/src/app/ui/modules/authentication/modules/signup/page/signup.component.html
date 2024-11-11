@@ -1,4 +1,4 @@
-<div class="flex flex-col bg-white rounded-lg px-10 py-12">
+<div class="flex flex-col bg-white rounded-lg p-12">
   <div class="mb-6">
     <div class="text-2xl font-medium">Sign up</div>
     <div class="text-sm text-secondary-7">Enter your details below to create your account and get started</div>
@@ -8,7 +8,7 @@
     <div class="flex justify-between mb-4">
       <div class="mr-5">
         <div class="text-sm mb-1">First Name*</div>
-        <input [ngClass]="!isFirstNameValid() ? '!border-error': null" nz-input [value]="firstName()" (input)="onInputChange($event, firstName)" placeholder="Enter your first name" />
+        <input class="input-height" [ngClass]="!isFirstNameValid() ? '!border-error': null" nz-input [value]="firstName()" (input)="onInputChange($event, firstName)" placeholder="Enter your first name" />
         @if (!isFirstNameValid()) {
           <div class="flex text-error text-xs mt-0.5">
             <i class="bi bi-exclamation-circle-fill mr-1"></i>
@@ -18,7 +18,7 @@
       </div>
       <div>
         <div class="text-sm mb-1">Last Name*</div>
-        <input [ngClass]="!isLastNameValid() ? '!border-error': null" nz-input [value]="lastName()" (input)="onInputChange($event, lastName)" placeholder="Enter your last name" />
+        <input class="input-height" [ngClass]="!isLastNameValid() ? '!border-error': null" nz-input [value]="lastName()" (input)="onInputChange($event, lastName)" placeholder="Enter your last name" />
         @if (!isLastNameValid()) {
           <div class="flex text-error text-xs mt-0.5">
             <i class="bi bi-exclamation-circle-fill mr-1"></i>
@@ -30,7 +30,7 @@
     <div class="flex justify-between mb-4">
       <div class="mr-5">
         <div class="text-sm mb-1">Email*</div>
-        <input [ngClass]="!isEmailValid() ? '!border-error': null" nz-input [value]="email()" (input)="onInputChange($event, email)" type="email" placeholder="Enter your email" />
+        <input class="input-height" [ngClass]="!isEmailValid() ? '!border-error': null" nz-input [value]="email()" (input)="onInputChange($event, email)" type="email" placeholder="Enter your email" />
         @if (!isEmailValid()) {
           <div class="flex text-error text-xs mt-0.5">
             <i class="bi bi-exclamation-circle-fill mr-1"></i>
@@ -40,7 +40,7 @@
       </div>
       <div>
         <div class="text-sm mb-1">Phone Number</div>
-        <input [ngClass]="!isPhoneValid() ? '!border-error': null" nz-input [value]="phone()" (input)="onInputChange($event, phone)" placeholder="Enter your phone number" />
+        <input class="input-height" [ngClass]="!isPhoneValid() ? '!border-error': null" nz-input [value]="phone()" (input)="onInputChange($event, phone)" placeholder="Enter your phone number" />
         @if (!isPhoneValid()) {
           <div class="flex text-error text-xs mt-0.5">
             <i class="bi bi-exclamation-circle-fill mr-1"></i>
@@ -49,7 +49,7 @@
         }
       </div>
     </div>
-    <div class="flex justify-between mb-8">
+    <div class="flex justify-between mb-8 password-div">
       <div class="mr-5">
         <div class="flex">
           <div class="text-sm mb-1 mr-1.5">Password*</div>
@@ -85,7 +85,7 @@
       </div>
       <div>
         <div class="text-sm mb-1">Confirm Password*</div>
-        <input [ngClass]="!doPasswordsMatch() && isPasswordValid() ? '!border-error': null" nz-input [value]="confirmPassword()" (input)="onInputChange($event, confirmPassword)" type="password" placeholder="Confirm password" />
+        <input class="input-height" [ngClass]="!doPasswordsMatch() && isPasswordValid() ? '!border-error': null" nz-input [value]="confirmPassword()" (input)="onInputChange($event, confirmPassword)" type="password" placeholder="Confirm password" />
         @if (!doPasswordsMatch() && isPasswordValid()) {
           <div class="flex text-error text-xs mt-0.5">
             <i class="bi bi-exclamation-circle-fill mr-1"></i>
@@ -96,16 +96,16 @@
     </div>
     <div class="flex justify-between">
       <div class="mr-5">
-        <button routerLink="/auth/choose-signup-method" nz-button class="back-button">Back</button>
+        <button routerLink="/auth/choose-signup-method" nz-button class="back-button !h-10">Back</button>
       </div>
       <div>
-        <button (click)="onSignUpClick()" nz-button nzType="primary" class="signin-button">Sign in</button>
+        <button (click)="onSignUpClick()" nz-button nzType="primary" class="signin-button !h-10">Sign up</button>
       </div>
     </div>
   </div>
 
   <div class="flex justify-center mt-3">
-    <div>Already have an account?</div>
-    <a class="ml-1">Log in</a>
+    <div class="text-secondary-7">Already have an account?</div>
+    <a routerLink="/auth/login" class="ml-1">Log in</a>
   </div>
 </div>

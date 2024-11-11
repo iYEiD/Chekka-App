@@ -23,3 +23,11 @@ input, nz-input-group {
 .toggle-password-icon:hover {
   color: var(--primary-color-6)
 }
+
+.password-div ::ng-deep .ant-input-affix-wrapper {
+  height: 40px !important;
+}
+
+.input-height {
+  height: 40px !important;
+}
