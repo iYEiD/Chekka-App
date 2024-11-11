@@ -1,5 +1,6 @@
-import {Component, signal, computed, effect, WritableSignal} from '@angular/core';
-import {Validators} from "../../helpers/validators";
+import {Component, signal, computed, effect, WritableSignal, inject} from '@angular/core';
+import {Validators} from "../../../helpers/validators";
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
   selector: 'app-page',
@@ -8,7 +9,8 @@ import {Validators} from "../../helpers/validators";
   styleUrl: './signup.component.scss'
 })
 export class SignupComponent {
-  isEmailSelected: boolean = false;
+  authService = inject(AuthService);
+
   passwordVisible: boolean = false;
 
   isEmailValid = signal<boolean>(true)
@@ -25,24 +27,11 @@ export class SignupComponent {
   password = signal('');
   confirmPassword = signal('');
 
-  constructor() {
-    effect(() => {
-      const test = this.firstName()
-      console.log(test)
-    });
-  }
+  constructor() {}
 
   onInputChange(event: Event, field: WritableSignal<string>): void {
     const input = event.target as HTMLInputElement;
     field.set(input.value);
-  }
-
-  continueWithEmail() {
-    this.isEmailSelected = true;
-  }
-
-  backButtonClicked() {
-    this.isEmailSelected = false;
   }
 
   togglePasswordVisibility(): void {
@@ -70,9 +59,7 @@ export class SignupComponent {
         phone: this.phone(),
         password: this.password(),
       }
-      console.log("Form is valid", userInfo)
-    } else {
-      console.log("invalid form")
+      this.authService.signUp(userInfo)
     }
   }
 }
