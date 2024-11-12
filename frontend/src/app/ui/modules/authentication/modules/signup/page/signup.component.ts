@@ -58,6 +58,7 @@ export class SignupComponent {
         email: this.email(),
         phone: this.phone(),
         password: this.password(),
+        confirmPassword: this.confirmPassword(),
       }
       this.authService.signUp(userInfo)
     }

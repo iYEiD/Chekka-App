@@ -18,12 +18,18 @@ export class AuthApiService {
   constructor() { }
 
   signup(userInfo: any): Observable<any> {
-    console.log(userInfo)
-    return this.http.post(this.signupUrl, userInfo)
+    let mappedUserInfo = {
+      first_name: userInfo.firstName,
+      last_name: userInfo.lastName,
+      email: userInfo.email,
+      password: userInfo.password,
+      password_confirmation: userInfo.confirmPassword,
+      phone_number: userInfo.phone,
+    }
+    return this.http.post(this.signupUrl, mappedUserInfo)
   }
 
   login(loginCredentials: LoginCredentialsModel): Observable<any> {
-    console.log(loginCredentials)
     return this.http.post(this.loginUrl, loginCredentials)
   }
 

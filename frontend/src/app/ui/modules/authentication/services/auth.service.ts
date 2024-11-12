@@ -18,15 +18,19 @@ export class AuthService {
 
   isLoggedIn = signal<boolean>(false)
   user = signal<UserViewModel | null>(null)
+
   constructor() { }
 
   signUp(signupUserInfo: any) {
     this.authApiService.signup(signupUserInfo).subscribe({
       next: (res) => {
+        console.log(res)
         this.snackBarService.openSnackBar(SnackbarTypeEnums.SUCCESS, 'Successfully signed up! Please log in')
+        this.router.navigate(['/auth/login']);
       },
       error: (error) => {
-        this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, 'Failed to register account')
+        console.log(error)
+        this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, error.error.message)
       }
     })
   }
@@ -48,7 +52,7 @@ export class AuthService {
 
   logout() {
     this.isLoggedIn.set(false);
-    // this.usersMS.user = {id: "", username: "",roles: []}
+    this.user.set(null)
     this.jwtService.clearTokens();
     this.router.navigateByUrl('auth').then(() => {});
   }
