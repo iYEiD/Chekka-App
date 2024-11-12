@@ -2,6 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {AuthApiService} from "./auth-api.service";
 import {SnackbarService} from "../../../../common/services/snack-bar/services/snackbar.service";
 import {SnackbarTypeEnums} from "../../../../common/services/snack-bar/enum/snackbar-type.enums";
+import {error} from "@ant-design/icons-angular";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,17 @@ export class AuthService {
       },
       error: (error) => {
         this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, 'Failed to register account')
+      }
+    })
+  }
+
+  login(loginCredentials: any) {
+    this.authApiService.login(loginCredentials).subscribe({
+      next: (res) => {
+
+      },
+      error: (error) => {
+
       }
     })
   }
