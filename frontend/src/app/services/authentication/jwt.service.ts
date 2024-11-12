@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { jwtDecode } from "jwt-decode";
-import { StorageService } from './storage.service';
-import { AuthenticationMapper } from 'src/app/entities/authentication/mapper/authentication.mapper';
-import { ParsedTokenDtoModel } from '../../models/interfaces/parsed-token.models';
+import {AuthenticationMapper} from "../../mappers/authentication/authentication.mapper";
+import {ParsedTokenDtoModel} from "../../models/authentication/interfaces/authentication.models";
 
 
 @Injectable({
@@ -10,14 +9,14 @@ import { ParsedTokenDtoModel } from '../../models/interfaces/parsed-token.models
 })
 export class JwtService {
 
-  constructor(private storageService: StorageService) { }
+  constructor() { }
 
   decodedToken?: ParsedTokenDtoModel;
 
   setTokens(accessToken: string, refreshToken: string) {
     if (accessToken && refreshToken) {
-      this.storageService.setLocalStorage('accessToken', accessToken);
-      this.storageService.setLocalStorage('refreshToken', refreshToken);
+      localStorage.setItem('accessToken', accessToken)
+      localStorage.setItem('refreshToken', refreshToken)
     }
   }
 
@@ -27,15 +26,16 @@ export class JwtService {
   }
 
   getAccessToken() {
-    return this.storageService.getLocalStorage('accessToken');
+    return localStorage.getItem('accessToken')
   }
 
   getRefreshToken() {
-    return this.storageService.getLocalStorage('refreshToken');
+    return localStorage.getItem('refreshToken')
+
   }
 
   updateAccessToken(newToken: string) {
-    this.storageService.setLocalStorage('accessToken', newToken);
+    localStorage.setItem('accessToken', newToken)
   }
 
   decodeToken(token: string) {
@@ -43,11 +43,6 @@ export class JwtService {
       return AuthenticationMapper.fromTokenDTOModelToParsedToken(jwtDecode(token));
     }
     return null;
-  }
-
-  getRoles() {
-    this.decodedToken = this.decodeToken(this.getAccessToken()!)!
-    return this.decodedToken ? this.decodedToken?.roles : null
   }
 
   getAccessTokenRemainingTime() {

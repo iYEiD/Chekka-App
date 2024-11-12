@@ -1,24 +1,21 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { HelperFunctions } from '../../common/helper-functions';
 import { JwtService } from '../services/authentication/jwt.service';
-import { AuthenticationMiddlewareService } from 'src/app/entities/authentication/middleware/authentication-middleware.service';
+import {AuthService} from "../ui/modules/authentication/services/auth.service";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(
-    private router: Router,
-    private jwtService: JwtService,
+  router = inject(Router)
+  jwtService = inject(JwtService);
 
-    private authenticationMS: AuthenticationMiddlewareService
-  ) {}
+  constructor() {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
