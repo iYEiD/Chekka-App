@@ -1,0 +1,12 @@
+.image-div {
+  height: calc(100% - 80px);
+  margin-bottom: 12px;
+}
+
+::ng-deep .slick-dots button {
+  pointer-events: auto; /* Ensure buttons are clickable */
+}
+
+.selected {
+  color: #FF385C
+}
