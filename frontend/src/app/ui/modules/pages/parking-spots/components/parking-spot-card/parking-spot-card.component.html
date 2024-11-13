@@ -1,6 +1,6 @@
 <div (click)="cardClickEmitterFunction($event)" class="w-full h-full rounded-3xl cursor-pointer relative">
   <div class="image-div">
-    <nz-carousel class="rounded-lg">
+    <nz-carousel class="rounded-lg carousel">
       <div nz-carousel-content *ngFor="let image of parkingSpot.images">
         <img class="h-full" [src]='image' alt=""/>
       </div>
@@ -8,11 +8,11 @@
   </div>
 
   <div class="h-20">
-    <div class="flex justify-between">
+    <div class="flex justify-between items-center">
       <div class="text-secondary-10 font-medium">{{parkingSpot.district}}, {{parkingSpot.city}}</div>
-      <div class="flex text-secondary-10">
+      <div class="flex items-center text-secondary-10">
         <i class="bi bi-star-fill"></i>
-        <div>{{parkingSpot.rating}}</div>
+        <div class="ml-1">{{parkingSpot.rating}}</div>
       </div>
     </div>
     <div class="text-secondary-6 mb-3">{{parkingSpot.mainDescription}}</div>
