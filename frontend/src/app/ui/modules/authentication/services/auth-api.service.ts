@@ -2,7 +2,10 @@ import { Injectable, inject } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {map, Observable} from "rxjs";
 import {environment} from "../../../../../environments/environment";
-import {LoginCredentialsModel, LoginDTOModel} from "../../../../models/authentication/interfaces/authentication.models";
+import {
+  LoginCredentialsModel,
+  LoginDTOModel, UserSignupInfoDTOModel,
+} from "../../../../models/authentication/interfaces/authentication.models";
 import {AuthenticationMapper} from "../../../../mappers/authentication/authentication.mapper";
 
 @Injectable({
@@ -17,16 +20,8 @@ export class AuthApiService {
 
   constructor() { }
 
-  signup(userInfo: any): Observable<any> {
-    let mappedUserInfo = {
-      first_name: userInfo.firstName,
-      last_name: userInfo.lastName,
-      email: userInfo.email,
-      password: userInfo.password,
-      password_confirmation: userInfo.confirmPassword,
-      phone_number: userInfo.phone,
-    }
-    return this.http.post(this.signupUrl, mappedUserInfo)
+  signup(userSignupInfo: UserSignupInfoDTOModel): Observable<any> {
+    return this.http.post(this.signupUrl, userSignupInfo)
   }
 
   login(loginCredentials: LoginCredentialsModel): Observable<any> {

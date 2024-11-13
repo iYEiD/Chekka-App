@@ -1,7 +1,7 @@
 import {
   DecodedTokenDTOModel, LoginDTOModel, LoginViewModel, ParsedTokenDtoModel,
   TokenDtoModel,
-  TokenViewModel, UserDTOModel, UserViewModel
+  TokenViewModel, UserDTOModel, UserSignupInfoDTOModel, UserSignupInfoViewModel, UserViewModel
 } from "../../models/authentication/interfaces/authentication.models";
 
 
@@ -39,5 +39,15 @@ export class AuthenticationMapper {
       lastName: user.last_name,
       email: user.email,
     }
+  }
+  public static fromUserSignupInfoViewModelToDTOModel(user: UserSignupInfoViewModel): UserSignupInfoDTOModel {
+      return {
+        first_name: user.firstName,
+        last_name: user.lastName,
+        email: user.email,
+        password: user.password,
+        phone_number: user.phoneNumber,
+        password_confirmation: user.confirmPassword
+      }
   }
 }

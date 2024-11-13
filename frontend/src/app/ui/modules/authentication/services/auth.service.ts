@@ -4,7 +4,11 @@ import {SnackbarService} from "../../../../services/snack-bar/services/snackbar.
 import {SnackbarTypeEnums} from "../../../../services/snack-bar/enum/snackbar-type.enums";
 import {JwtService} from "../../../../services/authentication/jwt.service";
 import {Router} from "@angular/router";
-import {LoginCredentialsModel, UserViewModel} from "../../../../models/authentication/interfaces/authentication.models";
+import {
+  LoginCredentialsModel,
+  UserSignupInfoViewModel,
+  UserViewModel
+} from "../../../../models/authentication/interfaces/authentication.models";
 import {AuthenticationMapper} from "../../../../mappers/authentication/authentication.mapper";
 
 @Injectable({
@@ -21,15 +25,13 @@ export class AuthService {
 
   constructor() { }
 
-  signUp(signupUserInfo: any) {
-    this.authApiService.signup(signupUserInfo).subscribe({
+  signUp(signupUserInfo: UserSignupInfoViewModel) {
+    this.authApiService.signup(AuthenticationMapper.fromUserSignupInfoViewModelToDTOModel(signupUserInfo)).subscribe({
       next: (res) => {
-        console.log(res)
-        this.snackBarService.openSnackBar(SnackbarTypeEnums.SUCCESS, 'Successfully signed up! Please log in')
         this.router.navigate(['/auth/login']);
+        this.snackBarService.openSnackBar(SnackbarTypeEnums.SUCCESS, 'Successfully signed up! Please log in')
       },
       error: (error) => {
-        console.log(error)
         this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, error.error.message)
       }
     })

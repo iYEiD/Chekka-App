@@ -3,6 +3,24 @@ export interface LoginCredentialsModel {
   password: string;
 }
 
+export interface UserSignupInfoViewModel {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phoneNumber: string;
+}
+
+export interface UserSignupInfoDTOModel {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+  phone_number: string;
+}
+
 export interface LoginDTOModel {
   tokens: TokenDtoModel
   user: UserDTOModel
