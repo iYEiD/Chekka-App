@@ -12,3 +12,9 @@ export interface ParkingSpotViewModel {
 export interface ParkingSpotDTOModel {
 
 }
+
+export interface AmenitiesModel {
+  name: string;
+  icon: string;
+  isSelected: boolean;
+}

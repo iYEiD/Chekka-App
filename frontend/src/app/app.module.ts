@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {NzModalService} from "ng-zorro-antd/modal";
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     HttpClientModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [NzModalService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
