@@ -26,12 +26,17 @@
         <ng-container *nzModalContent>
           <div>
             <div>
-              <div class="text-xl font-medium text-secondary-10">Selected</div>
-              <div class="text-secondary-6 mt-1">No selected filters</div>
+              <div class="text-xl font-medium text-secondary-10 mb-1">Selected</div>
+              <div class="text-secondary-6">No selected filters</div>
             </div>
             <nz-divider></nz-divider>
-            <div class="text-xl font-medium text-secondary-10">Price Range</div>
-            <div class="text-secondary-6 mt-1 mb-8">Hourly prices in US dollars ($) before fees and taxes</div>
+            <div>
+              <div class="text-xl font-medium text-secondary-10 mb-2">Type of vehicle</div>
+              <nz-segmented [nzOptions]="vehicleTypeOptions" [nzBlock]="true"></nz-segmented>
+            </div>
+            <nz-divider></nz-divider>
+            <div class="text-xl font-medium text-secondary-10 mb-1">Price Range</div>
+            <div class="text-secondary-6 mb-8">Hourly prices in US dollars ($) before fees and taxes</div>
             <nz-slider nzRange [(ngModel)]="priceRange" [nzMin]="minPriceFilter()" [nzMax]="maxPriceFilter()"></nz-slider>
 
             <div class="flex justify-between mt-4">
@@ -55,13 +60,27 @@
                 ></nz-input-number>
               </div>
             </div>
+            <nz-divider></nz-divider>
+            <div>
+              <div class="text-xl font-medium text-secondary-10 mb-2">Amenities</div>
+              <div class="flex flex-wrap gap-y-3 gap-x-1.5">
+                @for (amenity of amenities; track amenity) {
+                  <div
+                    (click)="updateAmenityIsSelectedStatus(amenity.name)"
+                    class="flex items-center rounded-3xl py-1.5 px-4 !cursor-pointer h-[46px] border border-secondary-2 hover:border-black transition-colors duration-200 ease-in-out"
+                  [ngClass]="amenity.isSelected ? 'border-2 border-black' : null">
+                    {{amenity.name}}
+                  </div>
+                }
+              </div>
+            </div>
           </div>
         </ng-container>
 
         <div *nzModalFooter class="flex justify-between">
           <button
             class="py-1 px-[15px] h-8 rounded-md
-            bg-transparent hover:bg-[var(--secondary-color-1)] transition-colors duration-200 ease-in-out"
+            bg-transparent hover:bg-secondary-1 transition-colors duration-200 ease-in-out"
           >
             Clear All
           </button>
@@ -70,25 +89,32 @@
       </nz-modal>
     </div>
 
-    <div
-      class="flex items-center border border-secondary-2 rounded-3xl p-1.5 cursor-pointer user-dropdown"
-      nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" [(nzVisible)]="isDropdownOpen" (nzVisibleChange)="onDropdownVisibleChange($event)"
-      [class.open]="isDropdownOpen" nzPlacement="bottomRight"
-    >
-      <i class="bi bi-list text-2xl mr-3"></i>
-      <nz-avatar nzIcon="user"></nz-avatar>
+    <div class="flex items-center">
+      <div class="flex items-center justify-center rounded-3xl py-1.5 px-3 !cursor-pointer ml-4 h-[46px]
+            bg-transparent hover:bg-[var(--secondary-color-1)] transition-colors duration-200 ease-in-out">
+        Switch to hosting
+      </div>
+      <div
+        class="flex items-center border border-secondary-2 rounded-3xl p-1.5 cursor-pointer ml-4 user-dropdown"
+        nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" [(nzVisible)]="isDropdownOpen" (nzVisibleChange)="onDropdownVisibleChange($event)"
+        [class.open]="isDropdownOpen" nzPlacement="bottomRight"
+      >
+        <i class="bi bi-list text-2xl mr-3"></i>
+        <nz-avatar nzIcon="user"></nz-avatar>
+      </div>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item>Map</li>
+          <div nz-menu-divider></div>
+          <li nz-menu-item>Dashboard</li>
+          <li nz-menu-item>Account</li>
+          <div nz-menu-divider></div>
+          <li nz-menu-item>Help Center</li>
+          <li class="!text-error" nz-menu-item>Logout</li>
+        </ul>
+      </nz-dropdown-menu>
     </div>
-    <nz-dropdown-menu #menu="nzDropdownMenu">
-      <ul nz-menu>
-        <li nz-menu-item>Map</li>
-        <div nz-menu-divider></div>
-        <li nz-menu-item>Dashboard</li>
-        <li nz-menu-item>Account</li>
-        <div nz-menu-divider></div>
-        <li nz-menu-item>Help Center</li>
-        <li class="!text-error" nz-menu-item>Logout</li>
-      </ul>
-    </nz-dropdown-menu>
+
   </div>
   <div class="px-16 mt-8">
     <router-outlet></router-outlet>

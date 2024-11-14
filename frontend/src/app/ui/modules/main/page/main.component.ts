@@ -11,6 +11,7 @@ export class MainComponent {
   @ViewChild('header') header!: ElementRef;
   isModalVisible = false;
   isDropdownOpen = false;
+  vehicleTypeOptions = ["Any Type", "Car", "Motorcycle"]
   minPriceFilter = signal<number>(1)
   maxPriceFilter = signal<number>(100)
   priceRange = signal<number[]>([this.minPriceFilter(),this.maxPriceFilter()])
@@ -56,7 +57,7 @@ export class MainComponent {
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event: Event): void {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollTop = document.documentElement.scrollTop;
     if (scrollTop > 0) {
       this.header.nativeElement.classList.add('scrolled');
     } else {
@@ -85,5 +86,11 @@ export class MainComponent {
     this.isDropdownOpen = visible;
   }
 
-  protected readonly close = close;
+  updateAmenityIsSelectedStatus(amenityName: string) {
+    const amenity = this.amenities.find(a => a.name === amenityName);
+    if (amenity) {
+      amenity.isSelected = !amenity.isSelected;
+    }
+  }
+
 }

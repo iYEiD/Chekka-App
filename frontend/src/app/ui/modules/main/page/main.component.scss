@@ -40,3 +40,11 @@ li {
   background-color: var(--secondary-color-1) !important;
 }
 
+::ng-deep .ant-input-number-handler-wrap {
+  display: none;
+}
+
+::ng-deep .ant-segmented-item, .ant-segmented-item:hover {
+  padding: 8px 4px;
+}
+

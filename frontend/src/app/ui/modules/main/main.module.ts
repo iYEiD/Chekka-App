@@ -13,6 +13,7 @@ import {NzSliderModule} from "ng-zorro-antd/slider";
 import {FormsModule} from "@angular/forms";
 import {NzDividerModule} from "ng-zorro-antd/divider";
 import {NzInputNumberModule} from "ng-zorro-antd/input-number";
+import {NzSegmentedModule} from "ng-zorro-antd/segmented";
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import {NzInputNumberModule} from "ng-zorro-antd/input-number";
     NzSliderModule,
     FormsModule,
     NzDividerModule,
-    NzInputNumberModule
+    NzInputNumberModule,
+    NzSegmentedModule
   ]
 })
 export class MainModule { }
