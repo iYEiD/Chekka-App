@@ -48,3 +48,8 @@ li {
   padding: 8px 4px;
 }
 
+::ng-deep .ant-modal {
+  padding: 0 !important;
+  top: 50px !important;
+}
+

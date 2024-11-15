@@ -1,5 +1,17 @@
-import {Component, computed, ElementRef, HostListener, signal, ViewChild} from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  HostListener,
+  inject,
+  signal,
+  untracked,
+  ViewChild
+} from '@angular/core';
 import {AmenitiesModel} from "../../pages/parking-spots/models/interfaces/parking-spots.model";
+import {HelperFunctions} from "../../../../common/helper-functions";
+import {ParkingSpotsService} from "../../pages/parking-spots/services/parking-spots.service";
 
 @Component({
   selector: 'app-page',
@@ -8,52 +20,95 @@ import {AmenitiesModel} from "../../pages/parking-spots/models/interfaces/parkin
   styleUrl: './main.component.scss'
 })
 export class MainComponent {
+  parkingSpotService = inject(ParkingSpotsService)
+
   @ViewChild('header') header!: ElementRef;
   isModalVisible = false;
   isDropdownOpen = false;
-  vehicleTypeOptions = ["Any Type", "Car", "Motorcycle"]
+  vehicleTypeOptions = [
+    {
+      label: "Any Type",
+      value: "any_type"
+    },
+    {
+      label: "Car",
+      value: "car"
+    },
+    {
+      label: "Motorcycle",
+      value: "motorcycle"
+    }
+  ]
   minPriceFilter = signal<number>(1)
   maxPriceFilter = signal<number>(100)
-  priceRange = signal<number[]>([this.minPriceFilter(),this.maxPriceFilter()])
+  priceRange = signal<number[] | null>(null)
   formatterDollar = (value: number): string => `$ ${value}`;
   formatterMaxDollar = (value: number): string => `$ ${value} +`;
 
-  amenities: AmenitiesModel[] = [
+  searchValue = signal<string | null>(null)
+  debouncedSearchValue = HelperFunctions.debouncedSignal(this.searchValue, 300)
+
+  selectedFilters = computed(() => {
+    return {
+      vehicle_type: this.vehicleType(),
+      price_range: this.priceRange(),
+      amenities: this.selectedAmenities()
+    }
+  })
+
+  vehicleType = signal("")
+
+  amenities = signal<AmenitiesModel[]>([
     {
-      name: "Covered",
+      label: "Covered",
+      value: "covered",
       icon: "",
       isSelected: false
     },
     {
-      name: "Security",
+      label: "Security",
+      value: "security",
       icon: "",
       isSelected: false
     },
     {
-      name: "EV Charging",
+      label: "EV Charging",
+      value: "ev_charging",
       icon: "",
       isSelected: false
     },
     {
-      name: "Handicap",
+      label: "Handicap",
+      value: "handicap",
       icon: "",
       isSelected: false
     },
     {
-      name: "Lighting",
+      label: "Lighting",
+      value: "lighting",
       icon: "",
       isSelected: false
     },
     {
-      name: "CCTV",
+      label: "CCTV",
+      value: "cctv",
       icon: "",
       isSelected: false
     }
-  ]
-
-  inputMinValueShown = computed(() => {
-    return '$' + this.minPriceFilter()
+  ])
+  selectedAmenities = computed(() => {
+    return this.amenities().filter(amenity => amenity.isSelected)
+      .map(amenity => amenity.value)
   })
+
+  constructor() {
+    effect(() => {
+      const debouncedValue = this.debouncedSearchValue()
+      untracked(() => {
+        this.fetchParkingSpots()
+      })
+    });
+  }
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event: Event): void {
@@ -65,20 +120,22 @@ export class MainComponent {
     }
   }
 
+  onVehicleTypeChange(value: number): void {
+    this.vehicleType.set(this.vehicleTypeOptions[value].value);
+  }
+
   onPriceChange(index: number, value: any): void {
-    const currentRange = [...this.priceRange()];
+    const currentRange = [...this.priceRange()!];
     currentRange[index] = value;
     this.priceRange.set(currentRange);
   }
 
   openModal() {
+    this.clearPriceRange()
     this.isModalVisible = true
   }
 
   closeModal() {
-    this.minPriceFilter.set(1)
-    this.maxPriceFilter.set(100)
-    this.priceRange.set([this.minPriceFilter(), this.maxPriceFilter()])
     this.isModalVisible = false
   }
 
@@ -87,10 +144,43 @@ export class MainComponent {
   }
 
   updateAmenityIsSelectedStatus(amenityName: string) {
-    const amenity = this.amenities.find(a => a.name === amenityName);
-    if (amenity) {
-      amenity.isSelected = !amenity.isSelected;
-    }
+    const updatedAmenities = this.amenities().map(a =>
+      a.value === amenityName ? { ...a, isSelected: !a.isSelected } : a
+    )
+    this.amenities.set(updatedAmenities)
+  }
+
+  fetchParkingSpots() {
+    this.isModalVisible = false
+    this.parkingSpotService.fetchParkingSports(this.selectedFilters())
+  }
+
+  clearAllFilters() {
+    this.clearSearchValue()
+    this.clearVehicleType()
+    this.clearSelectedAmenities()
+    this.clearPriceRange()
+    this.fetchParkingSpots()
+  }
+
+  clearVehicleType() {
+    this.vehicleType.set("any_type")
+  }
+
+  clearSelectedAmenities() {
+    this.amenities().forEach(amenity => {
+      amenity.isSelected = false
+    })
+  }
+
+  clearSearchValue() {
+    this.searchValue.set(null)
+  }
+
+  clearPriceRange() {
+    this.minPriceFilter.set(1)
+    this.maxPriceFilter.set(100)
+    this.priceRange.set([this.minPriceFilter(), this.maxPriceFilter()])
   }
 
 }

@@ -1,10 +1,12 @@
-import { Injectable, signal } from '@angular/core';
+import {inject, Injectable, signal} from '@angular/core';
 import {ParkingSpotViewModel} from "../models/interfaces/parking-spots.model";
+import {ParkingSpotsApiService} from "./parking-spots-api.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ParkingSpotsService {
+  parkingSpotsApiService = inject(ParkingSpotsApiService)
   parkingSpots = signal<ParkingSpotViewModel[]>([
     {
       id: "1",
@@ -149,5 +151,14 @@ export class ParkingSpotsService {
       )
     );
     // implement a backend endpoint as well to update the isFavorite field in the table
+  }
+
+  fetchParkingSports(filters: any) {
+    this.parkingSpotsApiService.fetchParkingSpots(filters).subscribe({
+      next: (res) => {
+      },
+      error: (err) => {
+      }
+    })
   }
 }
