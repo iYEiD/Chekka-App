@@ -25,23 +25,10 @@ export class MainComponent {
   @ViewChild('header') header!: ElementRef;
   isModalVisible = false;
   isDropdownOpen = false;
-  vehicleTypeOptions = [
-    {
-      label: "Any Type",
-      value: "any_type"
-    },
-    {
-      label: "Car",
-      value: "car"
-    },
-    {
-      label: "Motorcycle",
-      value: "motorcycle"
-    }
-  ]
+  vehicleTypeOptions = ["any_type", "car", "motorcycle"]
   minPriceFilter = signal<number>(1)
   maxPriceFilter = signal<number>(100)
-  priceRange = signal<number[] | null>(null)
+  priceRange = signal<number[] | null>([this.minPriceFilter(), this.maxPriceFilter()])
   formatterDollar = (value: number): string => `$ ${value}`;
   formatterMaxDollar = (value: number): string => `$ ${value} +`;
 
@@ -56,43 +43,39 @@ export class MainComponent {
     }
   })
 
-  vehicleType = signal("")
+  filterTagChips: string[] = []
+
+  vehicleType = signal<string>("any_type")
 
   amenities = signal<AmenitiesModel[]>([
     {
       label: "Covered",
       value: "covered",
-      icon: "",
       isSelected: false
     },
     {
       label: "Security",
       value: "security",
-      icon: "",
       isSelected: false
     },
     {
       label: "EV Charging",
       value: "ev_charging",
-      icon: "",
       isSelected: false
     },
     {
       label: "Handicap",
       value: "handicap",
-      icon: "",
       isSelected: false
     },
     {
       label: "Lighting",
       value: "lighting",
-      icon: "",
       isSelected: false
     },
     {
       label: "CCTV",
       value: "cctv",
-      icon: "",
       isSelected: false
     }
   ])
@@ -120,8 +103,8 @@ export class MainComponent {
     }
   }
 
-  onVehicleTypeChange(value: number): void {
-    this.vehicleType.set(this.vehicleTypeOptions[value].value);
+  onVehicleTypeChange(value: string): void {
+    this.vehicleType.set(value);
   }
 
   onPriceChange(index: number, value: any): void {
@@ -131,7 +114,6 @@ export class MainComponent {
   }
 
   openModal() {
-    this.clearPriceRange()
     this.isModalVisible = true
   }
 
@@ -151,7 +133,13 @@ export class MainComponent {
   }
 
   fetchParkingSpots() {
+    this.filterTagChips = []
     this.isModalVisible = false
+    this.vehicleType() !== "any_type" && this.vehicleType() ? this.filterTagChips.push(this.vehicleType()) : null
+    this.priceRange()![0] !== this.minPriceFilter() || this.priceRange()![1] !== this.maxPriceFilter() ?
+      this.filterTagChips.push("$" + this.minPriceFilter() + " - $" + this.maxPriceFilter()) : null
+    this.selectedAmenities().length > 0 ?
+      this.selectedAmenities().forEach(amenity => this.filterTagChips.push(amenity)) : null
     this.parkingSpotService.fetchParkingSports(this.selectedFilters())
   }
 
@@ -160,7 +148,6 @@ export class MainComponent {
     this.clearVehicleType()
     this.clearSelectedAmenities()
     this.clearPriceRange()
-    this.fetchParkingSpots()
   }
 
   clearVehicleType() {
@@ -168,9 +155,10 @@ export class MainComponent {
   }
 
   clearSelectedAmenities() {
-    this.amenities().forEach(amenity => {
-      amenity.isSelected = false
-    })
+    const updatedAmenities = this.amenities().map(amenity => {
+      return { ...amenity, isSelected: false };
+    });
+    this.amenities.set(updatedAmenities);
   }
 
   clearSearchValue() {

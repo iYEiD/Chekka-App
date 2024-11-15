@@ -53,3 +53,7 @@ li {
   top: 50px !important;
 }
 
+::ng-deep .ant-input-number-input {
+  text-align: center;
+}
+

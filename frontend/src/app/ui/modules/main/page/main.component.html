@@ -11,13 +11,18 @@
       <ng-template #prefixIconSearch>
         <span nz-icon nzType="search"></span>
       </ng-template>
-      <button
-        class="!flex ml-2 !px-2 !items-center border rounded-md border-secondary-2
-        hover:border-[var(--primary-color-6)] hover:text-[var(--primary-color-6)] transition-colors duration-200 ease-in-out"
-        (click)="openModal()">
-        <i class="bi bi-sliders mr-2"></i>
-        <div>Filters</div>
-      </button>
+      <nz-badge [nzCount]="filterTagChips.length"
+                class="!flex !items-center !ml-2 !px-2 border rounded-md border-secondary-2 cursor-pointer
+                hover:border-[var(--primary-color-6)]
+                hover:text-[var(--primary-color-6)]
+                transition-colors duration-200 ease-in-out"
+                (click)="openModal()"
+      >
+        <button class="!flex !items-center">
+          <i class="bi bi-sliders mr-2"></i>
+          <div>Filters</div>
+        </button>
+      </nz-badge>
       <nz-modal
         [(nzVisible)]="isModalVisible"
         nzTitle="Filters"
@@ -27,12 +32,19 @@
           <div>
             <div>
               <div class="text-xl font-medium text-secondary-10 mb-2">Type of vehicle</div>
-              <nz-segmented
-                [ngModel]="vehicleType()"
-                [nzOptions]="vehicleTypeOptions"
-                [nzBlock]="true"
-                (ngModelChange)="onVehicleTypeChange($event)">
-              </nz-segmented>
+              <div
+                class="grid grid-rows-1 grid-cols-3 border border-secondary-2 rounded-lg px-1 py-1 text-center"
+              >
+                @for (option of vehicleTypeOptions; track option) {
+                  <button
+                    class=" py-2 rounded-lg"
+                    (click)="onVehicleTypeChange(option)"
+                    [ngClass]="option === vehicleType() ? 'border border-black bg-secondary-1' : 'hover:bg-secondary-1 transition-colors duration-200 ease-in-out'"
+                  >
+                    {{option | snakeToTitleCase}}
+                  </button>
+                }
+              </div>
             </div>
             <nz-divider></nz-divider>
             <div class="text-xl font-medium text-secondary-10 mb-1">Price Range</div>
@@ -43,7 +55,7 @@
               <div class="flex flex-col justify-center items-center">
                 <div class="text-xs text-secondary-8">Minimum</div>
                 <nz-input-number
-                  class="!w-20 text-center"
+                  class="!w-20"
                   [ngModel]="priceRange()![0]"
                   (ngModelChange)="onPriceChange(0, $event)"
                   [nzFormatter]="formatterDollar"
@@ -53,7 +65,7 @@
               <div class="flex flex-col justify-center items-center">
                 <div class="text-xs text-secondary-8">Maximum</div>
                 <nz-input-number
-                  class="!w-20 text-center"
+                  class="!w-20"
                   [ngModel]="priceRange()![1]"
                   [nzFormatter]="priceRange()![1] === maxPriceFilter() ? formatterMaxDollar : formatterDollar"
                   (ngModelChange)="onPriceChange(1, $event)"
@@ -68,7 +80,7 @@
                   <div
                     (click)="updateAmenityIsSelectedStatus(amenity.value)"
                     class="flex items-center rounded-3xl py-1.5 px-4 !cursor-pointer h-[46px] border border-secondary-2 hover:border-black transition-colors duration-200 ease-in-out"
-                  [ngClass]="amenity.isSelected ? 'border-2 !border-black' : null">
+                  [ngClass]="amenity.isSelected ? 'border-2 !border-black !bg-secondary-1' : null">
                     {{amenity.label}}
                   </div>
                 }

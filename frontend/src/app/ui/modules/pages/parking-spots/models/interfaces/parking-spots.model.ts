@@ -16,6 +16,5 @@ export interface ParkingSpotDTOModel {
 export interface AmenitiesModel {
   label: string;
   value: string
-  icon: string;
   isSelected: boolean;
 }

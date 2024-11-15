@@ -7,13 +7,14 @@ import {NzInputModule} from "ng-zorro-antd/input";
 import {NzAvatarModule} from "ng-zorro-antd/avatar";
 import {NzButtonModule} from "ng-zorro-antd/button";
 import {NzIconModule} from "ng-zorro-antd/icon";
-import {NzModalModule, NzModalService} from "ng-zorro-antd/modal";
+import {NzModalModule} from "ng-zorro-antd/modal";
 import {NzDropDownModule} from "ng-zorro-antd/dropdown";
 import {NzSliderModule} from "ng-zorro-antd/slider";
 import {FormsModule} from "@angular/forms";
 import {NzDividerModule} from "ng-zorro-antd/divider";
 import {NzInputNumberModule} from "ng-zorro-antd/input-number";
-import {NzSegmentedModule} from "ng-zorro-antd/segmented";
+import {NzBadgeModule} from "ng-zorro-antd/badge";
+import {SharedPipesModule} from "../../../common/pipes/shared-pipes.module";
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {NzSegmentedModule} from "ng-zorro-antd/segmented";
     FormsModule,
     NzDividerModule,
     NzInputNumberModule,
-    NzSegmentedModule
+    NzBadgeModule,
+    SharedPipesModule
   ]
 })
 export class MainModule { }

@@ -15,7 +15,7 @@ import {NzModalService} from "ng-zorro-antd/modal";
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [NzModalService],
   bootstrap: [AppComponent]
