@@ -39,7 +39,8 @@ export class MainComponent {
     return {
       vehicle_type: this.vehicleType(),
       price_range: this.priceRange(),
-      amenities: this.selectedAmenities()
+      amenities: this.selectedAmenities(),
+      searchValue: this.debouncedSearchValue()
     }
   })
 
@@ -144,7 +145,6 @@ export class MainComponent {
   }
 
   clearAllFilters() {
-    this.clearSearchValue()
     this.clearVehicleType()
     this.clearSelectedAmenities()
     this.clearPriceRange()
@@ -159,10 +159,6 @@ export class MainComponent {
       return { ...amenity, isSelected: false };
     });
     this.amenities.set(updatedAmenities);
-  }
-
-  clearSearchValue() {
-    this.searchValue.set(null)
   }
 
   clearPriceRange() {
