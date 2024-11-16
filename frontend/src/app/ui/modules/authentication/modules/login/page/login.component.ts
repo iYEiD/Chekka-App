@@ -1,6 +1,7 @@
 import {Component, inject, signal, WritableSignal} from '@angular/core';
 import {Validators} from "../../../helpers/validators";
 import {AuthService} from "../../../services/auth.service";
+import {LoginCredentialsModel} from "../../../../../../models/authentication/interfaces/authentication.models";
 
 @Component({
   selector: 'app-page',
@@ -34,7 +35,7 @@ export class LoginComponent {
 
   onLoginClick(): void {
     if (this.validateForm()) {
-      const loginCredentials = {
+      const loginCredentials: LoginCredentialsModel = {
         email: this.email(),
         password: this.password(),
       }

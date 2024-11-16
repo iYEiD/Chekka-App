@@ -1,6 +1,7 @@
 import {Component, signal, computed, effect, WritableSignal, inject} from '@angular/core';
 import {Validators} from "../../../helpers/validators";
 import {AuthService} from "../../../services/auth.service";
+import {UserSignupInfoViewModel} from "../../../../../../models/authentication/interfaces/authentication.models";
 
 @Component({
   selector: 'app-page',
@@ -52,12 +53,13 @@ export class SignupComponent {
 
   onSignUpClick() {
     if (this.validateForm()) {
-      const userInfo = {
+      const userInfo: UserSignupInfoViewModel = {
         firstName: this.firstName(),
         lastName: this.lastName(),
         email: this.email(),
-        phone: this.phone(),
+        phoneNumber: this.phone(),
         password: this.password(),
+        confirmPassword: this.confirmPassword(),
       }
       this.authService.signUp(userInfo)
     }
