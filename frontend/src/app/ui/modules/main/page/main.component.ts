@@ -10,8 +10,8 @@ import {
   ViewChild
 } from '@angular/core';
 import {AmenitiesModel} from "../../pages/parking-spots/models/interfaces/parking-spots.model";
-import {HelperFunctions} from "../../../../common/helper-functions";
 import {ParkingSpotsService} from "../../pages/parking-spots/services/parking-spots.service";
+import {HelperFunctions} from "../../../../common/helper-functions";
 
 @Component({
   selector: 'app-page',
