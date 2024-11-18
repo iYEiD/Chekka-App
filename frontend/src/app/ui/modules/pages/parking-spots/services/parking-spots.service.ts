@@ -18,7 +18,38 @@ export class ParkingSpotsService {
       isFavorite: false,
       images: [
         'assets/images/test.png',
+        'assets/images/test2.png',
+        'assets/images/test.png',
+        'assets/images/test2.png',
+        'assets/images/test.png',
         'assets/images/test2.png'
+      ],
+      amenities: ["covered", "ev_charging", "security", "cctv"],
+      reviews: [
+        {
+          userFirstName: "User 1",
+          userUsageTime: "3 months",
+          rating: 4.6,
+          comment: "Amazing spot",
+          creationDate: "2 weeks ago",
+          title: "Test"
+        },
+        {
+          userFirstName: "User 2",
+          userUsageTime: "1 year",
+          rating: 2.2,
+          comment: "Amazing spot",
+          creationDate: "3 years ago",
+          title: "Test"
+        },
+        {
+          userFirstName: "User 2",
+          userUsageTime: "2 years",
+          rating: 3.5,
+          comment: "Average spot",
+          creationDate: "4 months ago",
+          title: "Test"
+        }
       ]
     },
     {
@@ -139,6 +170,7 @@ export class ParkingSpotsService {
       ]
     },
   ])
+  selectedParkingSpot = signal<ParkingSpotViewModel | null>(null)
 
   constructor() { }
 
@@ -150,6 +182,7 @@ export class ParkingSpotsService {
           : spot
       )
     );
+    this.fetchParkingSpotById(id)
     // implement a backend endpoint as well to update the isFavorite field in the table
   }
 
@@ -160,5 +193,9 @@ export class ParkingSpotsService {
       error: (err) => {
       }
     })
+  }
+
+  fetchParkingSpotById(id: string) {
+    this.selectedParkingSpot.set(this.parkingSpots().filter(spot => spot.id === id)[0])
   }
 }

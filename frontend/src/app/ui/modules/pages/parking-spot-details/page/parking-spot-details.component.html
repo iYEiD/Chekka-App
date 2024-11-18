@@ -1,0 +1,121 @@
+<div class="page-content">
+  <div class="flex justify-between items-center">
+    <div class="text-3xl text-secondary-10">{{parkingSpot()?.mainDescription}}</div>
+    <button class="flex cursor-pointer hover:bg-secondary-1 rounded-md py-1.5 px-2" (click)="parkingSpotsService.toggleIsFavorite(parkingSpot()?.id!)">
+      <i [ngClass]="parkingSpot()?.isFavorite ? 'text-favorite' : 'text-secondary-10'"
+         class="bi bi-heart-fill text-base cursor-pointer"></i>
+      <div class="ml-1.5 underline">Save</div>
+    </button>
+  </div>
+
+  <div class="carousel-div mb-[20px] mt-[20px]">
+    <nz-carousel class="rounded-lg carousel">
+      <div nz-carousel-content *ngFor="let image of parkingSpot()?.images">
+        <img class="h-full w-full" [src]='image' alt=""/>
+      </div>
+    </nz-carousel>
+  </div>
+
+  <div class="images-grid">
+    <div>
+      <img class="!w-full !h-full main-image" src="{{ parkingSpot()?.images![0] }}" alt="Main Image">
+    </div>
+    <div class="second-column-images-grid">
+      @for (image of parkingSpot()?.images!.slice(1,5); track image) {
+        <img class="!h-full !w-full" [src]="image" alt="Secondary Image">
+      }
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <div>
+      <div>
+        <div class="text-xl text-secondary-10">Parking spot in {{parkingSpot()?.city}}, {{parkingSpot()?.district}}</div>
+        <div class="text-md text-secondary-7">{{parkingSpot()?.mainDescription}}</div>
+        <div class="flex items-center text-secondary-10">
+          <i class="bi bi-star-fill"></i>
+          <div class="ml-1">{{parkingSpot()?.rating}}</div>
+        </div>
+      </div>
+
+      <nz-divider></nz-divider>
+
+      <div class="flex items-center gap-x-4">
+        <nz-avatar nzIcon="user"></nz-avatar>
+        <div>
+          <div>Hosted by Host Name</div>
+          <div class="text-secondary-5">1 year hosting</div>
+        </div>
+      </div>
+
+      <nz-divider></nz-divider>
+
+      <div style="width: fit-content">
+        <div class="text-xl text-secondary-10">What this spot offers</div>
+        <div class="amenities-grid mt-2">
+          @for (amenity of parkingSpot()?.amenities; track amenity) {
+            <div class="flex items-center text-base text-secondary-10">
+              <i [ngClass]="amenitiesIconMap[amenity]" class="mr-2"></i>
+              <div>{{amenity | snakeToTitleCase}}</div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="reserve-div">
+      <div class="!h-full border border-secondary-2 rounded-md p-5 !w-full flex flex-col justify-between">
+        <div>
+          <div class="mb-4">${{parkingSpot()?.pricePerHour}} per hour</div>
+          <nz-range-picker
+            [nzShowTime]="{ nzFormat: 'HH' }"
+            nzFormat="yyyy-MM-dd HH"
+            [(ngModel)]="dateRange"
+            class="!mb-3"
+          ></nz-range-picker>
+          <div>From: {{selectedStartTime()}}</div>
+          <div>To: {{selectedEndTime()}}</div>
+        </div>
+
+        <div>
+          <button nz-button nzType="primary" class="!w-full">Reserve</button>
+          <div class="text-center mt-3 text-xs">You won't be charged yet</div>
+          <nz-divider></nz-divider>
+          <div class="flex justify-between">
+            <div>Total</div>
+            <div>$38</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nz-divider></nz-divider>
+
+  <div class="flex justify-center mt-8 mb-5">
+    <img class="h-24" src="assets/images/left-rate.avif" alt="">
+    <div class="text-6xl font-semibold">{{parkingSpot()?.rating}}</div>
+    <img class="h-24" src="assets/images/right-rate.avif" alt="">
+  </div>
+
+  <div class="reviews-grid">
+    @for (review of parkingSpot()?.reviews; track review) {
+      <div>
+        <div class="flex items-center gap-x-3">
+          <nz-avatar nzIcon="user"></nz-avatar>
+          <div>
+            <div>{{review.userFirstName}}</div>
+            <div>{{review.userUsageTime}} on AppName</div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <nz-rate [ngModel]="review.rating" nzAllowHalf></nz-rate>
+          <i class="bi bi-dot text-secondary-4"></i>
+          <div>{{review.creationDate}}</div>
+        </div>
+        <div class="text-base">{{review.comment}}</div>
+      </div>
+    }
+  </div>
+
+</div>
