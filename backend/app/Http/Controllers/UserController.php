@@ -42,11 +42,7 @@ class UserController extends Controller
 
         $user->save();
 
-        // Generate a token for the user with custom claims
-        $token = $user->createToken('accessToken')->accessToken;
-
-        // Return a JSON response to the user with the token
-        return response()->json(['accessToken' => $token], 201);
+        return response()->json(['message' => 'User created successfully'], 201);
     }
 
     // Login Logic
@@ -66,7 +62,16 @@ class UserController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
             $token = $user->createToken('accessToken')->accessToken;
-            return response()->json(['accessToken' => $token], 200);
+            return response()->json([
+                'access_token' => $token,
+                'user' => [
+                    'id' => $user->user_id,
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'email' => $user->email,
+                    'phone_number' => $user->phone_number,
+                ],
+            ], 200);
         }
 
         return response()->json(['message' => 'Wrong email or password!'], 401);
