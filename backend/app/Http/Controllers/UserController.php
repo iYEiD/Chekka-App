@@ -69,6 +69,6 @@ class UserController extends Controller
             return response()->json(['accessToken' => $token], 200);
         }
 
-        return response()->json(['message' => 'Wrong Password!'], 401);
+        return response()->json(['message' => 'Wrong email or password!'], 401);
     }
 }
