@@ -13,10 +13,9 @@ export class JwtService {
 
   decodedToken?: ParsedTokenDtoModel;
 
-  setTokens(accessToken: string, refreshToken: string) {
-    if (accessToken && refreshToken) {
+  setTokens(accessToken: string) {
+    if (accessToken) {
       localStorage.setItem('accessToken', accessToken)
-      localStorage.setItem('refreshToken', refreshToken)
     }
   }
 
