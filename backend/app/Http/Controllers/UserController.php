@@ -20,7 +20,7 @@ class UserController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string|min:8|confirmed',
             'phone_number' => 'required|string|max:15',
-            'status' => 'required|string|max:30',
+            // 'status' => 'required|string|max:30',
         ]);
         
         // Check if the email already exists
@@ -32,18 +32,18 @@ class UserController extends Controller
         $user = new User();
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
-        $user->status = $request->status;
+        $user->status = "active"; //default until implemented by admins
         $user->phone_number = $request->phone_number;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
 
         $user->save();
 
-        // Generate a token for the user
-        $token = $user->createToken('Personal Access Token')->accessToken;
+        // Generate a token for the user with custom claims
+        $token = $user->createToken('accessToken')->accessToken;
 
         // Return a JSON response to the user with the token
-        return response()->json(['message' => 'User created successfully', 'token' => $token], 201);
+        return response()->json(['accessToken' => $token], 201);
     }
 
     // Login Logic
@@ -58,9 +58,8 @@ class UserController extends Controller
         // Attempt to log the user in
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-            $token = $user->createToken('Personal Access Token')->accessToken;
-
-            return response()->json(['token' => $token], 200);
+            $token = $user->createToken('accessToken')->accessToken;
+            return response()->json(['accessToken' => $token], 200);
         }
 
         return response()->json(['message' => 'Wrong Password!'], 401);
