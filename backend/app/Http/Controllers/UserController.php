@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-
+use \Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -14,14 +14,17 @@ class UserController extends Controller
     public function signup(Request $request)
     {
         // Validate the request data for user signup
-        $request->validate([
-            'first_name' => 'required|string|max:30',
-            'last_name' => 'required|string|max:30',
-            'email' => 'required|string|email',
-            'password' => 'required|string|min:8|confirmed',
-            'phone_number' => 'required|string|max:15',
-            // 'status' => 'required|string|max:30',
-        ]);
+        try {
+            $request->validate([
+                'first_name' => 'required|string|max:30',
+                'last_name' => 'required|string|max:30',
+                'email' => 'required|string|email',
+                'password' => 'required|string|min:8|confirmed',
+                'phone_number' => 'required|string|max:15',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['message' => 'Validation Error', 'errors' => $e->errors()], 422);
+        }
         
         // Check if the email already exists
         if (User::where('email', $request->email)->exists()) {
@@ -49,11 +52,15 @@ class UserController extends Controller
     // Login Logic
     public function login(Request $request)
     {
-        // Validate the request data for login
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+        try {
+            // Validate the request data for login
+            $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['message' => 'Validation Error', 'errors' => $e->errors()], 422);
+        }
 
         // Attempt to log the user in
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
