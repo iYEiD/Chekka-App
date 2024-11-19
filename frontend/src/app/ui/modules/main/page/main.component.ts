@@ -38,6 +38,7 @@ export class MainComponent {
   selectedFilters = computed(() => {
     return {
       vehicle_type: this.vehicleType(),
+      date_range: this.dateRange(),
       price_range: this.priceRange(),
       amenities: this.selectedAmenities(),
       searchValue: this.debouncedSearchValue()
@@ -45,6 +46,8 @@ export class MainComponent {
   })
 
   filterTagChips: string[] = []
+
+  dateRange = signal<any | null>(null)
 
   vehicleType = signal<string>("any_type")
 
