@@ -1,6 +1,7 @@
 import {inject, Injectable, signal} from '@angular/core';
-import {ParkingSpotViewModel} from "../models/interfaces/parking-spots.model";
+import {ParkingSpotViewModel, ReservationViewModel} from "../models/interfaces/parking-spots.model";
 import {ParkingSpotsApiService} from "./parking-spots-api.service";
+import {ParkingSpotMapper} from "../mappers/parking-spot.mapper";
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,11 @@ export class ParkingSpotsService {
           creationDate: "4 months ago",
           title: "Test"
         }
+      ],
+      disabledDateTimes: [
+        { date: '2024-11-19', hours: [9, 10, 11] },
+        { date: '2024-11-20', hours: [15, 16] },
+        { date: '2024-11-21', hours: [] },
       ]
     },
     {
@@ -197,5 +203,14 @@ export class ParkingSpotsService {
 
   fetchParkingSpotById(id: string) {
     this.selectedParkingSpot.set(this.parkingSpots().filter(spot => spot.id === id)[0])
+  }
+
+  reserveSpot(reservationDetails: ReservationViewModel) {
+    this.parkingSpotsApiService.reserveSpot(ParkingSpotMapper.fromReservationViewModelToDTOModel(reservationDetails)).subscribe({
+      next: (res) => {
+      },
+        error: (err) => {
+      }
+    })
   }
 }

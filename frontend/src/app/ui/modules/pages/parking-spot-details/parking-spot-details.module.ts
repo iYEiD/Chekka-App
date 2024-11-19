@@ -10,21 +10,23 @@ import {NzDatePickerModule} from "ng-zorro-antd/date-picker";
 import {FormsModule} from "@angular/forms";
 import {NzCarouselModule} from "ng-zorro-antd/carousel";
 import {NzRateModule} from "ng-zorro-antd/rate";
+import {NzModalModule} from "ng-zorro-antd/modal";
 
 
 @NgModule({
   declarations: [ParkingSpotDetailsComponent],
-    imports: [
-      CommonModule,
-      ParkingSpotDetailsRoutingModule,
-      NzDividerModule,
-      NzAvatarModule,
-      NzButtonModule,
-      NzDatePickerModule,
-      SharedPipesModule,
-      FormsModule,
-      NzCarouselModule,
-      NzRateModule
-    ]
+  imports: [
+    CommonModule,
+    ParkingSpotDetailsRoutingModule,
+    NzDividerModule,
+    NzAvatarModule,
+    NzButtonModule,
+    NzDatePickerModule,
+    SharedPipesModule,
+    FormsModule,
+    NzCarouselModule,
+    NzRateModule,
+    NzModalModule
+  ]
 })
 export class ParkingSpotDetailsModule { }

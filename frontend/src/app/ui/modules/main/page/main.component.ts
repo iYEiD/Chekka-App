@@ -39,10 +39,10 @@ export class MainComponent {
 
   selectedFilters = computed(() => {
     return {
-      vehicle_type: this.vehicleType(),
-      price_range: this.priceRange(),
-      amenities: this.selectedAmenities(),
-      searchValue: this.debouncedSearchValue()
+      vehicle_type: this.vehicleType() !== "any_type" ? this.vehicleType() : null,
+      price_range: this.priceRange()![0] !== this.minPriceFilter() || this.priceRange()![1] !== this.maxPriceFilter() ? this.priceRange() : null,
+      amenities: this.selectedAmenities().length !== 0 ? this.selectedAmenities() : null,
+      search_value: this.debouncedSearchValue()
     }
   })
 

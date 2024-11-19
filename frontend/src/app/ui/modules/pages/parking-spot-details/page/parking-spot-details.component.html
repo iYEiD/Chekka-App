@@ -71,21 +71,49 @@
             [nzShowTime]="{ nzFormat: 'HH' }"
             nzFormat="yyyy-MM-dd HH"
             [(ngModel)]="dateRange"
+            [nzDisabledDate]="disabledDate"
+            [nzDisabledTime]="disabledTime"
             class="!mb-3"
           ></nz-range-picker>
           <div>From: {{selectedStartTime()}}</div>
           <div>To: {{selectedEndTime()}}</div>
+          <div class="mb-3">Duration: {{totalDuration() || "-"}} hour(s)</div>
         </div>
 
         <div>
-          <button nz-button nzType="primary" class="!w-full">Reserve</button>
+          <button nz-button [disabled]="reserveButtonDisabled()" (click)="openConfirmationModal()" nzType="primary" class="!w-full">Reserve</button>
           <div class="text-center mt-3 text-xs">You won't be charged yet</div>
           <nz-divider></nz-divider>
           <div class="flex justify-between">
             <div>Total</div>
-            <div>$38</div>
+            <div>${{totalPrice() || "-"}}</div>
           </div>
         </div>
+
+        <nz-modal
+          [(nzVisible)]="isModalVisible"
+          nzTitle="Booking Confirmation"
+          (nzOnCancel)="closeConfirmationModal()"
+        >
+          <ng-container *nzModalContent>
+            <div class="text-base text-secondary-6 mb-2">Please confirm the booking details</div>
+            <div>From: {{selectedStartTime()}}</div>
+            <div>To: {{selectedEndTime()}}</div>
+            <div>Duration: {{totalDuration() || "-"}} hours</div>
+            <div>Total: ${{totalPrice() || "-"}}</div>
+          </ng-container>
+
+          <div *nzModalFooter class="flex justify-center">
+            <button
+              (click)="closeConfirmationModal()"
+              class="py-1 px-[15px] h-8 rounded-md mr-3
+            bg-transparent hover:bg-secondary-1 transition-colors duration-200 ease-in-out"
+            >
+              Cancel
+            </button>
+            <button nz-button nzType="primary" (click)="reserveSpot()">Confirm</button>
+          </div>
+        </nz-modal>
       </div>
     </div>
   </div>

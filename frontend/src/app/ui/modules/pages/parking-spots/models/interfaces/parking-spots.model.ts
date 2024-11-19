@@ -9,6 +9,12 @@ export interface ParkingSpotViewModel {
   images: string[];
   amenities?: string[];
   reviews?: ReviewsViewModel[]
+  disabledDateTimes?: DisabledDateTimesModel[]
+}
+
+export interface DisabledDateTimesModel {
+  date: string;
+  hours: number[]
 }
 
 export interface ParkingSpotDTOModel {
@@ -28,4 +34,16 @@ export interface ReviewsViewModel {
   rating: number;
   comment: string;
   creationDate: string;
+}
+
+export interface ReservationViewModel {
+  spotId: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface ReservationDTOModel {
+  spot_id: string;
+  start_time: string;
+  end_time: string;
 }
