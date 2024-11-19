@@ -16,7 +16,6 @@ export class AuthApiService {
   baseUrl = `${environment.backendUrl}`
   signupUrl = `${this.baseUrl}/user/signup`;
   loginUrl = `${this.baseUrl}/user/login`;
-  refreshUrl = `${this.baseUrl}/refresh-tokens`;
 
   constructor() { }
 
@@ -26,16 +25,5 @@ export class AuthApiService {
 
   login(loginCredentials: LoginCredentialsModel): Observable<LoginDTOModel> {
     return this.http.post<LoginDTOModel>(this.loginUrl, loginCredentials)
-  }
-
-  refreshToken(refreshToken: string) {
-    const headers = new HttpHeaders({
-      'authorization': 'Bearer ' + refreshToken
-    });
-    return this.http.get<LoginDTOModel>(this.refreshUrl, {headers}).pipe(
-      map((res: LoginDTOModel) => {
-        return AuthenticationMapper.fromLoginDTOModelToViewModel(res)
-      })
-    );
   }
 }

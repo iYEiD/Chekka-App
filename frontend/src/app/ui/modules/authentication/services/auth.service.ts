@@ -58,9 +58,4 @@ export class AuthService {
     this.jwtService.clearTokens();
     this.router.navigateByUrl('auth').then(() => {});
   }
-
-  refreshToken() {
-    const refreshToken = this.jwtService.getRefreshToken();
-    return this.authApiService.refreshToken(refreshToken!)
-  }
 }
