@@ -1,0 +1,36 @@
+<div class="page-content">
+  <div class="text-3xl text-secondary-10 mb-1">Account</div>
+  <div class="flex">
+    <div class="text-lg mr-1">{{authService.user()?.firstName}},</div>
+    <div class="text-lg font-light">{{authService.user()?.email}}</div>
+  </div>
+
+  <div class="text-xl mt-14">Personal Information</div>
+  <div class="mt-4">
+    @for (detail of userDetailsWithEditing(); track detail) {
+      <div
+        class="flex justify-between items-center"
+        [class.opacity-20]="editingField() && !detail.isBeingEdited"
+        [class.pointer-events-none]="editingField() && !detail.isBeingEdited"
+      >
+        <div class="text-base">{{ detail.field | camelToTitleCase }}</div>
+        <div
+          class="text-sm underline cursor-pointer"
+          (click)="!editingField() || detail.isBeingEdited ? toggleIsBeingEdited(detail.field) : null"
+        >
+          {{ detail.isBeingEdited ? 'Cancel' : 'Edit' }}
+        </div>
+      </div>
+      @if (!detail.isBeingEdited) {
+        <div class="text-sm text-secondary-6"
+             [class.opacity-20]="editingField() && !detail.isBeingEdited"
+        >{{ detail.value }}</div>
+      } @else {
+        <input class="!mt-2 !h-[40px]" nz-input [(ngModel)]="detail.value">
+        <button class="mt-5" nz-button nzType="primary" nzSize="large" (click)="updateDetails()">Save</button>
+      }
+      <nz-divider></nz-divider>
+    }
+  </div>
+
+</div>
