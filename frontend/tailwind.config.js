@@ -33,6 +33,7 @@ module.exports = {
         },
         error: 'var(--error-color)',
         'error-bg': 'var(--error-bg-color)',
+        favorite: 'var(--favorite)'
       },
     },
   },

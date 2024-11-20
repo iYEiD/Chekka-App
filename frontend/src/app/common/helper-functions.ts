@@ -27,4 +27,15 @@ export class HelperFunctions {
 
     return debounceSignal;
   }
+
+  public static formatDateToCustomFormat(dateString: string): string {
+    const date = new Date(dateString);
+    const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' });
+    const month = date.toLocaleDateString('en-US', { month: 'short' });
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+
+    return `${dayOfWeek} ${month} ${day} ${year} @ ${hours}:00`;
+  }
 }

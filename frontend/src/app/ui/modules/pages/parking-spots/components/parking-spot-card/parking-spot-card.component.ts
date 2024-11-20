@@ -16,7 +16,7 @@ export class ParkingSpotCardComponent {
     if ((event.target as HTMLElement).closest('.slick-dots')) {
       return;
     } else {
-      this.cardClickEmitter.emit(this.parkingSpot)
+      this.cardClickEmitter.emit(this.parkingSpot.id)
     }
   }
 

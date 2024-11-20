@@ -9,9 +9,10 @@ import {
   untracked,
   ViewChild
 } from '@angular/core';
-import {AmenitiesModel} from "../../pages/parking-spots/models/interfaces/parking-spots.model";
+import {AmenitiesFilterModel} from "../../pages/parking-spots/models/interfaces/parking-spots.model";
 import {ParkingSpotsService} from "../../pages/parking-spots/services/parking-spots.service";
 import {HelperFunctions} from "../../../../common/helper-functions";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-page',
@@ -21,6 +22,7 @@ import {HelperFunctions} from "../../../../common/helper-functions";
 })
 export class MainComponent {
   parkingSpotService = inject(ParkingSpotsService)
+  router = inject(Router)
 
   @ViewChild('header') header!: ElementRef;
   isModalVisible = false;
@@ -37,11 +39,10 @@ export class MainComponent {
 
   selectedFilters = computed(() => {
     return {
-      vehicle_type: this.vehicleType(),
-      date_range: this.dateRange(),
-      price_range: this.priceRange(),
-      amenities: this.selectedAmenities(),
-      searchValue: this.debouncedSearchValue()
+      vehicle_type: this.vehicleType() !== "any_type" ? this.vehicleType() : null,
+      price_range: this.priceRange()![0] !== this.minPriceFilter() || this.priceRange()![1] !== this.maxPriceFilter() ? this.priceRange() : null,
+      amenities: this.selectedAmenities().length !== 0 ? this.selectedAmenities() : null,
+      search_value: this.debouncedSearchValue()
     }
   })
 
@@ -51,7 +52,7 @@ export class MainComponent {
 
   vehicleType = signal<string>("any_type")
 
-  amenities = signal<AmenitiesModel[]>([
+  amenities = signal<AmenitiesFilterModel[]>([
     {
       label: "Covered",
       value: "covered",
@@ -168,6 +169,10 @@ export class MainComponent {
     this.minPriceFilter.set(1)
     this.maxPriceFilter.set(100)
     this.priceRange.set([this.minPriceFilter(), this.maxPriceFilter()])
+  }
+
+  navigateToHomePage() {
+    this.router.navigate(['/app/parking-spots'])
   }
 
 }
