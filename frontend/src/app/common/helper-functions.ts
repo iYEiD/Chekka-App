@@ -38,4 +38,14 @@ export class HelperFunctions {
 
     return `${dayOfWeek} ${month} ${day} ${year} @ ${hours}:00`;
   }
+
+  public static formatFilterDate(dateString: string) {
+    const date = new Date(dateString); // Parse the date string
+    const day = String(date.getDate()).padStart(2, '0'); // Get day with leading zero
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Get month (0-based, so add 1)
+    const year = date.getFullYear(); // Get year
+    const hour = String(date.getHours()).padStart(2, '0'); // Get hour with leading zero
+
+    return `${day}/${month}/${year}:${hour}:00`;
+  }
 }
