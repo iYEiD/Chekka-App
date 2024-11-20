@@ -14,9 +14,8 @@ import {AuthenticationMapper} from "../../../../mappers/authentication/authentic
 export class AuthApiService {
   http = inject(HttpClient)
   baseUrl = `${environment.backendUrl}`
-  signupUrl = `${this.baseUrl}/signup`;
-  loginUrl = `${this.baseUrl}/login`;
-  refreshUrl = `${this.baseUrl}/refresh-tokens`;
+  signupUrl = `${this.baseUrl}/user/signup`;
+  loginUrl = `${this.baseUrl}/user/login`;
 
   constructor() { }
 
@@ -24,18 +23,7 @@ export class AuthApiService {
     return this.http.post(this.signupUrl, userSignupInfo)
   }
 
-  login(loginCredentials: LoginCredentialsModel): Observable<any> {
-    return this.http.post(this.loginUrl, loginCredentials)
-  }
-
-  refreshToken(refreshToken: string) {
-    const headers = new HttpHeaders({
-      'authorization': 'Bearer ' + refreshToken
-    });
-    return this.http.get<LoginDTOModel>(this.refreshUrl, {headers}).pipe(
-      map((res: LoginDTOModel) => {
-        return AuthenticationMapper.fromLoginDTOModelToViewModel(res)
-      })
-    );
+  login(loginCredentials: LoginCredentialsModel): Observable<LoginDTOModel> {
+    return this.http.post<LoginDTOModel>(this.loginUrl, loginCredentials)
   }
 }
