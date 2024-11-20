@@ -1,19 +1,10 @@
 import {
-  DecodedTokenDTOModel, LoginDTOModel, LoginViewModel, ParsedTokenDtoModel,
-  TokenDtoModel,
-  TokenViewModel, UserDTOModel, UserSignupInfoDTOModel, UserSignupInfoViewModel, UserViewModel
+  DecodedTokenDTOModel, LoginDTOModel, LoginViewModel, ParsedTokenDtoModel, UserDTOModel, UserSignupInfoDTOModel, UserSignupInfoViewModel, UserViewModel
 } from "../../models/authentication/interfaces/authentication.models";
 
 
 export class AuthenticationMapper {
     constructor() {}
-
-    public static fromTokenDTOModelToTokenViewModel(dto: TokenDtoModel): TokenViewModel {
-        return {
-            accessToken: dto.access_token,
-            refreshToken: dto.refresh_token
-        }
-    }
 
     public static fromTokenDTOModelToParsedToken(res: DecodedTokenDTOModel): ParsedTokenDtoModel {
         return {
@@ -25,19 +16,18 @@ export class AuthenticationMapper {
 
     public static fromLoginDTOModelToViewModel(res: LoginDTOModel): LoginViewModel {
       return {
-        tokens: {
-          accessToken: res.tokens.access_token,
-          refreshToken: res.tokens.refresh_token
-        },
+        accessToken: res.access_token,
         user: this.fromUserDTOModelToUserViewModel(res.user)
       }
     }
 
   public static fromUserDTOModelToUserViewModel(user: UserDTOModel): UserViewModel {
     return {
+      id: user.id,
       firstName: user.first_name,
       lastName: user.last_name,
       email: user.email,
+      phoneNumber: user.phone_number,
     }
   }
   public static fromUserSignupInfoViewModelToDTOModel(user: UserSignupInfoViewModel): UserSignupInfoDTOModel {

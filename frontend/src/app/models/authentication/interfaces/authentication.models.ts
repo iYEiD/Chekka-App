@@ -22,35 +22,29 @@ export interface UserSignupInfoDTOModel {
 }
 
 export interface LoginDTOModel {
-  tokens: TokenDtoModel
+  access_token: string
   user: UserDTOModel
 }
 
 export interface LoginViewModel {
-  tokens: TokenViewModel
+  accessToken: string
   user: UserViewModel
 }
 
-export interface TokenViewModel {
-  accessToken: string;
-  refreshToken: string;
-}
-
-export interface TokenDtoModel {
-  access_token: string;
-  refresh_token: string;
-}
-
 export interface UserDTOModel {
+  id: number;
   first_name: string;
   last_name: string;
   email: string;
+  phone_number: string;
 }
 
 export interface UserViewModel {
+  id: number
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
 }
 
 export interface DecodedTokenDTOModel {

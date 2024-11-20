@@ -40,10 +40,10 @@ export class AuthService {
   login(loginCredentials: LoginCredentialsModel) {
     this.authApiService.login(loginCredentials).subscribe({
       next: (res) => {
+        let mappedRes = AuthenticationMapper.fromLoginDTOModelToViewModel(res)
         this.isLoggedIn.set(true);
-        let tokens = AuthenticationMapper.fromTokenDTOModelToTokenViewModel(res.tokens);
-        this.jwtService.setTokens(tokens.accessToken, tokens.refreshToken);
-        this.user.set(AuthenticationMapper.fromUserDTOModelToUserViewModel(res.user));
+        this.jwtService.setTokens(mappedRes.accessToken);
+        this.user.set(mappedRes.user);
         this.router.navigateByUrl('/app').then(() => {});
       },
       error: (error) => {
@@ -57,10 +57,5 @@ export class AuthService {
     this.user.set(null)
     this.jwtService.clearTokens();
     this.router.navigateByUrl('auth').then(() => {});
-  }
-
-  refreshToken() {
-    const refreshToken = this.jwtService.getRefreshToken();
-    return this.authApiService.refreshToken(refreshToken!)
   }
 }
