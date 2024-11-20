@@ -45,6 +45,14 @@
               </div>
             </div>
             <nz-divider></nz-divider>
+            <div class="text-xl font-medium text-secondary-10 mb-2">Time Range</div>
+            <nz-range-picker
+              [nzShowTime]="{ nzFormat: 'HH' }"
+              nzFormat="yyyy-MM-dd HH"
+              [(ngModel)]="dateTimeRange"
+              class="!w-full"
+            ></nz-range-picker>
+            <nz-divider></nz-divider>
             <div class="text-xl font-medium text-secondary-10 mb-1">Price Range</div>
             <div class="text-secondary-6 mb-8">Hourly prices in US dollars ($) before fees and taxes</div>
             <nz-slider nzRange [(ngModel)]="priceRange" [nzMin]="minPriceFilter()" [nzMax]="maxPriceFilter()"></nz-slider>
