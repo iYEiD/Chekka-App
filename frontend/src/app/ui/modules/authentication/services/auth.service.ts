@@ -23,7 +23,13 @@ export class AuthService {
   isLoggedIn = signal<boolean>(false)
   user = signal<UserViewModel | null>(null)
 
-  constructor() { }
+  constructor() {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      this.user.set(JSON.parse(savedUser));
+      this.isLoggedIn.set(true);
+    }
+  }
 
   signUp(signupUserInfo: UserSignupInfoViewModel) {
     this.authApiService.signup(AuthenticationMapper.fromUserSignupInfoViewModelToDTOModel(signupUserInfo)).subscribe({
@@ -44,6 +50,7 @@ export class AuthService {
         this.isLoggedIn.set(true);
         this.jwtService.setTokens(mappedRes.accessToken);
         this.user.set(mappedRes.user);
+        localStorage.setItem('user', JSON.stringify(mappedRes.user))
         this.router.navigateByUrl('/app').then(() => {});
       },
       error: (error) => {
@@ -56,6 +63,7 @@ export class AuthService {
     this.isLoggedIn.set(false);
     this.user.set(null)
     this.jwtService.clearTokens();
+    localStorage.removeItem('user')
     this.router.navigateByUrl('auth').then(() => {});
   }
 }

@@ -13,6 +13,7 @@ import {AmenitiesFilterModel} from "../../pages/parking-spots/models/interfaces/
 import {ParkingSpotsService} from "../../pages/parking-spots/services/parking-spots.service";
 import {HelperFunctions} from "../../../../common/helper-functions";
 import {Router} from "@angular/router";
+import {AuthService} from "../../authentication/services/auth.service";
 
 @Component({
   selector: 'app-page',
@@ -22,6 +23,7 @@ import {Router} from "@angular/router";
 })
 export class MainComponent {
   parkingSpotService = inject(ParkingSpotsService)
+  authService = inject(AuthService)
   router = inject(Router)
 
   @ViewChild('header') header!: ElementRef;

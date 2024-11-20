@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {ParkingSpotsComponent} from "../pages/parking-spots/page/parking-spots.component";
 import {ParkingSpotDetailsComponent} from "../pages/parking-spot-details/page/parking-spot-details.component";
+import {AccountComponent} from "../pages/account/page/account.component";
 
 const routes: Routes = [
   {
@@ -13,6 +14,11 @@ const routes: Routes = [
     path: 'parking-spots/:ID',
     component: ParkingSpotDetailsComponent,
     loadChildren: () => import('../pages/parking-spot-details/parking-spot-details.module').then(m => m.ParkingSpotDetailsModule)
+  },
+  {
+    path: 'account',
+    component: AccountComponent,
+    loadChildren: () => import('../pages/account/account.module').then(m => m.AccountModule)
   },
   { path: '**', redirectTo: 'parking-spots'},
 ];

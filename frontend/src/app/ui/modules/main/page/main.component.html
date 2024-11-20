@@ -115,13 +115,13 @@
       </div>
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu>
-          <li nz-menu-item>Map</li>
+          <li nz-menu-item routerLink="">Map</li>
           <div nz-menu-divider></div>
-          <li nz-menu-item>Dashboard</li>
-          <li nz-menu-item>Account</li>
+          <li nz-menu-item routerLink="">Dashboard</li>
+          <li nz-menu-item routerLink="/app/account">Account</li>
           <div nz-menu-divider></div>
-          <li nz-menu-item>Help Center</li>
-          <li class="!text-error" nz-menu-item>Logout</li>
+          <li nz-menu-item routerLink="">Help Center</li>
+          <li class="!text-error" nz-menu-item (click)="authService.logout()">Logout</li>
         </ul>
       </nz-dropdown-menu>
     </div>
