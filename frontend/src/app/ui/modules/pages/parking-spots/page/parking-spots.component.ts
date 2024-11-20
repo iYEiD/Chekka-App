@@ -1,5 +1,6 @@
 import {Component, computed, inject} from '@angular/core';
 import {ParkingSpotsService} from "../services/parking-spots.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-page',
@@ -9,6 +10,7 @@ import {ParkingSpotsService} from "../services/parking-spots.service";
 })
 export class ParkingSpotsComponent {
   parkingSpotsService = inject(ParkingSpotsService)
+  router = inject(Router)
 
   parkingSpots = computed(() => {
     return this.parkingSpotsService.parkingSpots();
@@ -18,8 +20,10 @@ export class ParkingSpotsComponent {
     // fetch parking spots from backend
   }
 
-  navigateToDetailsPage(event: any) {
+  navigateToDetailsPage(id: number) {
+    let detailsPageUrl = '/app/parking-spots'
 
+    this.router.navigate([detailsPageUrl, id]);
   }
 
   toggleIsFavorite(id: string) {

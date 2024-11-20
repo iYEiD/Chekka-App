@@ -18,5 +18,5 @@
     <div class="text-secondary-6 mb-3">{{parkingSpot.mainDescription}}</div>
     <div class="text-secondary-10 font-medium">${{parkingSpot.pricePerHour}} per hour</div>
   </div>
-  <i [ngClass]="parkingSpot.isFavorite ? 'selected' : 'text-secondary-10'" class="bi bi-heart-fill absolute top-3 right-3 text-base cursor-pointer" (click)="favoriteClickEmitterFunction($event)"></i>
+  <i [ngClass]="parkingSpot.isFavorite ? 'text-favorite' : 'text-secondary-10'" class="bi bi-heart-fill absolute top-3 right-3 text-base cursor-pointer" (click)="favoriteClickEmitterFunction($event)"></i>
 </div>
