@@ -36,8 +36,8 @@ class SpotRepo implements ISpotRepo
             $query->whereBetween('price_per_hour', $filters['price_range']);
         }
         
-        if (isset($filters['amenities'])) {
-            $amenities = explode(',', $filters['amenities']);
+        if (!empty($filters['amenities'])) {
+            $amenities = $filters['amenities'];
             foreach ($amenities as $amenity) {
                 // Check if the column exists in the table
                 if (Schema::hasColumn('spot_amenities', $amenity)) {
