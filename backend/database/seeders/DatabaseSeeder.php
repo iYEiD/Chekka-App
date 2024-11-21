@@ -13,11 +13,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // php artisan db:seed to run all these seeders
+        // php artisan db:seed --class=ParkingSpotsTableSeeder for individual seeder
+        $this->call(ParkingSpotsTableSeeder::class);
+        $this->call(SpotLocationsTableSeeder::class);
+        $this->call(AvailabilityTableSeeder::class);
+        $this->call(SpotAmenitiesTableSeeder::class);
     }
 }

@@ -20,11 +20,28 @@ class ParkingSpot extends Model
         'title',
         'main_description',
         'status',
+        'overall_rating',
     ];
-
+    protected $primaryKey = 'spot_id';
     // Define the relationship with the User model
     public function host()
     {
-        return $this->belongsTo(User::class, 'host_id');
+        return $this->belongsTo(User::class, 'host_id','user_id');
     }
+
+    public function isFavouriteForUser($userId)
+{
+    return $this->favourites()->where('user_id', $userId)->exists();
+}
+
+public function favourites()
+{
+    return $this->hasMany(Favourite::class, 'spot_id');
+}
+
+public function amenities()
+{
+    return $this->hasMany(Amenity::class, 'spot_id');
+}   
+
 }
