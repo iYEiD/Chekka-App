@@ -48,22 +48,22 @@ class SpotService implements ISpotService{
         // Check each amenity and add it to the array if it's true
         // ONLY RETURN POSITIVE AMENITIES VALUE
         if ($spot->is_covered) {
-            $amenities['is_covered'] = $spot->is_covered;
+            $amenities[] = 'is_covered';
         }
         if ($spot->has_security) {
-            $amenities['has_security'] = $spot->has_security;
+            $amenities[] = 'has_security';
         }
         if ($spot->has_ev_charging) {
-            $amenities['has_ev_charging'] = $spot->has_ev_charging;
+            $amenities[] = 'has_ev_charging';
         }
         if ($spot->is_handicap_accessible) {
-            $amenities['is_handicap_accessible'] = $spot->is_handicap_accessible;
+            $amenities[] = 'is_handicap_accessible';
         }
         if ($spot->has_lighting) {
-            $amenities['has_lighting'] = $spot->has_lighting;
+            $amenities[] = 'has_lighting';
         }
         if ($spot->has_cctv) {
-            $amenities['has_cctv'] = $spot->has_cctv;
+            $amenities[] = 'has_cctv';
         }
             return [
                 'spot_id' => $spot->spot_id,
