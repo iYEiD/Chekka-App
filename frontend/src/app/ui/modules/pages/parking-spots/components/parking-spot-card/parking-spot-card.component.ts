@@ -10,18 +10,21 @@ import {ParkingSpotViewModel} from "../../models/interfaces/parking-spots.model"
 export class ParkingSpotCardComponent {
   @Input() parkingSpot: ParkingSpotViewModel = new Input()
   @Output() cardClickEmitter = new EventEmitter()
-  @Output() favoriteClickEmitter = new EventEmitter
+  @Output() favoriteClickEmitter = new EventEmitter()
 
   cardClickEmitterFunction(event: any) {
     if ((event.target as HTMLElement).closest('.slick-dots')) {
       return;
     } else {
-      this.cardClickEmitter.emit(this.parkingSpot.id)
+      this.cardClickEmitter.emit(this.parkingSpot.spotId)
     }
   }
 
   favoriteClickEmitterFunction(event: any) {
-    event.stopPropagation()
-    this.favoriteClickEmitter.emit(this.parkingSpot.id)
+    event.stopPropagation();
+    this.favoriteClickEmitter.emit({
+      spotId: this.parkingSpot.spotId,
+      isFavorite: !this.parkingSpot.isFavorite
+    });
   }
 }

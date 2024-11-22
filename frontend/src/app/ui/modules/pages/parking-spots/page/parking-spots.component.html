@@ -2,7 +2,7 @@
   @for (parkingSpot of parkingSpots(); track parkingSpot) {
     <app-parking-spot-card class="grid-item"
                            (cardClickEmitter)="navigateToDetailsPage($event)"
-                           (favoriteClickEmitter)="toggleIsFavorite($event)"
+                           (favoriteClickEmitter)="updateIsFavorite($event)"
                            [parkingSpot]="parkingSpot"
     >
     </app-parking-spot-card>

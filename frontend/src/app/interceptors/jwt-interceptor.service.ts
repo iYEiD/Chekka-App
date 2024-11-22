@@ -6,17 +6,14 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { JwtService } from '../services/authentication/jwt.service';
 import {AuthService} from "../ui/modules/authentication/services/auth.service";
-import {environment} from "../../environments/environment";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   authService = inject(AuthService)
   jwtService = inject(JwtService);
-
-  static backendBaseUrl = environment.backendUrl
 
   updateRequest(request: HttpRequest<unknown>, accessToken: string) {
     return request.clone({

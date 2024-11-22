@@ -36,7 +36,7 @@ export class ParkingSpotDetailsComponent {
     return this.dateRange() && this.dateRange()?.length !== 0 ? HelperFunctions.formatDateToCustomFormat(this.dateRange()![1]) : "-"
   })
   totalPrice = computed(() => {
-    return this.totalDuration() ? this.totalDuration()!*this.parkingSpot()?.pricePerHour! : null
+    return this.totalDuration() ? this.totalDuration()!*parseInt(this.parkingSpot()?.pricePerHour!) : null
   })
   totalDuration = computed(() => {
     return this.selectedEndTime() && this.selectedStartTime() ? this.getDuration(this.selectedStartTime(), this.selectedEndTime()) : null
@@ -46,7 +46,7 @@ export class ParkingSpotDetailsComponent {
   })
   reservationDetails = computed(() => {
     return {
-      spotId: this.parkingSpot()?.id!,
+      spotId: this.parkingSpot()?.spotId!,
       startTime: this.selectedStartTime()!,
       endTime: this.selectedEndTime()!,
     }
@@ -95,7 +95,7 @@ export class ParkingSpotDetailsComponent {
   constructor() {}
 
   ngOnInit(): void {
-    this.parkingSpotsService.fetchParkingSpotById(this.parkingSpotId()!)
+    this.parkingSpotsService.fetchParkingSpotById(parseInt(this.parkingSpotId()!, 10))
   }
 
   openConfirmationModal() {

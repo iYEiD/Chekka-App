@@ -26,7 +26,8 @@ export class ParkingSpotsComponent {
     this.router.navigate([detailsPageUrl, id]);
   }
 
-  toggleIsFavorite(id: string) {
-    this.parkingSpotsService.toggleIsFavorite(id)
+  updateIsFavorite(emitterData: any) {
+    this.parkingSpotsService.toggleIsFavorite(emitterData.spotId)
+    // this.parkingSpotsService.updateIsFavorite(emitterData.spotId, emitterData.isFavorite)
   }
 }
