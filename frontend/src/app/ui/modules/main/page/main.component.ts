@@ -45,7 +45,7 @@ export class MainComponent {
       price_range: this.priceRange()![0] !== this.minPriceFilter() || this.priceRange()![1] !== this.maxPriceFilter() ? this.priceRange() : null,
       amenities: this.selectedAmenities().length !== 0 ? this.selectedAmenities() : null,
       search_value: this.debouncedSearchValue(),
-      date_range: this.dateTimeRange() ? [HelperFunctions.formatFilterDate(this.dateTimeRange()![0]), HelperFunctions.formatFilterDate(this.dateTimeRange()![1])] : null
+      // date_range: this.dateTimeRange() ? [HelperFunctions.formatFilterDate(this.dateTimeRange()![0]), HelperFunctions.formatFilterDate(this.dateTimeRange()![1])] : null
     }
   })
 
