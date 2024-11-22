@@ -22,7 +22,7 @@ export class ParkingSpotsApiService {
   updateSpotFavoriteStatus(spotId: number, status: boolean): Observable<any> {
     let updateSpotFavoriteStatusUrl = `${this.baseUrl}/parking-spots/update-favorite-status/${spotId}`
     console.log(updateSpotFavoriteStatusUrl, status)
-    return this.http.post(updateSpotFavoriteStatusUrl, {is_favourite: status})
+    return this.http.post(updateSpotFavoriteStatusUrl, {is_favorite: status})
   }
 
   reserveSpot(reservationDetails: ReservationDTOModel): Observable<any> {
