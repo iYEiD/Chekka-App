@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\ParkingSpot;
 use App\Repositories\Interfaces\ISpotRepo;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class SpotRepo implements ISpotRepo
 {
@@ -58,5 +59,23 @@ class SpotRepo implements ISpotRepo
     }
 
 
+
+    public function filterSpotsByAvailabilityAndTime($spots, $dayOfWeek, $startTime, $endTime)
+    {
+        // Print the spot IDs for debugging
+        error_log('Spot IDs: ' . implode(', ', $spots->pluck('spot_id')->toArray()));
+        $availableSpotIds = DB::table('availability')
+            ->whereIn('spot_id', $spots->pluck('spot_id')) // Filter spots from the provided list
+            ->where('day', $dayOfWeek)
+            ->where('start_time_availability', '<=', $startTime)
+            ->where('end_time_availability', '>=', $endTime)
+            ->pluck('spot_id'); // Return matching spot IDs
+
+        // Log the IDs for testing
+        error_log('Available Spot  [AVAILABILITY ONLY]: ' . implode(', ', $availableSpotIds->toArray()));
+
+     
+        return $spots->whereIn('spot_id', $availableSpotIds->toArray());
+    }
 
 }

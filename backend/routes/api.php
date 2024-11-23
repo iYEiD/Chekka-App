@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SpotsController;
-use App\Models\ParkingSpot;
 
 
+// Users
 Route::post('/user/signup', [UserController::class, 'signup']);
 Route::post('/user/login', [UserController::class, 'login']);
 
 
-
-Route::post('/fetch-parking-spots', [SpotsController::class, 'fetchParkingSpots'])->middleware('auth:api');
+// Parking Spots
+Route::post('/parking-spots/fetch-parking-spots', [SpotsController::class, 'fetchParkingSpots'])->middleware('auth:api');
+//TODO: parking-spots/update-favorite/{spot_id} + or params for details

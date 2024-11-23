@@ -6,14 +6,17 @@ use App\Services\Interfaces\ISpotService;
 use App\Repositories\SpotRepo;
 use App\Models\ParkingSpot;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\BookingRepo;
 
 class SpotService implements ISpotService{
 
     protected $spotRepo;
+    protected $bookingRepo;
 
-    public function __construct(SpotRepo $spotRepo)
+    public function __construct(SpotRepo $spotRepo, BookingRepo $bookingRepo)
     {
         $this->spotRepo = $spotRepo;
+        $this->bookingRepo = $bookingRepo;
     }
 
     public function fetchParkingSpots($request){
@@ -28,8 +31,12 @@ class SpotService implements ISpotService{
     }   
 
     public function fetchParkingSpotsFiltered($request){
-        // Apply filters
+        // Apply filters excluding time_range
         $filteredSpots = $this->applyFilters($request);
+        // Apply time range filter
+        if(isset($request->time_range)){
+        $filteredSpots = $this->applyTimeRangeFilter($filteredSpots, $request->time_range);
+        }   
         // Get User
         $user = Auth::user();
         // Pass filtered spots to apply favourites for the user 
@@ -39,6 +46,9 @@ class SpotService implements ISpotService{
        
         return $transformedSpots;
     }
+
+
+    // FINAL MAPPER
     public function transformSpots($spots)
     {
     
@@ -68,23 +78,23 @@ class SpotService implements ISpotService{
             return [
                 'spot_id' => $spot->spot_id,
                 'host_id' => $spot->host_id,
-                'longitude' => $spot->longitude,
-                'latitude' => $spot->latitude,
-                'price_per_hour' => $spot->price_per_hour,
+                'longitude' => (float)$spot->longitude,
+                'latitude' => (float)$spot->latitude,
+                'price_per_hour' => (float)$spot->price_per_hour,
                 'car_type' => $spot->car_type,
                 'title' => $spot->title,
                 'main_description' => $spot->main_description,
                 'status' => $spot->status,
                 'created_at' => $spot->created_at,
                 'updated_at' => $spot->updated_at,
-                'overall_rating' => $spot->overall_rating,
+                'overall_rating' => (float)$spot->overall_rating,
                 'location' => [
                     'city' => $spot->city,
                     'district' => $spot->district,
                     'address' => $spot->address,
                 ],
                 'amenities' => $amenities,
-                'is_favourite' => $spot->is_favourite,
+                'is_favorite' => $spot->is_favourite, //Intentionally O since frontend receives o not ou
             ];
         });
     
@@ -97,6 +107,35 @@ class SpotService implements ISpotService{
             $spot->is_favourite = $spot->isFavouriteForUser($userId);
             return $spot;
         });
+    }
+
+
+
+    public function applyTimeRangeFilter($spots, $timeRange)
+    {
+        // Parse the input time range
+        [$start, $end] = $timeRange;
+    
+        // Convert to Carbon instances for processing
+        $startTime = \Carbon\Carbon::createFromFormat('d/m/Y:H:i', $start);
+        $endTime = \Carbon\Carbon::createFromFormat('d/m/Y:H:i', $end);
+        
+        // Determine the day of the week
+        $dayOfWeek = $startTime->dayOfWeekIso;
+        
+        // Debug
+        error_log("Start Time: " . $startTime);
+        error_log("End Time: " . $endTime);
+        error_log("Day of Week: " . $dayOfWeek);
+
+        // Filter spots by availability
+        $availableSpots = $this->spotRepo->filterSpotsByAvailabilityAndTime($spots, $dayOfWeek, $startTime->format('H:i'), $endTime->format('H:i'));
+
+        // Filter Booked Spots
+        $filteredBookedSpots =$this->bookingRepo->filterBookedSpots($availableSpots, $timeRange);
+
+        return $filteredBookedSpots;
+
     }
 
 }
