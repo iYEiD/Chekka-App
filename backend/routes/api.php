@@ -8,8 +8,9 @@ use App\Http\Controllers\SpotsController;
 // Users
 Route::post('/user/signup', [UserController::class, 'signup']);
 Route::post('/user/login', [UserController::class, 'login']);
+Route::post('/user/logout', [UserController::class, 'logout'])->middleware('auth:api');
 
 
 // Parking Spots
 Route::post('/parking-spots/fetch-parking-spots', [SpotsController::class, 'fetchParkingSpots'])->middleware('auth:api');
-//TODO: parking-spots/update-favorite/{spot_id} + or params for details
+Route::post('/parking-spots/update-favorite/{spot_id}', [UserController::class, 'favouriteASpot'])->middleware('auth:api');

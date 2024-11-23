@@ -136,4 +136,16 @@ class SpotService implements ISpotService{
 
     }
 
+    public function updateFavoriteSpot($request){
+   
+        $user = Auth::user();
+        $spotId = $request->route('spot_id');
+        $isFavourite = $request->input('is_favorite');
+
+        if($isFavourite){
+            $this->spotRepo->addFavorite($spotId, $user->user_id);
+        }else{
+            $this->spotRepo->removeFavorite($spotId, $user->user_id);
+        }
+    }
 }
