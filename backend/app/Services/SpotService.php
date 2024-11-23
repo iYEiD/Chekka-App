@@ -85,8 +85,6 @@ class SpotService implements ISpotService{
                 'title' => $spot->title,
                 'main_description' => $spot->main_description,
                 'status' => $spot->status,
-                'created_at' => $spot->created_at,
-                'updated_at' => $spot->updated_at,
                 'overall_rating' => (float)$spot->overall_rating,
                 'location' => [
                     'city' => $spot->city,
@@ -94,7 +92,7 @@ class SpotService implements ISpotService{
                     'address' => $spot->address,
                 ],
                 'amenities' => $amenities,
-                'is_favorite' => $spot->is_favourite, //Intentionally O since frontend receives o not ou
+                'is_favorite' => $spot->is_favourite, //Intentionally favOrite since frontend receives o not favOUrite
             ];
         });
     
