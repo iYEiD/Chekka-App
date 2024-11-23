@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \Illuminate\Validation\ValidationException;
 use App\Services\UserService; 
-
+use App\Services\SpotService;
 class UserController extends Controller
 {   
     protected $userService;
-    //
-    public function __construct(UserService $userService)
+    protected $spotService;
+
+    public function __construct(UserService $userService, SpotService $spotService)
     {
         $this->userService = $userService; // Assign the injected service to the property
+        $this->spotService = $spotService;
     }
 
     public function signup(Request $request)
@@ -74,5 +76,14 @@ class UserController extends Controller
             ],
         ], 200);
        
+    }
+
+    public function logout(Request $request){
+        $request->user()->token()->revoke();
+        return response()->json(['message' => 'Logged out successfully'], 200);
+    }   
+
+    public function favouriteASpot(Request $request){
+        $this->spotService->updateFavoriteSpot($request);
     }
 }

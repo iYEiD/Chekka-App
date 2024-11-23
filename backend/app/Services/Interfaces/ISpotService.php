@@ -8,4 +8,5 @@ interface ISpotService{
     public function fetchParkingSpotsFiltered($request);
     public function transformSpots($spots);
     public function applyFavourites($spots, $userId);
+    public function updateFavoriteSpot($request);
 }
