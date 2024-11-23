@@ -30,8 +30,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {   
-
-
+        // Auto update pending bookings
+        $bookingRepo = app(BookingRepo::class);
+        $bookingRepo->updatePendingBookings();
 
     }
 
