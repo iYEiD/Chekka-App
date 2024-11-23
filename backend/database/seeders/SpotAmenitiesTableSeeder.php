@@ -12,7 +12,7 @@ class SpotAmenitiesTableSeeder extends Seeder
     {
         DB::table('spot_amenities')->insert([
             [
-                'spot_id' => 1,
+                'spot_id' => 100,
                 'is_covered' => true,
                 'has_security' => true,
                 'has_ev_charging' => false,
@@ -23,7 +23,7 @@ class SpotAmenitiesTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 2,
+                'spot_id' => 101,
                 'is_covered' => false,
                 'has_security' => false,
                 'has_ev_charging' => true,
@@ -34,7 +34,7 @@ class SpotAmenitiesTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 3,
+                'spot_id' => 102,
                 'is_covered' => true,
                 'has_security' => false,
                 'has_ev_charging' => true,
@@ -45,7 +45,7 @@ class SpotAmenitiesTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 4,
+                'spot_id' => 103,
                 'is_covered' => true,
                 'has_security' => true,
                 'has_ev_charging' => true,

@@ -13,7 +13,7 @@ class AvailabilityTableSeeder extends Seeder
         DB::table('availability')->insert([
             // Spot 1
             [
-                'spot_id' => 1,
+                'spot_id' => 100,
                 'start_time_availability' => '08:00:00',
                 'end_time_availability' => '20:00:00',
                 'day' => 1, // Monday
@@ -21,7 +21,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 1,
+                'spot_id' => 100,
                 'start_time_availability' => '08:00:00',
                 'end_time_availability' => '20:00:00',
                 'day' => 2, // Tuesday
@@ -29,7 +29,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 1,
+                'spot_id' => 100,
                 'start_time_availability' => '08:00:00',
                 'end_time_availability' => '20:00:00',
                 'day' => 3, // Wednesday
@@ -37,7 +37,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 1,
+                'spot_id' => 100,
                 'start_time_availability' => '08:00:00',
                 'end_time_availability' => '20:00:00',
                 'day' => 4, // Thursday
@@ -45,7 +45,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 1,
+                'spot_id' => 100,
                 'start_time_availability' => '08:00:00',
                 'end_time_availability' => '20:00:00',
                 'day' => 5, // Friday
@@ -53,7 +53,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 1,
+                'spot_id' => 100,
                 'start_time_availability' => '10:00:00',
                 'end_time_availability' => '18:00:00',
                 'day' => 6, // Saturday
@@ -61,7 +61,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 1,
+                'spot_id' => 100,
                 'start_time_availability' => '12:00:00',
                 'end_time_availability' => '16:00:00',
                 'day' => 7, // Sunday
@@ -70,7 +70,7 @@ class AvailabilityTableSeeder extends Seeder
             ],
             // Spot 2
             [
-                'spot_id' => 2,
+                'spot_id' => 101,
                 'start_time_availability' => '09:00:00',
                 'end_time_availability' => '17:00:00',
                 'day' => 1, // Monday
@@ -78,7 +78,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 2,
+                'spot_id' => 101,
                 'start_time_availability' => '09:00:00',
                 'end_time_availability' => '17:00:00',
                 'day' => 2, // Tuesday
@@ -86,7 +86,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 2,
+                'spot_id' => 101,
                 'start_time_availability' => '09:00:00',
                 'end_time_availability' => '17:00:00',
                 'day' => 3, // Wednesday
@@ -94,7 +94,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 2,
+                'spot_id' => 101,
                 'start_time_availability' => '09:00:00',
                 'end_time_availability' => '17:00:00',
                 'day' => 4, // Thursday
@@ -102,7 +102,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 2,
+                'spot_id' => 101,
                 'start_time_availability' => '09:00:00',
                 'end_time_availability' => '17:00:00',
                 'day' => 5, // Friday
@@ -110,7 +110,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 2,
+                'spot_id' => 101,
                 'start_time_availability' => '10:00:00',
                 'end_time_availability' => '14:00:00',
                 'day' => 6, // Saturday
@@ -118,7 +118,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 2,
+                'spot_id' => 101,
                 'start_time_availability' => '11:00:00',
                 'end_time_availability' => '15:00:00',
                 'day' => 7, // Sunday
@@ -127,7 +127,7 @@ class AvailabilityTableSeeder extends Seeder
             ],
             // Spot 3
             [
-                'spot_id' => 3,
+                'spot_id' => 102,
                 'start_time_availability' => '08:00:00',
                 'end_time_availability' => '17:00:00',
                 'day' => 1, // Monday
@@ -135,7 +135,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 3,
+                'spot_id' => 102,
                 'start_time_availability' => '08:00:00',
                 'end_time_availability' => '17:00:00',
                 'day' => 2, // Tuesday
@@ -143,7 +143,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 3,
+                'spot_id' => 102,
                 'start_time_availability' => '08:00:00',
                 'end_time_availability' => '17:00:00',
                 'day' => 3, // Wednesday
@@ -151,7 +151,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 3,
+                'spot_id' => 102,
                 'start_time_availability' => '08:00:00',
                 'end_time_availability' => '17:00:00',
                 'day' => 4, // Thursday
@@ -159,7 +159,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 3,
+                'spot_id' => 102,
                 'start_time_availability' => '08:00:00',
                 'end_time_availability' => '17:00:00',
                 'day' => 5, // Friday
@@ -167,7 +167,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 3,
+                'spot_id' => 102,
                 'start_time_availability' => '09:00:00',
                 'end_time_availability' => '13:00:00',
                 'day' => 6, // Saturday
@@ -175,7 +175,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 3,
+                'spot_id' => 102,
                 'start_time_availability' => '10:00:00',
                 'end_time_availability' => '14:00:00',
                 'day' => 7, // Sunday
@@ -184,7 +184,7 @@ class AvailabilityTableSeeder extends Seeder
             ],
             // Spot 4
             [
-                'spot_id' => 4,
+                'spot_id' => 103,
                 'start_time_availability' => '10:00:00',
                 'end_time_availability' => '16:00:00',
                 'day' => 1, // Monday
@@ -192,7 +192,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 4,
+                'spot_id' => 103,
                 'start_time_availability' => '10:00:00',
                 'end_time_availability' => '16:00:00',
                 'day' => 2, // Tuesday
@@ -200,7 +200,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 4,
+                'spot_id' => 103,
                 'start_time_availability' => '10:00:00',
                 'end_time_availability' => '16:00:00',
                 'day' => 3, // Wednesday
@@ -208,7 +208,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 4,
+                'spot_id' => 103,
                 'start_time_availability' => '10:00:00',
                 'end_time_availability' => '16:00:00',
                 'day' => 4, // Thursday
@@ -216,7 +216,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 4,
+                'spot_id' => 103,
                 'start_time_availability' => '10:00:00',
                 'end_time_availability' => '16:00:00',
                 'day' => 5, // Friday
@@ -224,7 +224,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 4,
+                'spot_id' => 103,
                 'start_time_availability' => '11:00:00',
                 'end_time_availability' => '15:00:00',
                 'day' => 6, // Saturday
@@ -232,7 +232,7 @@ class AvailabilityTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'spot_id' => 4,
+                'spot_id' => 103,
                 'start_time_availability' => '12:00:00',
                 'end_time_availability' => '14:00:00',
                 'day' => 7, // Sunday
