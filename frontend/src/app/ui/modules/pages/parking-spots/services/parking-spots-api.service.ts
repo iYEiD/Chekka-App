@@ -10,7 +10,7 @@ import {ParkingSpotDTOModel, ReservationDTOModel} from "../models/interfaces/par
 export class ParkingSpotsApiService {
   http = inject(HttpClient);
   baseUrl = `${environment.backendUrl}`
-  fetchParkingSportUrl = `${this.baseUrl}/fetch-parking-spots`
+  fetchParkingSportUrl = `${this.baseUrl}/parking-spots/fetch-parking-spots`
   reserveSpotUrl = `${this.baseUrl}/parking-spots/reserve-spot`
 
   constructor() { }

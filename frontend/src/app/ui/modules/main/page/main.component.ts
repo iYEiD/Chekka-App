@@ -58,7 +58,7 @@ export class MainComponent {
   amenities = signal<AmenitiesFilterModel[]>([
     {
       label: "Covered",
-      value: "covered",
+      value: "is_covered",
       isSelected: false
     },
     {
