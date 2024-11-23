@@ -86,4 +86,11 @@ class UserController extends Controller
     public function favouriteASpot(Request $request){
         $this->spotService->updateFavoriteSpot($request);
     }
+
+    public function updateDetails(Request $request){
+       if($this->userService->updateUserDetails($request) === null){
+        return response()->json(['message' => 'Invalid request'], 400);
+       }
+       return response()->json(['message' => 'User details updated successfully'], 200);
+    }
 }
