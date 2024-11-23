@@ -29,7 +29,7 @@ class UsersTableSeeder extends Seeder
                 'first_name' => 'Jane',
                 'last_name' => 'Doe',
                 'phone_number' => '0987654321',
-                'status' => 'blocked',
+                'status' => 'active',
                 'email' => 'demo2@gmail.com',
                 'password' => bcrypt('password'),
                 'created_at' => Carbon::now(),

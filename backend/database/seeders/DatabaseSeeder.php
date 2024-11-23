@@ -25,12 +25,12 @@ class DatabaseSeeder extends Seeder
         // $this->call(SpotAmenitiesTableSeeder::class);
 
         // Apply Local Seeders
-        // $this->call(UsersTableSeeder::class); // If already ran user demo seeders don't uncomment
-        // $this->call(ParkingSpotsTableSeeder::class);
-        // $this->call(SpotLocationsTableSeeder::class);
-        // $this->call(AvailabilityTableSeeder::class);
-        // $this->call(SpotAmenitiesTableSeeder::class);
-        // $this->call(BookingsTableSeeder::class);
-        // $this->call(FavouritesTableSeeder::class);
+        $this->call(UsersTableSeeder::class); // If already ran user demo seeders don't uncomment
+        $this->call(ParkingSpotsTableSeeder::class);
+        $this->call(SpotLocationsTableSeeder::class);
+        $this->call(AvailabilityTableSeeder::class);
+        $this->call(SpotAmenitiesTableSeeder::class);
+        $this->call(BookingsTableSeeder::class);
+        $this->call(FavouritesTableSeeder::class);
     }
 }

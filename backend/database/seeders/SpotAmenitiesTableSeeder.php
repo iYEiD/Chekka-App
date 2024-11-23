@@ -19,8 +19,7 @@ class SpotAmenitiesTableSeeder extends Seeder
                 'is_handicap_accessible' => true,
                 'has_lighting' => true,
                 'has_cctv' => true,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+
             ],
             [
                 'spot_id' => 101,
@@ -30,8 +29,7 @@ class SpotAmenitiesTableSeeder extends Seeder
                 'is_handicap_accessible' => false,
                 'has_lighting' => true,
                 'has_cctv' => false,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+
             ],
             [
                 'spot_id' => 102,
@@ -41,8 +39,7 @@ class SpotAmenitiesTableSeeder extends Seeder
                 'is_handicap_accessible' => false,
                 'has_lighting' => true,
                 'has_cctv' => true,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+
             ],
             [
                 'spot_id' => 103,
@@ -52,8 +49,7 @@ class SpotAmenitiesTableSeeder extends Seeder
                 'is_handicap_accessible' => true,
                 'has_lighting' => true,
                 'has_cctv' => true,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+ 
             ]
         ]);
     }

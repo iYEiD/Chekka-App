@@ -16,16 +16,14 @@ class SpotLocationsTableSeeder extends Seeder
                 'address' => 'Beirut Downtown',
                 'city' => 'Beirut',
                 'district' => 'Downtown',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+
             ],
             [
                 'spot_id' => 101,
                 'address' => 'Jounieh',
                 'city' => 'Beirut',
                 'district' => 'Jounieh',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+
             ]
             ,
             [
@@ -33,8 +31,7 @@ class SpotLocationsTableSeeder extends Seeder
                 'address' => 'Bay Area',
                 'city' => 'Beirut',
                 'district' => 'Bay Area',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+
             ]
             ,
             [
@@ -42,8 +39,7 @@ class SpotLocationsTableSeeder extends Seeder
                 'address' => 'Byblos Downtown',
                 'city' => 'Byblos',
                 'district' => 'Downtown',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+
             ]
         ]);
     }

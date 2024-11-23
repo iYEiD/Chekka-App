@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('availability', function (Blueprint $table) {
             $table->id('availability_id');
             $table->foreignId('spot_id')->constrained('parking_spots', 'spot_id');
-            $table->time('start_time_availability');
-            $table->time('end_time_availability');
+            $table->time('start_time');
+            $table->time('end_time_');
             $table->integer('day');
             $table->timestamps();
         });
