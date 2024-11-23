@@ -79,4 +79,14 @@ class SpotRepo implements ISpotRepo
         return $spots->whereIn('spot_id', $availableSpotIds->toArray());
     }
 
+    public function addFavorite($spotId, $userId){
+        DB::table('favourites')->insert([
+            'user_id' => $userId,
+            'spot_id' => $spotId
+        ]);
+    }   
+
+    public function removeFavorite($spotId, $userId){
+        DB::table('favourites')->where('user_id', $userId)->where('spot_id', $spotId)->delete();
+    }   
 }
