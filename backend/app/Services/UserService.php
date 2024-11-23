@@ -38,4 +38,34 @@ class UserService implements IuserService{
         return null;
     }
 
+
+    public function updateUserDetails($request){
+        $user = Auth::user();
+        if ($user) {
+            $column = $request->column;
+            $newValue = $request->newValue;
+            if ($column !== null && $newValue !== null){
+                if (in_array($column, ['first_name', 'last_name', 'phone_number', 'email'])) {
+                    if ($column == 'first_name' || $column == 'last_name') {
+                        if (!preg_match("/^[a-zA-Z]+$/", $newValue)) {
+                            return null; // Invalid name
+                        }
+                    } elseif ($column == 'phone_number') {
+                        if (!preg_match("/^[0-9]{10,15}$/", $newValue)) {
+                            return null; // Invalid phone number
+                        }
+                    } elseif ($column == 'email') {
+                        if (!filter_var($newValue, FILTER_VALIDATE_EMAIL)) {
+                            return null; // Invalid email
+                        }
+                    }
+                    $user->$column = $newValue;
+                    $user->save();
+                    return $user;
+                }
+            }
+        }
+
+        return null;
+    }
 }
