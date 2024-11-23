@@ -17,19 +17,19 @@ class FavouritesTableSeeder extends Seeder
         DB::table('favourites')->insert([
             [
                 'user_id' => 105,
-                'spot_id' => 1,
+                'spot_id' => 100,
             ],
             [
                 'user_id' => 106,
-                'spot_id' => 2,
+                'spot_id' => 101,
             ],
             [
                 'user_id' => 105,
-                'spot_id' => 3,
+                'spot_id' => 102,
             ],
             [
                 'user_id' => 106,
-                'spot_id' => 4,
+                'spot_id' => 103,
             ],
             
         ]);

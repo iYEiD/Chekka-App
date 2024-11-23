@@ -28,33 +28,34 @@ class SpotRepo implements ISpotRepo
             ->select('parking_spots.*', 'spot_locations.city', 'spot_locations.address', 'spot_locations.district', 'spot_amenities.*');
         //possible filters: vehicle_type, price_range, search_value,amenities[], time_range[]   
      
-        
-        if(isset($filters['vehicle_type'])){
+        if (isset($filters['vehicle_type'])) {
             $query->where('car_type', $filters['vehicle_type']);
-            }
-       
-        if(isset($filters['price_range'])){
+        }
+
+        if (isset($filters['price_range'])) {
             $query->whereBetween('price_per_hour', $filters['price_range']);
         }
-        
+
         if (!empty($filters['amenities'])) {
             $amenities = $filters['amenities'];
             foreach ($amenities as $amenity) {
-                // Check if the column exists in the table
-                if (Schema::hasColumn('spot_amenities', $amenity)) {
-                    $query->where("spot_amenities.$amenity", true);
-                }
+            // Check if the column exists in the table
+            if (Schema::hasColumn('spot_amenities', $amenity)) {
+                $query->where("spot_amenities.$amenity", true);
+            }
             }
         }
-       
-        if(isset($filters['search_value'])){
+
+        if (isset($filters['search_value'])) {
             $searchValue = strtolower($filters['search_value']);
+            $query->where(function ($query) use ($searchValue) {
             $query->whereRaw("INSTR(LOWER(city), ?) > 0", [$searchValue])
                   ->orWhereRaw("INSTR(LOWER(address), ?) > 0", [$searchValue])
                   ->orWhereRaw("INSTR(LOWER(district), ?) > 0", [$searchValue]);
+            });
         }
 
-         // TIME RANGE TO BE ADDED
+        // TIME RANGE TO BE ADDED
         return $query->get();   
     }
 
@@ -67,8 +68,8 @@ class SpotRepo implements ISpotRepo
         $availableSpotIds = DB::table('availability')
             ->whereIn('spot_id', $spots->pluck('spot_id')) // Filter spots from the provided list
             ->where('day', $dayOfWeek)
-            ->where('start_time_availability', '<=', $startTime)
-            ->where('end_time_availability', '>=', $endTime)
+            ->where('start_time', '<=', $startTime)
+            ->where('end_time', '>=', $endTime)
             ->pluck('spot_id'); // Return matching spot IDs
 
         // Log the IDs for testing

@@ -12,38 +12,34 @@ class SpotLocationsTableSeeder extends Seeder
     {
         DB::table('spot_locations')->insert([
             [
-                'spot_id' => 1,
-                'address' => '123 Main St',
-                'city' => 'Bangalore',
-                'district' => 'Central',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+                'spot_id' => 100,
+                'address' => 'Beirut Downtown',
+                'city' => 'Beirut',
+                'district' => 'Downtown',
+
             ],
             [
-                'spot_id' => 2,
-                'address' => '456 Elm St',
-                'city' => 'Mountain View',
-                'district' => 'Santa Clara',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+                'spot_id' => 101,
+                'address' => 'Jounieh',
+                'city' => 'Beirut',
+                'district' => 'Jounieh',
+
             ]
             ,
             [
-                'spot_id' => 3,
-                'address' => '789 Pine St',
-                'city' => 'San Francisco',
+                'spot_id' => 102,
+                'address' => 'Bay Area',
+                'city' => 'Beirut',
                 'district' => 'Bay Area',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+
             ]
             ,
             [
-                'spot_id' => 4,
-                'address' => '101 Oak St',
-                'city' => 'Los Angeles',
+                'spot_id' => 103,
+                'address' => 'Byblos Downtown',
+                'city' => 'Byblos',
                 'district' => 'Downtown',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+
             ]
         ]);
     }
