@@ -26,5 +26,9 @@ class SpotsController extends Controller
     }
 
     
+    public function fetchParkingSpotDetails(Request $request){
+        $spot = $this->spotService->fetchParkingSpotDetails($request);
+        return response()->json($spot);
+    }   
 }   
 
