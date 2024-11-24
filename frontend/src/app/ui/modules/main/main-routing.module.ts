@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {ParkingSpotsComponent} from "../pages/parking-spots/page/parking-spots.component";
 import {ParkingSpotDetailsComponent} from "../pages/parking-spot-details/page/parking-spot-details.component";
 import {AccountComponent} from "../pages/account/page/account.component";
+import {MapComponent} from "../pages/map/page/map.component";
 
 const routes: Routes = [
   {
@@ -19,6 +20,11 @@ const routes: Routes = [
     path: 'account',
     component: AccountComponent,
     loadChildren: () => import('../pages/account/account.module').then(m => m.AccountModule)
+  },
+  {
+    path: 'map',
+    component: MapComponent,
+    loadChildren: () => import('../pages/map/map.module').then(m => m.MapModule)
   },
   { path: '**', redirectTo: 'parking-spots'},
 ];

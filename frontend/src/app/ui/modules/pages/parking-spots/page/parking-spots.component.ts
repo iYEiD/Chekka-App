@@ -16,18 +16,11 @@ export class ParkingSpotsComponent {
     return this.parkingSpotsService.parkingSpots();
   })
 
-  ngOnInit(): void {
-    // fetch parking spots from backend
-  }
-
   navigateToDetailsPage(id: number) {
-    let detailsPageUrl = '/app/parking-spots'
-
-    this.router.navigate([detailsPageUrl, id]);
+    this.parkingSpotsService.navigateToDetailsPage(id)
   }
 
   updateIsFavorite(emitterData: any) {
-    this.parkingSpotsService.toggleIsFavorite(emitterData.spotId)
-    // this.parkingSpotsService.updateIsFavorite(emitterData.spotId, emitterData.isFavorite)
+    this.parkingSpotsService.updateIsFavorite(emitterData.spotId, emitterData.isFavorite)
   }
 }

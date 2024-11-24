@@ -10,7 +10,7 @@ import {ParkingSpotDTOModel, ReservationDTOModel} from "../models/interfaces/par
 export class ParkingSpotsApiService {
   http = inject(HttpClient);
   baseUrl = `${environment.backendUrl}`
-  fetchParkingSportUrl = `${this.baseUrl}/fetch-parking-spots`
+  fetchParkingSportUrl = `${this.baseUrl}/parking-spots/fetch-parking-spots`
   reserveSpotUrl = `${this.baseUrl}/parking-spots/reserve-spot`
 
   constructor() { }
@@ -20,8 +20,7 @@ export class ParkingSpotsApiService {
   }
 
   updateSpotFavoriteStatus(spotId: number, status: boolean): Observable<any> {
-    let updateSpotFavoriteStatusUrl = `${this.baseUrl}/parking-spots/update-favorite-status/${spotId}`
-    console.log(updateSpotFavoriteStatusUrl, status)
+    let updateSpotFavoriteStatusUrl = `${this.baseUrl}/parking-spots/update-favorite/${spotId}`
     return this.http.post(updateSpotFavoriteStatusUrl, {is_favorite: status})
   }
 

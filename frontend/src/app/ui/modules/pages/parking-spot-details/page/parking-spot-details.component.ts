@@ -36,7 +36,7 @@ export class ParkingSpotDetailsComponent {
     return this.dateRange() && this.dateRange()?.length !== 0 ? HelperFunctions.formatDateToCustomFormat(this.dateRange()![1]) : "-"
   })
   totalPrice = computed(() => {
-    return this.totalDuration() ? this.totalDuration()!*parseInt(this.parkingSpot()?.pricePerHour!) : null
+    return this.totalDuration() ? this.totalDuration()!*this.parkingSpot()?.pricePerHour! : null
   })
   totalDuration = computed(() => {
     return this.selectedEndTime() && this.selectedStartTime() ? this.getDuration(this.selectedStartTime(), this.selectedEndTime()) : null
