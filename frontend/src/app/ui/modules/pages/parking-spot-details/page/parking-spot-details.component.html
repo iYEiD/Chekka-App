@@ -1,7 +1,7 @@
 <div class="page-content">
   <div class="flex justify-between items-center">
     <div class="text-3xl text-secondary-10">{{parkingSpot()?.title}}</div>
-    <button class="flex cursor-pointer hover:bg-secondary-1 rounded-md py-1.5 px-2" (click)="parkingSpotsService.toggleIsFavorite(parkingSpot()?.spotId!)">
+    <button class="flex cursor-pointer hover:bg-secondary-1 rounded-md py-1.5 px-2" (click)="parkingSpotsService.updateIsFavorite(parkingSpot()?.spotId!, !parkingSpot()?.isFavorite)">
       <i [ngClass]="parkingSpot()?.isFavorite ? 'text-favorite' : 'text-secondary-10'"
          class="bi bi-heart-fill text-base cursor-pointer"></i>
       <div class="ml-1.5 underline">Save</div>

@@ -20,8 +20,7 @@ export class ParkingSpotsApiService {
   }
 
   updateSpotFavoriteStatus(spotId: number, status: boolean): Observable<any> {
-    let updateSpotFavoriteStatusUrl = `${this.baseUrl}/parking-spots/update-favorite-status/${spotId}`
-    console.log(updateSpotFavoriteStatusUrl, status)
+    let updateSpotFavoriteStatusUrl = `${this.baseUrl}/parking-spots/update-favorite/${spotId}`
     return this.http.post(updateSpotFavoriteStatusUrl, {is_favorite: status})
   }
 

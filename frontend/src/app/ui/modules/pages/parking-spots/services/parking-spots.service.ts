@@ -3,33 +3,30 @@ import {ParkingSpotViewModel, ReservationViewModel} from "../models/interfaces/p
 import {ParkingSpotsApiService} from "./parking-spots-api.service";
 import {ParkingSpotMapper} from "../mappers/parking-spot.mapper";
 import {error} from "@ant-design/icons-angular";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ParkingSpotsService {
   parkingSpotsApiService = inject(ParkingSpotsApiService)
+  router = inject(Router)
+
   parkingSpots = signal<ParkingSpotViewModel[]>([])
   selectedParkingSpot = signal<ParkingSpotViewModel | null>(null)
 
   constructor() { }
 
-  toggleIsFavorite(id: number) {
-    this.parkingSpots.update((spots) =>
-      spots.map((spot) =>
-        spot.spotId === id
-          ? { ...spot, isFavorite: !spot.isFavorite }
-          : spot
-      )
-    );
-    this.fetchParkingSpotById(id)
-    // implement a backend endpoint as well to update the isFavorite field in the table
-  }
-
   updateIsFavorite(spotId: number, status: boolean) {
     this.parkingSpotsApiService.updateSpotFavoriteStatus(spotId, status).subscribe({
       next: (res) => {
-        console.log(res)
+        this.parkingSpots.update((spots) =>
+          spots.map((spot) =>
+            spot.spotId === spotId
+              ? { ...spot, isFavorite: !spot.isFavorite }
+              : spot
+          )
+        );
       },
       error: error => {}
     })
@@ -56,5 +53,11 @@ export class ParkingSpotsService {
         error: (err) => {
       }
     })
+  }
+
+  navigateToDetailsPage(id: number) {
+    let detailsPageUrl = '/app/parking-spots'
+
+    this.router.navigate([detailsPageUrl, id]);
   }
 }
