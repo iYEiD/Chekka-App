@@ -40,11 +40,11 @@ export interface UserDTOModel {
 }
 
 export interface UserViewModel {
-  id: number
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
+  id?: number
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phoneNumber?: string;
 }
 
 export interface DecodedTokenDTOModel {

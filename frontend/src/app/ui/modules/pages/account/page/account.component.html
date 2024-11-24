@@ -26,7 +26,20 @@
              [class.opacity-20]="editingField() && !detail.isBeingEdited"
         >{{ detail.value }}</div>
       } @else {
-        <input class="!mt-2 !h-[40px]" nz-input [(ngModel)]="detail.value">
+        @if (detail.field !== 'password') {
+          <input class="!mt-2 !h-[40px]" nz-input [(ngModel)]="detail.value">
+        } @else {
+          <div class="!mt-2">Old Password</div>
+          <input class="!mt-2 !mb-4 !h-[40px]" nz-input [(ngModel)]="oldPassword">
+          <div class="flex items-center !mt-2">
+            <div>New Password</div>
+            <i
+              class="bi bi-info-circle ml-2"
+              nz-tooltip="Passord should be at least 8 characters long, contain at least 1 capital letter, 1 special character and 1 number">
+            </i>
+          </div>
+          <input class="!mt-2 !h-[40px]" nz-input [(ngModel)]="newPassword">
+        }
         <button class="mt-5" nz-button nzType="primary" nzSize="large" (click)="updateDetails()">Save</button>
       }
       <nz-divider></nz-divider>

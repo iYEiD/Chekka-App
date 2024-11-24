@@ -8,18 +8,20 @@ import {NzDividerModule} from "ng-zorro-antd/divider";
 import {NzInputModule} from "ng-zorro-antd/input";
 import {NzButtonModule} from "ng-zorro-antd/button";
 import {FormsModule} from "@angular/forms";
+import {NzToolTipModule} from "ng-zorro-antd/tooltip";
 
 
 @NgModule({
   declarations: [AccountComponent],
-  imports: [
-    CommonModule,
-    AccountRoutingModule,
-    SharedPipesModule,
-    NzDividerModule,
-    NzInputModule,
-    NzButtonModule,
-    FormsModule
-  ]
+    imports: [
+        CommonModule,
+        AccountRoutingModule,
+        SharedPipesModule,
+        NzDividerModule,
+        NzInputModule,
+        NzButtonModule,
+        FormsModule,
+        NzToolTipModule
+    ]
 })
 export class AccountModule { }

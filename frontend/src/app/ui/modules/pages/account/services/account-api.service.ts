@@ -8,13 +8,16 @@ import {Observable} from "rxjs";
 })
 export class AccountApiService {
   http = inject(HttpClient)
-  baseUrl = `${environment.backendUrl}`
-  updateUserDetailUrl = `${this.baseUrl}/user/update-details`
+  baseUrl = `${environment.backendUrl}/user`
+  updateUserDetailUrl = `${this.baseUrl}/update-details`
 
   constructor() { }
 
-  updateUserDetails(changes: any): Observable<any> {
-    console.log(changes)
-    return this.http.post(this.updateUserDetailUrl, changes)
+  updateUserDetails(column: string, newValue: string | number, oldValue?: string): Observable<any> {
+    return this.http.post(this.updateUserDetailUrl, {
+      column: column,
+      newValue: newValue,
+      // oldValue: oldValue
+    })
   }
 }
