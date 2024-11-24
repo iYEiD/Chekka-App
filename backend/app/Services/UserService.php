@@ -18,7 +18,7 @@ class UserService implements IuserService{
         $user = new User();
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
-        $user->status = "active"; //default until implemented by admins
+        $user->status = "pending"; //default pending
         $user->phone_number = $request->phone_number;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
@@ -36,6 +36,10 @@ class UserService implements IuserService{
             return $user;
         };
         return null;
+    }
+
+    public function getUser(){
+        return Auth::user();
     }
 
 
@@ -68,4 +72,43 @@ class UserService implements IuserService{
 
         return null;
     }
+
+    public function fetchUserData(){
+    $user = Auth::user();
+    
+    // Create a simplified user object
+    $response = [
+        'first_name' => $user->first_name,
+    ];
+    
+    // Set FavoriteSpots
+    $response['favoriteSpots'] = $user->favourites->map(function ($favourite) {
+        return $favourite->parkingSpot;
+    })->values();
+
+    // Set Pending Bookings
+    $response['upcomingBookings'] = $user->bookings->where('status', 'upcoming')->map(function ($booking) {
+        $booking->spotDetails = $booking->parkingSpot;
+        unset($booking->parkingSpot);
+        return $booking;
+    })->values();
+
+    // Set Completed Bookings
+    $response['completedBookings'] = $user->bookings->where('status', 'completed')->map(function ($booking) {
+        $booking->is_reviewed = $booking->reviews()->where('user_id', $booking->guest_id)->exists();
+        $booking->spotDetails = $booking->parkingSpot;
+        unset($booking->parkingSpot);
+        return $booking;
+    })->values();
+
+    // Set Cancelled Bookings
+    $response['cancelledBookings'] = $user->bookings->where('status', 'cancelled')->map(function ($booking) {
+        $booking->spotDetails = $booking->parkingSpot;
+        unset($booking->parkingSpot);
+        return $booking;
+    })->values();
+
+    return $response;
+}
+
 }

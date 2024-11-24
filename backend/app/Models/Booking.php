@@ -28,5 +28,10 @@ class Booking extends Model
     {
         return $this->belongsTo(ParkingSpot::class, 'spot_id', 'spot_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'booking_id', 'booking_id');
+    }   
     
 }
