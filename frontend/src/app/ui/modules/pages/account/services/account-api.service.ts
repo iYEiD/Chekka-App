@@ -17,7 +17,7 @@ export class AccountApiService {
     return this.http.post(this.updateUserDetailUrl, {
       column: column,
       newValue: newValue,
-      // oldValue: oldValue
+      oldValue: oldValue
     })
   }
 }
