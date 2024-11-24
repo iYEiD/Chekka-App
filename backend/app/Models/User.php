@@ -31,10 +31,24 @@ class User extends Authenticatable
 
 
     public function favourites()
-{
-    return $this->hasMany(Favourite::class, 'user_id');
-}
+    {
+        return $this->hasMany(Favourite::class, 'user_id');
+    }   
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'user_id');
+    }
+
+    public function spotsOwned()
+    {
+        return $this->hasMany(ParkingSpot::class, 'host_id');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'guest_id');
+    }
 
 
     /**

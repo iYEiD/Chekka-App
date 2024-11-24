@@ -13,4 +13,10 @@ class Favourite extends Model
         'user_id',
     ];
     protected $primaryKey = 'favourite_id';
+
+    public function parkingSpot()   
+    {
+        return $this->belongsTo(ParkingSpot::class, 'spot_id', 'spot_id');
+    }
+
 }

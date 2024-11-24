@@ -93,4 +93,14 @@ class UserController extends Controller
        }
        return response()->json(['message' => 'User details updated successfully'], 200);
     }
+
+    public function userDashboard(){
+        $userData = $this->userService->fetchUserData();
+        return response()->json($userData, 200);
+    }   
+
+    public function userDetails(){
+        $user = $this->userService->getUser();
+        return response()->json($user, 200);
+    }
 }

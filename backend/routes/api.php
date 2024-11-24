@@ -9,6 +9,8 @@ use App\Http\Controllers\SpotsController;
 Route::post('/user/signup', [UserController::class, 'signup']);
 Route::post('/user/login', [UserController::class, 'login']);
 Route::post('/user/update-details', [UserController::class, 'updateDetails'])->middleware('auth:api');
+Route::get('/user/user-details', [UserController::class, 'userDetails'])->middleware('auth:api');
+Route::get('/user/user-dashboard', [UserController::class, 'userDashboard'])->middleware('auth:api');
 Route::post('/user/logout', [UserController::class, 'logout'])->middleware('auth:api');
 
 
