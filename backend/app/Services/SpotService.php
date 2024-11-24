@@ -192,7 +192,7 @@ class SpotService implements ISpotService
         $spot->amenities = $amenities;
 
         // Append Locations
-        $location = $spot->location()->get();
+        $location = $spot->location()->first();
         $spot->location = $location;
 
         // Get Reviews 
