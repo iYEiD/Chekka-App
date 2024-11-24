@@ -4,6 +4,7 @@ import {UserViewModel} from "../../../../../models/authentication/interfaces/aut
 import {SnackbarService} from "../../../../../services/snack-bar/services/snackbar.service";
 import {SnackbarTypeEnums} from "../../../../../services/snack-bar/enum/snackbar-type.enums";
 import {AccountService} from "../services/account.service";
+import {HelperFunctions} from "../../../../../common/helper-functions";
 
 @Component({
   selector: 'app-page',
@@ -71,21 +72,23 @@ export class AccountComponent {
       let originalValue = this.userDetails().filter(detail => detail.field === this.editingField());
       let newValue = this.userDetailsWithEditing().filter(detail => detail.field === this.editingField());
       if (!this.columnValueValidator(this.editingField()!, newValue[0].value)) {
-        this.snackbarService.openSnackBar(SnackbarTypeEnums.ERROR, "Wrong value format")
+        this.snackbarService.openSnackBar(SnackbarTypeEnums.ERROR, `Wrong value format for ${HelperFunctions.fromCamelToTitleCase(this.editingField()!)}`)
         return
       }
       if (originalValue[0].value === newValue[0].value) {
-        this.snackbarService.openSnackBar(SnackbarTypeEnums.WARNING, "No change in field value")
+        this.snackbarService.openSnackBar(SnackbarTypeEnums.WARNING, `No change in ${HelperFunctions.fromCamelToTitleCase(this.editingField()!)} value`)
       } else {
         this.accountService.updateUserDetails(newValue[0].field, newValue[0].value!)
         this.toggleIsBeingEdited(this.editingField()!)
       }
     } else {
       if (!this.columnValueValidator(this.editingField()!, this.newPassword())) {
-        this.snackbarService.openSnackBar(SnackbarTypeEnums.ERROR, "Wrong value format")
+        this.snackbarService.openSnackBar(SnackbarTypeEnums.ERROR, `Wrong value format for ${HelperFunctions.fromCamelToTitleCase(this.editingField()!)}`)
         return
       }
       this.accountService.updateUserDetails(this.editingField()!, this.newPassword()!, this.oldPassword()!)
+      this.oldPassword.set(null)
+      this.newPassword.set(null)
       this.toggleIsBeingEdited(this.editingField()!)
     }
   }
