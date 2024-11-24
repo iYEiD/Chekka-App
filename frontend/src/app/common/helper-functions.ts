@@ -48,4 +48,15 @@ export class HelperFunctions {
 
     return `${day}/${month}/${year}:${hour}:00`;
   }
+
+  public static fromCamelToSnakeCase(value: string) {
+    return value.replace(/([A-Z])/g, '_$1').toLowerCase();
+  }
+
+  public static fromCamelToTitleCase(value: string) {
+    return value
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, char => char.toUpperCase())
+      .trim();
+  }
 }

@@ -13,7 +13,6 @@ export class MapComponent {
   router = inject(Router)
   parkingSpotsService = inject(ParkingSpotsService)
   parkingSpots = computed(() => {
-    console.log(this.parkingSpotsService.parkingSpots())
     return this.parkingSpotsService.parkingSpots()
   })
 

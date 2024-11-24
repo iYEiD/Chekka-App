@@ -4,6 +4,7 @@ import {UserViewModel} from "../../../../../models/authentication/interfaces/aut
 import {SnackbarService} from "../../../../../services/snack-bar/services/snackbar.service";
 import {SnackbarTypeEnums} from "../../../../../services/snack-bar/enum/snackbar-type.enums";
 import {AccountService} from "../services/account.service";
+import {HelperFunctions} from "../../../../../common/helper-functions";
 
 @Component({
   selector: 'app-page',
@@ -37,11 +38,24 @@ export class AccountComponent {
     const details = this.userDetails();
     const currentEditingField = this.editingField();
 
-    return details.map(detail => ({
+    const detailsWithPassword = [
+      ...details,
+      {
+        field: 'password',
+        value: '',
+        isBeingEdited: currentEditingField === 'password'
+      }
+    ];
+
+    // Map details and update the `isBeingEdited` flag for each field
+    return detailsWithPassword.map(detail => ({
       ...detail,
-      isBeingEdited: detail.field === currentEditingField,
+      isBeingEdited: detail.field === currentEditingField
     }));
   });
+
+  oldPassword = signal<string | null>(null)
+  newPassword = signal<string | null>(null)
 
   toggleIsBeingEdited(field: string) {
     const currentEditingField = this.editingField();
@@ -54,13 +68,52 @@ export class AccountComponent {
   }
 
   updateDetails() {
-    let originalValue = this.userDetails().filter(detail => detail.field === this.editingField());
-    let newValue = this.userDetailsWithEditing().filter(detail => detail.field === this.editingField());
-    if (originalValue[0].value === newValue[0].value) {
-      this.snackbarService.openSnackBar(SnackbarTypeEnums.WARNING, "No change in field value")
+    if (this.editingField() !== 'password') {
+      let originalValue = this.userDetails().filter(detail => detail.field === this.editingField());
+      let newValue = this.userDetailsWithEditing().filter(detail => detail.field === this.editingField());
+      if (!this.columnValueValidator(this.editingField()!, newValue[0].value)) {
+        this.snackbarService.openSnackBar(SnackbarTypeEnums.ERROR, `Wrong value format for ${HelperFunctions.fromCamelToTitleCase(this.editingField()!)}`)
+        return
+      }
+      if (originalValue[0].value === newValue[0].value) {
+        this.snackbarService.openSnackBar(SnackbarTypeEnums.WARNING, `No change in ${HelperFunctions.fromCamelToTitleCase(this.editingField()!)} value`)
+      } else {
+        this.accountService.updateUserDetails(newValue[0].field, newValue[0].value!)
+        this.toggleIsBeingEdited(this.editingField()!)
+      }
     } else {
-      this.accountService.updateUserDetails(newValue[0])
+      if (!this.columnValueValidator(this.editingField()!, this.newPassword())) {
+        this.snackbarService.openSnackBar(SnackbarTypeEnums.ERROR, `Wrong value format for ${HelperFunctions.fromCamelToTitleCase(this.editingField()!)}`)
+        return
+      }
+      this.accountService.updateUserDetails(this.editingField()!, this.newPassword()!, this.oldPassword()!)
+      this.oldPassword.set(null)
+      this.newPassword.set(null)
+      this.toggleIsBeingEdited(this.editingField()!)
     }
-    this.toggleIsBeingEdited(this.editingField()!)
   }
+
+  columnValueValidator(column: string, value: any): boolean {
+    switch (column) {
+      case 'firstName':
+      case 'lastName':
+        return typeof value === 'string' && /^[a-zA-Z]+$/.test(value);
+
+      case 'email':
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return typeof value === 'string' && emailPattern.test(value);
+
+      case 'phoneNumber':
+        const phoneNumberPattern = /^\d{8}$/;
+        return typeof value === 'string' && phoneNumberPattern.test(value);
+
+      case 'password':
+        const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/;
+        return typeof value === 'string' && passwordPattern.test(value);
+
+      default:
+        return false;
+    }
+  }
+
 }
