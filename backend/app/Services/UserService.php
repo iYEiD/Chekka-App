@@ -48,8 +48,18 @@ class UserService implements IuserService{
         if ($user) {
             $column = $request->column;
             $newValue = $request->newValue;
+            $oldValue = $request->oldValue ?? null;
+
             if ($column !== null && $newValue !== null){
-                if (in_array($column, ['first_name', 'last_name', 'phone_number', 'email'])) {
+                if ($column === 'password' && $oldValue !== null) {
+                    if (Hash::check($oldValue, $user->password)) {
+                        $user->password = Hash::make($newValue);
+                        $user->save();
+                        return $user;
+                    } else {
+                        return null; // Old password does not match
+                    }
+                } elseif (in_array($column, ['first_name', 'last_name', 'phone_number', 'email'])) {
                     if ($column == 'first_name' || $column == 'last_name') {
                         if (!preg_match("/^[a-zA-Z]+$/", $newValue)) {
                             return null; // Invalid name
