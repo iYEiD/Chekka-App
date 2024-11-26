@@ -4,6 +4,7 @@ import {ParkingSpotsComponent} from "../pages/parking-spots/page/parking-spots.c
 import {ParkingSpotDetailsComponent} from "../pages/parking-spot-details/page/parking-spot-details.component";
 import {AccountComponent} from "../pages/account/page/account.component";
 import {MapComponent} from "../pages/map/page/map.component";
+import {DashboardComponent} from "../pages/dashboard/page/dashboard.component";
 
 const routes: Routes = [
   {
@@ -20,6 +21,11 @@ const routes: Routes = [
     path: 'account',
     component: AccountComponent,
     loadChildren: () => import('../pages/account/account.module').then(m => m.AccountModule)
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    loadChildren: () => import('../pages/dashboard/dashboard.module').then(m => m.DashboardModule)
   },
   {
     path: 'map',
