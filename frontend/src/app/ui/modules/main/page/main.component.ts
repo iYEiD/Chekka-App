@@ -63,27 +63,27 @@ export class MainComponent {
     },
     {
       label: "Security",
-      value: "security",
+      value: "has_security",
       isSelected: false
     },
     {
       label: "EV Charging",
-      value: "ev_charging",
+      value: "has_ev_charging",
       isSelected: false
     },
     {
-      label: "Handicap",
-      value: "handicap",
+      label: "Handicap Accessible",
+      value: "is_handicap_accessible",
       isSelected: false
     },
     {
       label: "Lighting",
-      value: "lighting",
+      value: "has_lighting",
       isSelected: false
     },
     {
       label: "CCTV",
-      value: "cctv",
+      value: "has_cctv",
       isSelected: false
     }
   ])

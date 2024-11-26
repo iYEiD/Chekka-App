@@ -14,10 +14,12 @@ export class ParkingSpotDetailsComponent {
   parkingSpotsService = inject(ParkingSpotsService)
 
   amenitiesIconMap: Record<string, string> = {
-    covered: "bi bi-droplet",
-    ev_charging: "bi bi-ev-station",
-    security: "bi bi-shield",
-    cctv: "bi bi-camera-video"
+    Covered: "bi bi-droplet",
+    Handicap: "bi bi-person-wheelchair",
+    Security: "bi bi-shield",
+    Lighting: "bi bi-lightbulb",
+    CCTV: "bi bi-camera-video",
+    EV: "bi bi-ev-station"
   };
 
   parkingSpot = computed(() => {
@@ -30,19 +32,26 @@ export class ParkingSpotDetailsComponent {
 
   dateRange = signal<string[] | null>(null)
   selectedStartTime = computed(() => {
-    return this.dateRange() && this.dateRange()?.length !== 0 ? HelperFunctions.formatDateToCustomFormat(this.dateRange()![0]) : "-"
+    return this.dateRange() && this.dateRange()?.length !== 0 ? HelperFunctions.formatDateToCustomFormat(this.dateRange()![0]) : null
   })
   selectedEndTime = computed(() => {
-    return this.dateRange() && this.dateRange()?.length !== 0 ? HelperFunctions.formatDateToCustomFormat(this.dateRange()![1]) : "-"
+    return this.dateRange() && this.dateRange()?.length !== 0 ? HelperFunctions.formatDateToCustomFormat(this.dateRange()![1]) : null
   })
   totalPrice = computed(() => {
     return this.totalDuration() ? this.totalDuration()!*this.parkingSpot()?.pricePerHour! : null
   })
   totalDuration = computed(() => {
-    return this.selectedEndTime() && this.selectedStartTime() ? this.getDuration(this.selectedStartTime(), this.selectedEndTime()) : null
+    return this.selectedEndTime() && this.selectedStartTime() ? this.getDuration(this.selectedStartTime()!, this.selectedEndTime()!) : null
+  })
+  invalidDateRange = computed(() => {
+    if (!this.selectedEndTime() || !this.selectedStartTime()) {
+      return false
+    } else {
+      return !this.compareDateStrings(this.selectedStartTime()!, this.selectedEndTime()!)
+    }
   })
   reserveButtonDisabled = computed(() => {
-    return this.totalPrice() === null
+    return this.totalPrice() === null || this.invalidDateRange()
   })
   reservationDetails = computed(() => {
     return {
@@ -53,6 +62,8 @@ export class ParkingSpotDetailsComponent {
   })
 
   isModalVisible: boolean = false
+
+  availabilityMap = new Map<number, { startHour: number; endHour: number }>();
 
   disabledDate = (current: Date): boolean => {
     if (!current) return false;
@@ -72,27 +83,35 @@ export class ParkingSpotDetailsComponent {
       };
     }
 
-    const formattedDate = this.formatDate(current as Date); // Format to 'yyyy-MM-dd'
+    const currentDate = current as Date;
+    const dayOfWeek = currentDate.getDay() || 7; // Convert Sunday (0) to 7
 
-    const disabledEntry = this.parkingSpot()?.disabledDateTimes?.find((entry) => entry.date === formattedDate);
+    const availability = this.availabilityMap.get(dayOfWeek);
 
-    if (disabledEntry && disabledEntry.hours && disabledEntry.hours.length > 0) {
-      return {
-        nzDisabledHours: () => disabledEntry.hours,
-        nzDisabledMinutes: () => [],
-        nzDisabledSeconds: () => [],
-      };
+    const disabledHours: any = [];
+    for (let hour = 0; hour < 24; hour++) {
+      if (availability && (hour < availability.startHour || hour > availability.endHour)) {
+        disabledHours.push(hour);
+      }
     }
 
     return {
-      nzDisabledHours: () => [],
+      nzDisabledHours: () => disabledHours,
       nzDisabledMinutes: () => [],
       nzDisabledSeconds: () => [],
     };
   };
 
-
-  constructor() {}
+  constructor() {
+    effect(() => {
+      let spot = this.parkingSpot()
+      this.parkingSpot()?.availability!.forEach(entry => {
+        const startHour = parseInt(entry.start_time.split(':')[0], 10);
+        const endHour = parseInt(entry.end_time.split(':')[0], 10);
+        this.availabilityMap.set(entry.day, { startHour, endHour });
+      });
+    })
+  }
 
   ngOnInit(): void {
     this.parkingSpotsService.fetchParkingSpotById(parseInt(this.parkingSpotId()!, 10))
@@ -126,6 +145,38 @@ export class ParkingSpotDetailsComponent {
 
     const diffInHours = diffInMilliseconds / (1000 * 60 * 60);
     return diffInHours;
+  }
+
+  compareDateStrings(startSignal: string, endSignal: string): boolean {
+    if (!startSignal || !endSignal) return false;
+
+    const startDate = this.parseCustomDateString(startSignal);
+    const endDate = this.parseCustomDateString(endSignal);
+
+    if (!startDate || !endDate) {
+      console.error("Invalid date format");
+      return false;
+    }
+
+    return startDate <= endDate;
+  }
+
+  parseCustomDateString(dateString: string): Date | null {
+    try {
+      const [datePart, timePart] = dateString.split('@');
+      const parsedDate = new Date(`${datePart.trim()} ${timePart.trim()}`);
+      return isNaN(parsedDate.getTime()) ? null : parsedDate;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  getAmenityIcon(amenity: string): string {
+    const matchingKey = Object.keys(this.amenitiesIconMap).find((key) =>
+      amenity.toLowerCase().startsWith(key.toLowerCase())
+    );
+
+    return matchingKey ? this.amenitiesIconMap[matchingKey] : '';
   }
 
 }

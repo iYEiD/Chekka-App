@@ -43,6 +43,11 @@ export class ParkingSpotsService {
   }
 
   fetchParkingSpotById(id: number) {
+    this.parkingSpotsApiService.fetchParkingSpotById(id).subscribe({
+      next: res => {
+        this.selectedParkingSpot.set(ParkingSpotMapper.fromParkingSpotDtoToViewModel(res))
+      }
+    })
     this.selectedParkingSpot.set(this.parkingSpots().filter(spot => spot.spotId === id)[0])
   }
 
