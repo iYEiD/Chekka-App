@@ -9,18 +9,24 @@ import {ParkingSpotDTOModel, ReservationDTOModel} from "../models/interfaces/par
 })
 export class ParkingSpotsApiService {
   http = inject(HttpClient);
-  baseUrl = `${environment.backendUrl}`
-  fetchParkingSportUrl = `${this.baseUrl}/parking-spots/fetch-parking-spots`
-  reserveSpotUrl = `${this.baseUrl}/parking-spots/reserve-spot`
+  baseUrl = `${environment.backendUrl}/parking-spots`
+  fetchParkingSpotsUrl = `${this.baseUrl}/fetch-parking-spots`
+  fetchParkingSpotByIdUrl = `${this.baseUrl}/fetch-parking-spot-details`
+  reserveSpotUrl = `${this.baseUrl}/reserve-spot`
 
   constructor() { }
 
   fetchParkingSpots(filters: any): Observable<ParkingSpotDTOModel[]> {
-    return this.http.post<ParkingSpotDTOModel[]>(this.fetchParkingSportUrl, filters)
+    return this.http.post<ParkingSpotDTOModel[]>(this.fetchParkingSpotsUrl, filters)
+  }
+
+  fetchParkingSpotById(spotId: number): Observable<ParkingSpotDTOModel> {
+    let updatedFetchParkingSpotByIdUrl = `${this.fetchParkingSpotByIdUrl}/${spotId}`
+    return this.http.get<ParkingSpotDTOModel>(updatedFetchParkingSpotByIdUrl)
   }
 
   updateSpotFavoriteStatus(spotId: number, status: boolean): Observable<any> {
-    let updateSpotFavoriteStatusUrl = `${this.baseUrl}/parking-spots/update-favorite/${spotId}`
+    let updateSpotFavoriteStatusUrl = `${this.baseUrl}/update-favorite/${spotId}`
     return this.http.post(updateSpotFavoriteStatusUrl, {is_favorite: status})
   }
 

@@ -3,6 +3,8 @@ import {CarTypeEnums, StatusEnums} from "../enums/parking-spots.enum";
 export interface ParkingSpotViewModel {
   spotId: number;
   hostId: number;
+  hostFirstname: string;
+  hostLastname: string;
   longitude: number;
   latitude: number;
   pricePerHour: number;
@@ -15,13 +17,16 @@ export interface ParkingSpotViewModel {
   amenities: string[];
   isFavorite: boolean;
   images: string[];
-  disabledDateTimes: DisabledDateTimesModel[]
-  reviews: ReviewViewModel[]
+  availability?: ParkingSpotAvailabilityViewModel[]
+  disabledDateTimes?: DisabledDateTimesModel[]
+  reviews?: ReviewViewModel[]
 }
 
 export interface ParkingSpotDTOModel {
   spot_id: number;
   host_id: number;
+  host_firstname: string;
+  host_lastname: string;
   longitude: number;
   latitude: number;
   price_per_hour: number;
@@ -29,12 +34,29 @@ export interface ParkingSpotDTOModel {
   title: string;
   main_description: string;
   status: StatusEnums;
-  created_at: string;
-  updated_at: string;
   overall_rating: number;
   location: LocationDTOModel;
   amenities: string[];
   is_favorite: boolean;
+  availability: ParkingSpotAvailabilityDTOModel[]
+  disabledDateTimes: DisabledDateTimesModel[]
+  reviews: ReviewDTOModel[]
+}
+
+export interface ParkingSpotAvailabilityDTOModel {
+  availability_id: number;
+  day: number;
+  end_time: string;
+  spot_id: number;
+  start_time: string
+}
+
+export interface ParkingSpotAvailabilityViewModel {
+  availability_id: number;
+  day: number;
+  end_time: string;
+  spot_id: number;
+  start_time: string
 }
 
 export interface LocationDTOModel {
@@ -64,13 +86,30 @@ export interface AmenitiesFilterModel {
   isSelected: boolean;
 }
 
-export interface ReviewViewModel {
-  userFirstName: string;
-  userUsageTime: string
+export interface ReviewDTOModel {
+  review_id: number;
+  booking_id: number;
+  spot_id: number;
+  user_id: number;
   title: string;
   rating: number;
   comment: string;
-  creationDate: string;
+  created_at: string;
+  user_firstname: string;
+  user_lastname: string
+}
+
+export interface ReviewViewModel {
+  reviewId: number;
+  bookingId: number;
+  spotId: number;
+  userId: number;
+  title: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  userFirstname: string;
+  userLastname: string
 }
 
 export interface ReservationViewModel {

@@ -1,9 +1,9 @@
 import {
-  LocationDTOModel, LocationViewModel,
+  LocationDTOModel, LocationViewModel, ParkingSpotAvailabilityDTOModel, ParkingSpotAvailabilityViewModel,
   ParkingSpotDTOModel,
   ParkingSpotViewModel,
   ReservationDTOModel,
-  ReservationViewModel
+  ReservationViewModel, ReviewDTOModel, ReviewViewModel
 } from "../models/interfaces/parking-spots.model";
 
 export class ParkingSpotMapper {
@@ -25,60 +25,65 @@ export class ParkingSpotMapper {
   }
 
   public static fromParkingSpotsDtoToViewModel(parkingSpots: ParkingSpotDTOModel[]): ParkingSpotViewModel[] {
-    return parkingSpots.map(parkingSpot => {
+    return parkingSpots.map(this.fromParkingSpotDtoToViewModel, this);
+  }
+
+  public static fromParkingSpotDtoToViewModel(parkingSpot: ParkingSpotDTOModel): ParkingSpotViewModel {
+    return {
+      spotId: parkingSpot.spot_id,
+      hostId: parkingSpot.host_id,
+      hostFirstname: parkingSpot.host_firstname,
+      hostLastname: parkingSpot.host_lastname,
+      longitude: parkingSpot.longitude,
+      latitude: parkingSpot.latitude,
+      pricePerHour: parkingSpot.price_per_hour,
+      carType: parkingSpot.car_type,
+      title: parkingSpot.title,
+      mainDescription: parkingSpot.main_description,
+      status: parkingSpot.status,
+      overallRating: parkingSpot.overall_rating,
+      location: this.fromLocationDtoToViewModel(parkingSpot.location),
+      amenities: parkingSpot.amenities,
+      isFavorite: parkingSpot.is_favorite,
+      disabledDateTimes: parkingSpot.disabledDateTimes ? parkingSpot.disabledDateTimes : [],
+      reviews: parkingSpot.reviews ? this.fromReviewDtoToViewModel(parkingSpot.reviews) : [],
+      availability: parkingSpot.availability ? this.fromAvailabilityDtoToViewModel(parkingSpot.availability) : [],
+      images: [
+        'assets/images/test.png',
+        'assets/images/test2.png',
+        'assets/images/test.png',
+        'assets/images/test2.png',
+        'assets/images/test.png',
+        'assets/images/test2.png'
+      ],
+    }
+  }
+
+  public static fromReviewDtoToViewModel(reviews: ReviewDTOModel[]): ReviewViewModel[] {
+    return reviews.map(review => {
       return {
-        spotId: parkingSpot.spot_id,
-        hostId: parkingSpot.host_id,
-        longitude: parkingSpot.longitude,
-        latitude: parkingSpot.latitude,
-        pricePerHour: parkingSpot.price_per_hour,
-        carType: parkingSpot.car_type,
-        title: parkingSpot.title,
-        mainDescription: parkingSpot.main_description,
-        status: parkingSpot.status,
-        overallRating: parkingSpot.overall_rating,
-        location: this.fromLocationDtoToViewModel(parkingSpot.location),
-        amenities: parkingSpot.amenities,
-        isFavorite: parkingSpot.is_favorite,
-        images: [
-          'assets/images/test.png',
-          'assets/images/test2.png',
-          'assets/images/test.png',
-          'assets/images/test2.png',
-          'assets/images/test.png',
-          'assets/images/test2.png'
-        ],
-        reviews: [
-          {
-            userFirstName: "User 1",
-            userUsageTime: "3 months",
-            rating: 4.6,
-            comment: "Amazing spot",
-            creationDate: "2 weeks ago",
-            title: "Test"
-          },
-          {
-            userFirstName: "User 2",
-            userUsageTime: "1 year",
-            rating: 2.2,
-            comment: "Amazing spot",
-            creationDate: "3 years ago",
-            title: "Test"
-          },
-          {
-            userFirstName: "User 2",
-            userUsageTime: "2 years",
-            rating: 3.5,
-            comment: "Average spot",
-            creationDate: "4 months ago",
-            title: "Test"
-          }
-        ],
-        disabledDateTimes: [
-          { date: '2024-11-19', hours: [9, 10, 11] },
-          { date: '2024-11-20', hours: [15, 16] },
-          { date: '2024-11-21', hours: [] },
-        ]
+        spotId: review.spot_id,
+        userLastname: review.user_lastname,
+        title: review.title,
+        reviewId: review.review_id,
+        comment: review.comment,
+        rating: review.rating,
+        bookingId: review.booking_id,
+        createdAt: review.created_at,
+        userFirstname: review.user_firstname,
+        userId: review.user_id
+      }
+    })
+  }
+
+  public static fromAvailabilityDtoToViewModel(availabilities: ParkingSpotAvailabilityDTOModel[]): ParkingSpotAvailabilityViewModel[] {
+    return availabilities.map(availability => {
+      return {
+        spot_id: availability.spot_id,
+        availability_id: availability.availability_id,
+        start_time: availability.start_time,
+        end_time: availability.end_time,
+        day: availability.day
       }
     })
   }
