@@ -40,12 +40,9 @@
 
       <nz-divider></nz-divider>
 
-      <div class="flex items-center gap-x-4">
+      <div class="flex items-center gap-x-3">
         <nz-avatar nzIcon="user"></nz-avatar>
-        <div>
-          <div>Hosted by Host Name</div>
-          <div class="text-secondary-5">1 year hosting</div>
-        </div>
+        <div>Hosted by {{ parkingSpot()?.hostFirstname }} {{parkingSpot()?.hostLastname}}</div>
       </div>
 
       <nz-divider></nz-divider>
@@ -55,8 +52,8 @@
         <div class="amenities-grid mt-2">
           @for (amenity of parkingSpot()?.amenities; track amenity) {
             <div class="flex items-center text-base text-secondary-10">
-              <i [ngClass]="amenitiesIconMap[amenity]" class="mr-2"></i>
-              <div>{{amenity | snakeToTitleCase}}</div>
+              <i [ngClass]="getAmenityIcon(amenity)" class="mr-2"></i>
+              <div>{{amenity}}</div>
             </div>
           }
         </div>
@@ -73,10 +70,16 @@
             [(ngModel)]="dateRange"
             [nzDisabledDate]="disabledDate"
             [nzDisabledTime]="disabledTime"
-            class="!mb-3"
+            [ngClass]="!invalidDateRange() ? '!mb-3': null"
           ></nz-range-picker>
-          <div>From: {{selectedStartTime()}}</div>
-          <div>To: {{selectedEndTime()}}</div>
+          @if (invalidDateRange()) {
+            <div class="text-error !mb-3 flex items-center">
+              <i class="bi bi-exclamation-circle-fill mr-1"></i>
+              <div>Invalid date range selected</div>
+            </div>
+          }
+          <div>From: {{selectedStartTime() || "-"}}</div>
+          <div>To: {{selectedEndTime() || "-"}}</div>
           <div class="mb-3">Duration: {{totalDuration() || "-"}} hour(s)</div>
         </div>
 
@@ -132,14 +135,14 @@
         <div class="flex items-center gap-x-3">
           <nz-avatar nzIcon="user"></nz-avatar>
           <div>
-            <div>{{review.userFirstName}}</div>
-            <div>{{review.userUsageTime}} on AppName</div>
+            <div>{{review.userFirstname}}</div>
+            <div>Since xxx on AppName</div>
           </div>
         </div>
         <div class="flex items-center">
           <nz-rate [ngModel]="review.rating" nzAllowHalf></nz-rate>
           <i class="bi bi-dot text-secondary-4"></i>
-          <div>{{review.creationDate}}</div>
+          <div>{{review.createdAt}}</div>
         </div>
         <div class="text-base">{{review.comment}}</div>
       </div>
