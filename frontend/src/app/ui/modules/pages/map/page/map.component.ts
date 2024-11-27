@@ -2,6 +2,7 @@ import {Component, computed, inject} from '@angular/core';
 import {Router} from "@angular/router";
 import {ParkingSpotsService} from "../../parking-spots/services/parking-spots.service";
 import {ParkingSpotViewModel} from "../../parking-spots/models/interfaces/parking-spots.model";
+import {MainService} from "../../../main/services/main.service";
 
 @Component({
   selector: 'app-map',
@@ -12,6 +13,8 @@ import {ParkingSpotViewModel} from "../../parking-spots/models/interfaces/parkin
 export class MapComponent {
   router = inject(Router)
   parkingSpotsService = inject(ParkingSpotsService)
+  mainService = inject(MainService)
+
   parkingSpots = computed(() => {
     return this.parkingSpotsService.parkingSpots()
   })
@@ -25,6 +28,7 @@ export class MapComponent {
   ngOnInit(): void {
     this.initMap();
     this.addMarkers();
+    this.mainService.changeNavbarStatus()
   }
 
   private initMap(): void {

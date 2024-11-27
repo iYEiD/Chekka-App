@@ -2,6 +2,7 @@ import {Component, computed, effect, inject, signal} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ParkingSpotsService} from "../../parking-spots/services/parking-spots.service";
 import {HelperFunctions} from "../../../../../common/helper-functions";
+import {MainService} from "../../../main/services/main.service";
 
 @Component({
   selector: 'app-page',
@@ -12,6 +13,7 @@ import {HelperFunctions} from "../../../../../common/helper-functions";
 export class ParkingSpotDetailsComponent {
   route = inject(ActivatedRoute)
   parkingSpotsService = inject(ParkingSpotsService)
+  mainService = inject(MainService)
 
   amenitiesIconMap: Record<string, string> = {
     Covered: "bi bi-droplet",
@@ -114,6 +116,7 @@ export class ParkingSpotDetailsComponent {
   }
 
   ngOnInit(): void {
+    this.mainService.changeNavbarStatus()
     this.parkingSpotsService.fetchParkingSpotById(parseInt(this.parkingSpotId()!, 10))
   }
 

@@ -14,6 +14,7 @@ import {ParkingSpotsService} from "../../pages/parking-spots/services/parking-sp
 import {HelperFunctions} from "../../../../common/helper-functions";
 import {Router} from "@angular/router";
 import {AuthService} from "../../authentication/services/auth.service";
+import {MainService} from "../services/main.service";
 
 @Component({
   selector: 'app-page',
@@ -23,13 +24,14 @@ import {AuthService} from "../../authentication/services/auth.service";
 })
 export class MainComponent {
   parkingSpotService = inject(ParkingSpotsService)
+  mainService = inject(MainService)
   authService = inject(AuthService)
   router = inject(Router)
 
   @ViewChild('header') header!: ElementRef;
   isModalVisible = false;
   isDropdownOpen = false;
-  vehicleTypeOptions = ["any_type", "car", "motorcycle"]
+  vehicleTypeOptions = ["any_type", "Car", "Bike", "Truck"]
   minPriceFilter = signal<number>(1)
   maxPriceFilter = signal<number>(100)
   priceRange = signal<number[] | null>([this.minPriceFilter(), this.maxPriceFilter()])
@@ -45,7 +47,7 @@ export class MainComponent {
       price_range: this.priceRange()![0] !== this.minPriceFilter() || this.priceRange()![1] !== this.maxPriceFilter() ? this.priceRange() : null,
       amenities: this.selectedAmenities().length !== 0 ? this.selectedAmenities() : null,
       search_value: this.debouncedSearchValue(),
-      // date_range: this.dateTimeRange() ? [HelperFunctions.formatFilterDate(this.dateTimeRange()![0]), HelperFunctions.formatFilterDate(this.dateTimeRange()![1])] : null
+      date_range: this.dateTimeRange() ? [HelperFunctions.formatFilterDate(this.dateTimeRange()![0]), HelperFunctions.formatFilterDate(this.dateTimeRange()![1])] : null
     }
   })
 
@@ -149,6 +151,10 @@ export class MainComponent {
     this.selectedAmenities().length > 0 ?
       this.selectedAmenities().forEach(amenity => this.filterTagChips.push(amenity)) : null
     this.parkingSpotService.fetchParkingSports(this.selectedFilters())
+    let currentUrl = this.router.url
+    if (currentUrl !== '/app/parking-spots') {
+      this.navigateToHomePage()
+    }
   }
 
   clearAllFilters() {
@@ -177,5 +183,4 @@ export class MainComponent {
   navigateToHomePage() {
     this.router.navigate(['/app/parking-spots'])
   }
-
 }
