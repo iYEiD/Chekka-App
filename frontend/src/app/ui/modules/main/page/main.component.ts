@@ -152,10 +152,6 @@ export class MainComponent {
       this.selectedAmenities().forEach(amenity => this.filterTagChips.push(amenity)) : null
     this.dateTimeRange() ? this.filterTagChips.push(this.dateTimeRange()) : null
     this.parkingSpotService.fetchParkingSports(this.selectedFilters())
-    let currentUrl = this.router.url
-    if (currentUrl !== '/app/parking-spots' && currentUrl !== '/app/map') {
-      this.navigateToHomePage()
-    }
   }
 
   clearAllFilters() {

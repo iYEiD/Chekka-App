@@ -41,6 +41,7 @@ export class DashboardComponent {
   updateDashboardIsFavorite(spotId: number, isFavorite: boolean, event: any) {
     event.stopPropagation()
     this.parkingSpotsService.updateIsFavorite(spotId, isFavorite)
+    this.fetchDashboardData()
   }
 
   fetchDashboardData() {
@@ -70,6 +71,8 @@ export class DashboardComponent {
 
   cancelBooking(bookingId: number) {
     this.dashboardService.cancelBooking(bookingId)
+    this.closeCancelBookingModal()
+    this.fetchDashboardData()
   }
 
   submitReview() {
@@ -78,6 +81,7 @@ export class DashboardComponent {
       comment: this.reviewComment(),
       rating: this.reviewRating(),
     })
+    this.fetchDashboardData()
     this.closeReviewModal()
   }
 }

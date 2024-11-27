@@ -1,54 +1,63 @@
 <div class="text-3xl text-secondary-10 mb-6">Dashboard</div>
 <nz-collapse>
-  <nz-collapse-panel nzHeader="Favorite Spots" [nzActive]="true">
-    @for (spot of dashboardData()?.favoriteSpots; track spot) {
-      <div class="flex justify-between items-center" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
-        <div>
-          <div class="flex">
-            <div class="mr-3">{{spot.title}}</div>
+  <nz-collapse-panel nzHeader="Favorite Spots" [nzActive]="dashboardData()?.favoriteSpots!.length > 0">
+    @if (dashboardData()?.favoriteSpots!.length > 0) {
+      @for (spot of dashboardData()?.favoriteSpots; track spot) {
+        <div class="flex justify-between items-center cursor-pointer" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
+          <div>
             <div class="flex">
-              <i class="bi bi-star-fill"></i>
-              <div class="ml-1">{{spot.overallRating}}</div>
+              <div class="mr-3">{{spot.title}}</div>
+              <div class="flex">
+                <i class="bi bi-star-fill"></i>
+                <div class="ml-1">{{spot.overallRating}}</div>
+              </div>
             </div>
+            <div>${{spot.pricePerHour}} per hour</div>
           </div>
-          <div>${{spot.pricePerHour}} per hour</div>
+          <button class="flex cursor-pointer hover:bg-secondary-1 rounded-md py-1.5 px-2" (click)="updateDashboardIsFavorite(spot?.spotId!, false, $event)">
+            <i class="bi bi-heart-fill text-base cursor-pointer text-favorite"></i>
+          </button>
         </div>
-        <button class="flex cursor-pointer hover:bg-secondary-1 rounded-md py-1.5 px-2" (click)="updateDashboardIsFavorite(spot?.spotId!, false, $event)">
-          <i class="bi bi-heart-fill text-base cursor-pointer text-favorite"></i>
-        </button>
-      </div>
-      <nz-divider></nz-divider>
+        <nz-divider></nz-divider>
+      }
+    }@else {
+      <div>No Favorite Spots</div>
     }
   </nz-collapse-panel>
 </nz-collapse>
 
 <nz-collapse class="!mt-5">
-  <nz-collapse-panel nzHeader="Completed Bookings" [nzActive]="true">
-    @for (spot of dashboardData()?.completedBookings; track spot) {
-      <div class="flex justify-between items-center" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
-        <div>
-          <div class="flex">
-            <div class="mr-3">{{spot.spotDetails.title}}</div>
+  <nz-collapse-panel nzHeader="Completed Bookings" [nzActive]="dashboardData()?.completedBookings!.length > 0">
+    @if (dashboardData()?.completedBookings!.length > 0) {
+      @for (spot of dashboardData()?.completedBookings; track spot) {
+        <div class="flex justify-between items-center cursor-pointer" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
+          <div>
             <div class="flex">
-              <i class="bi bi-star-fill"></i>
-              <div class="ml-1">{{spot.spotDetails.overallRating}}</div>
+              <div class="mr-3">{{spot.spotDetails.title}}</div>
+              <div class="flex">
+                <i class="bi bi-star-fill"></i>
+                <div class="ml-1">{{spot.spotDetails.overallRating}}</div>
+              </div>
             </div>
+            <div class="flex items-center">
+              <div>{{spot.startTime}}</div>
+              <i class="bi bi-arrow-right ml-1.5 mr-1.5"></i>
+              <div>{{spot.endTime}}</div>
+            </div>
+            <div>Total: ${{spot.totalPrice}}</div>
           </div>
-          <div class="flex items-center">
-            <div>{{spot.startTime}}</div>
-            <i class="bi bi-arrow-right ml-1.5 mr-1.5"></i>
-            <div>{{spot.endTime}}</div>
-          </div>
-          <div>Total: ${{spot.totalPrice}}</div>
+          @if (!spot.isReviewed) {
+            <button class="flex cursor-pointer hover:bg-secondary-1 rounded-md py-1.5 px-2" (click)="openReviewModal(spot.bookingId, $event)">
+              Review
+            </button>
+          }
         </div>
-        @if (!spot.isReviewed) {
-          <button class="flex cursor-pointer hover:bg-secondary-1 rounded-md py-1.5 px-2" (click)="openReviewModal(spot.bookingId, $event)">
-            Review
-          </button>
-        }
-      </div>
-      <nz-divider></nz-divider>
+        <nz-divider></nz-divider>
+      }
+    }@else {
+      <div>No Completed Bookings</div>
     }
+
   </nz-collapse-panel>
 </nz-collapse>
 
@@ -87,29 +96,33 @@
 </nz-modal>
 
 <nz-collapse class="!mt-5">
-  <nz-collapse-panel nzHeader="Upcoming Bookings" [nzActive]="true">
-    @for (spot of dashboardData()?.upcomingBookings; track spot) {
-      <div class="flex justify-between items-center" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
-        <div>
-          <div class="flex">
-            <div class="mr-3">{{spot.spotDetails.title}}</div>
+  <nz-collapse-panel nzHeader="Upcoming Bookings" [nzActive]="dashboardData()?.upcomingBookings!.length > 0">
+    @if (dashboardData()?.upcomingBookings!.length > 0) {
+      @for (spot of dashboardData()?.upcomingBookings; track spot) {
+        <div class="flex justify-between items-center cursor-pointer" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
+          <div>
             <div class="flex">
-              <i class="bi bi-star-fill"></i>
-              <div class="ml-1">{{spot.spotDetails.overallRating}}</div>
+              <div class="mr-3">{{spot.spotDetails.title}}</div>
+              <div class="flex">
+                <i class="bi bi-star-fill"></i>
+                <div class="ml-1">{{spot.spotDetails.overallRating}}</div>
+              </div>
             </div>
+            <div class="flex items-center">
+              <div>{{spot.startTime}}</div>
+              <i class="bi bi-arrow-right ml-1.5 mr-1.5"></i>
+              <div>{{spot.endTime}}</div>
+            </div>
+            <div>Total: ${{spot.totalPrice}}</div>
           </div>
-          <div class="flex items-center">
-            <div>{{spot.startTime}}</div>
-            <i class="bi bi-arrow-right ml-1.5 mr-1.5"></i>
-            <div>{{spot.endTime}}</div>
-          </div>
-          <div>Total: ${{spot.totalPrice}}</div>
+          <button class="flex cursor-pointer hover:bg-secondary-1 rounded-md py-1.5 px-2" (click)="openCancelBookingModal(spot, $event)">
+            Cancel Booking
+          </button>
         </div>
-        <button class="flex cursor-pointer hover:bg-secondary-1 rounded-md py-1.5 px-2" (click)="openCancelBookingModal(spot, $event)">
-          Cancel Booking
-        </button>
-      </div>
-      <nz-divider></nz-divider>
+        <nz-divider></nz-divider>
+      }
+    }@else {
+      <div>No Upcoming Bookings</div>
     }
   </nz-collapse-panel>
 </nz-collapse>

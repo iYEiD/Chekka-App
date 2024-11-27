@@ -12,7 +12,7 @@ export class MainService {
 
   changeNavbarStatus() {
     let currentUrl = this.router.url
-    if (currentUrl.startsWith('/app/parking-spots') || currentUrl === '/app/map') {
+    if (currentUrl === '/app/parking-spots' || currentUrl === '/app/map') {
       this.isNavbarFunctioningDisabled.set(false)
     } else {
       this.isNavbarFunctioningDisabled.set(true)
