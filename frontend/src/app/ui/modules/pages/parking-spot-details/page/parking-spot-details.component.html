@@ -1,4 +1,4 @@
-<div class="page-content">
+<div class="page-content" style="padding-bottom: 60px">
   <div class="flex justify-between items-center">
     <div class="text-3xl text-secondary-10">{{parkingSpot()?.title}}</div>
     <button class="flex cursor-pointer hover:bg-secondary-1 rounded-md py-1.5 px-2" (click)="parkingSpotsService.updateIsFavorite(parkingSpot()?.spotId!, !parkingSpot()?.isFavorite)">
@@ -71,6 +71,7 @@
             [nzDisabledDate]="disabledDate"
             [nzDisabledTime]="disabledTime"
             [ngClass]="!invalidDateRange() ? '!mb-3': null"
+            class="!w-full"
           ></nz-range-picker>
           @if (invalidDateRange()) {
             <div class="text-error !mb-3 flex items-center">
@@ -134,10 +135,7 @@
       <div>
         <div class="flex items-center gap-x-3">
           <nz-avatar nzIcon="user"></nz-avatar>
-          <div>
-            <div>{{review.userFirstname}}</div>
-            <div>Since xxx on AppName</div>
-          </div>
+          <div>{{review.userFirstname}} {{review.userLastname}}</div>
         </div>
         <div class="flex items-center">
           <nz-rate [ngModel]="review.rating" nzAllowHalf></nz-rate>
