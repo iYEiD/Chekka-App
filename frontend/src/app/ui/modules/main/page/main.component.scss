@@ -32,6 +32,11 @@ li {
   border-color: var(--secondary-color-2);
 }
 
+::ng-deep .ant-modal-content {
+  max-height: calc(100vh - 7em);
+  overflow: scroll;
+}
+
 .clear-all-button {
   transition: background-color 0.2s ease-in-out;
 }

@@ -1,4 +1,4 @@
-import {Component, computed, inject} from '@angular/core';
+import {Component, computed, effect, inject} from '@angular/core';
 import {Router} from "@angular/router";
 import {ParkingSpotsService} from "../../parking-spots/services/parking-spots.service";
 import {ParkingSpotViewModel} from "../../parking-spots/models/interfaces/parking-spots.model";
@@ -23,11 +23,15 @@ export class MapComponent {
   private markers: google.maps.Marker[] = [];
   private zoomThreshold = 12;
 
-  constructor() {}
+  constructor() {
+    effect(() => {
+      let parkingSpots = this.parkingSpots()
+      this.initMap();
+      this.addMarkers();
+    });
+  }
 
   ngOnInit(): void {
-    this.initMap();
-    this.addMarkers();
     this.mainService.changeNavbarStatus()
   }
 

@@ -31,7 +31,7 @@ export class MainComponent {
   @ViewChild('header') header!: ElementRef;
   isModalVisible = false;
   isDropdownOpen = false;
-  vehicleTypeOptions = ["any_type", "Car", "Bike", "Truck"]
+  vehicleTypeOptions = ["Any", "Car", "Bike", "Truck"]
   minPriceFilter = signal<number>(1)
   maxPriceFilter = signal<number>(100)
   priceRange = signal<number[] | null>([this.minPriceFilter(), this.maxPriceFilter()])
@@ -43,11 +43,11 @@ export class MainComponent {
 
   selectedFilters = computed(() => {
     return {
-      vehicle_type: this.vehicleType() !== "any_type" ? this.vehicleType() : null,
+      vehicle_type: this.vehicleType() !== "Any" ? this.vehicleType() : null,
       price_range: this.priceRange()![0] !== this.minPriceFilter() || this.priceRange()![1] !== this.maxPriceFilter() ? this.priceRange() : null,
       amenities: this.selectedAmenities().length !== 0 ? this.selectedAmenities() : null,
       search_value: this.debouncedSearchValue(),
-      date_range: this.dateTimeRange() ? [HelperFunctions.formatFilterDate(this.dateTimeRange()![0]), HelperFunctions.formatFilterDate(this.dateTimeRange()![1])] : null
+      time_range: this.dateTimeRange() ? [HelperFunctions.formatFilterDate(this.dateTimeRange()![0]), HelperFunctions.formatFilterDate(this.dateTimeRange()![1])] : null
     }
   })
 
@@ -55,7 +55,7 @@ export class MainComponent {
 
   dateTimeRange = signal<any | null>(null)
 
-  vehicleType = signal<string>("any_type")
+  vehicleType = signal<string>("Any")
 
   amenities = signal<AmenitiesFilterModel[]>([
     {
@@ -145,14 +145,15 @@ export class MainComponent {
   fetchParkingSpots() {
     this.filterTagChips = []
     this.isModalVisible = false
-    this.vehicleType() !== "any_type" && this.vehicleType() ? this.filterTagChips.push(this.vehicleType()) : null
+    this.vehicleType() !== "Any" && this.vehicleType() ? this.filterTagChips.push(this.vehicleType()) : null
     this.priceRange()![0] !== this.minPriceFilter() || this.priceRange()![1] !== this.maxPriceFilter() ?
       this.filterTagChips.push("$" + this.minPriceFilter() + " - $" + this.maxPriceFilter()) : null
     this.selectedAmenities().length > 0 ?
       this.selectedAmenities().forEach(amenity => this.filterTagChips.push(amenity)) : null
+    this.dateTimeRange() ? this.filterTagChips.push(this.dateTimeRange()) : null
     this.parkingSpotService.fetchParkingSports(this.selectedFilters())
     let currentUrl = this.router.url
-    if (currentUrl !== '/app/parking-spots') {
+    if (currentUrl !== '/app/parking-spots' && currentUrl !== '/app/map') {
       this.navigateToHomePage()
     }
   }
@@ -161,10 +162,11 @@ export class MainComponent {
     this.clearVehicleType()
     this.clearSelectedAmenities()
     this.clearPriceRange()
+    this.clearDateTimeRangeFilter()
   }
 
   clearVehicleType() {
-    this.vehicleType.set("any_type")
+    this.vehicleType.set("Any")
   }
 
   clearSelectedAmenities() {
@@ -178,6 +180,10 @@ export class MainComponent {
     this.minPriceFilter.set(1)
     this.maxPriceFilter.set(100)
     this.priceRange.set([this.minPriceFilter(), this.maxPriceFilter()])
+  }
+
+  clearDateTimeRangeFilter() {
+    this.dateTimeRange.set(null)
   }
 
   navigateToHomePage() {
