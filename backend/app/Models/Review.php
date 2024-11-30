@@ -18,6 +18,8 @@ class Review extends Model
         'created_at',
     ];
 
+    protected $primaryKey = 'review_id';
+    
     protected $casts = [
         'rating' => 'float',
     ];
@@ -36,4 +38,5 @@ class Review extends Model
     {
         return $this->belongsTo(Booking::class, 'booking_id', 'booking_id');
     }   
+    public $timestamps = false; // Disable timestamps
 }
