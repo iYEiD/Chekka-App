@@ -127,7 +127,7 @@ export class ParkingSpotDetailsComponent {
         this.addSpotLocationMarker()
         console.log(this.bounds)
         this.map.fitBounds(this.bounds);
-        this.highlightFastestRoute()
+        // this.highlightFastestRoute()
       }
     })
   }

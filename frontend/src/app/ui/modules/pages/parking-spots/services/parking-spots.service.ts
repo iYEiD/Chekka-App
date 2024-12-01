@@ -2,7 +2,6 @@ import {inject, Injectable, signal} from '@angular/core';
 import {ParkingSpotViewModel, ReservationViewModel} from "../models/interfaces/parking-spots.model";
 import {ParkingSpotsApiService} from "./parking-spots-api.service";
 import {ParkingSpotMapper} from "../mappers/parking-spot.mapper";
-import {error} from "@ant-design/icons-angular";
 import {Router} from "@angular/router";
 
 @Injectable({
@@ -23,14 +22,18 @@ export class ParkingSpotsService {
         this.parkingSpots.update((spots) =>
           spots.map((spot) =>
             spot.spotId === spotId
-              ? { ...spot, isFavorite: !spot.isFavorite }
+              ? { ...spot, isFavorite: status }
               : spot
           )
         );
+        this.fetchParkingSpotById(spotId)
       },
-      error: error => {}
-    })
+      error: (error) => {
+        console.error('Error updating favorite status:', error);
+      },
+    });
   }
+
 
   fetchParkingSports(filters: any) {
     this.parkingSpotsApiService.fetchParkingSpots(filters).subscribe({
@@ -48,7 +51,6 @@ export class ParkingSpotsService {
         this.selectedParkingSpot.set(ParkingSpotMapper.fromParkingSpotDtoToViewModel(res))
       }
     })
-    this.selectedParkingSpot.set(this.parkingSpots().filter(spot => spot.spotId === id)[0])
   }
 
   reserveSpot(reservationDetails: ReservationViewModel) {
