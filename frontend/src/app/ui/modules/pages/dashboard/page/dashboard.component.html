@@ -7,7 +7,7 @@
           <div class="flex justify-between items-center cursor-pointer" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
             <div>
               <div class="flex">
-                <div class="mr-3">{{spot.title}}</div>
+                <div class="mr-3">{{spot.location.district}}, {{spot.location.city}}</div>
                 <div class="flex">
                   <i class="bi bi-star-fill"></i>
                   <div class="ml-1">{{spot.overallRating}}</div>
@@ -34,7 +34,7 @@
           <div class="flex justify-between items-center cursor-pointer" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
             <div>
               <div class="flex">
-                <div class="mr-3">{{spot.spotDetails.title}}</div>
+                <div class="mr-3">{{spot.spotDetails.location.district}}, {{spot.spotDetails.location.city}}</div>
                 <div class="flex">
                   <i class="bi bi-star-fill"></i>
                   <div class="ml-1">{{spot.spotDetails.overallRating}}</div>
@@ -97,13 +97,40 @@
   </nz-modal>
 
   <nz-collapse class="!mt-5">
+    <nz-collapse-panel nzHeader="Current Bookings" [nzActive]="dashboardData()?.currentBookings!.length > 0">
+      @if (dashboardData()?.currentBookings!.length > 0) {
+        @for (spot of dashboardData()?.currentBookings; track spot) {
+          <div class="cursor-pointer" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
+            <div class="flex">
+              <div class="mr-3">{{spot.spotDetails.location.district}}, {{spot.spotDetails.location.city}}</div>
+              <div class="flex">
+                <i class="bi bi-star-fill"></i>
+                <div class="ml-1">{{spot.spotDetails.overallRating}}</div>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div>{{spot.startTime}}</div>
+              <i class="bi bi-arrow-right ml-1.5 mr-1.5"></i>
+              <div>{{spot.endTime}}</div>
+            </div>
+            <div>${{spot.totalPrice}} per hour</div>
+          </div>
+          <nz-divider></nz-divider>
+        }
+      }@else {
+        <div>No Current Bookings</div>
+      }
+    </nz-collapse-panel>
+  </nz-collapse>
+
+  <nz-collapse class="!mt-5">
     <nz-collapse-panel nzHeader="Upcoming Bookings" [nzActive]="dashboardData()?.upcomingBookings!.length > 0">
       @if (dashboardData()?.upcomingBookings!.length > 0) {
         @for (spot of dashboardData()?.upcomingBookings; track spot) {
           <div class="flex justify-between items-center cursor-pointer" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
             <div>
               <div class="flex">
-                <div class="mr-3">{{spot.spotDetails.title}}</div>
+                <div class="mr-3">{{spot.spotDetails.location.district}}, {{spot.spotDetails.location.city}}</div>
                 <div class="flex">
                   <i class="bi bi-star-fill"></i>
                   <div class="ml-1">{{spot.spotDetails.overallRating}}</div>

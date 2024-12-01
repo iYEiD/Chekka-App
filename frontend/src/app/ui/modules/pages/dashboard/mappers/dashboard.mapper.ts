@@ -5,6 +5,7 @@ import {
   SpotDetailsDTOModel,
   SpotDetailsViewModel
 } from "../models/interfaces/dashboard.models";
+import {ParkingSpotMapper} from "../../parking-spots/mappers/parking-spot.mapper";
 
 export class DashboardMapper {
   public static fromSpotDetailsDTOToViewModel(dto: SpotDetailsDTOModel): SpotDetailsViewModel {
@@ -19,6 +20,7 @@ export class DashboardMapper {
       pricePerHour: dto.price_per_hour,
       overallRating: dto.overall_rating,
       status: dto.status,
+      location: ParkingSpotMapper.fromLocationDtoToViewModel(dto.location)
     };
   }
 
@@ -34,6 +36,7 @@ export class DashboardMapper {
       pricePerHour: dto.price_per_hour,
       overallRating: dto.overall_rating,
       status: dto.status,
+      location: ParkingSpotMapper.fromLocationDtoToViewModel(dto.location)
     }));
   }
 
@@ -61,6 +64,7 @@ export class DashboardMapper {
       completedBookings: this.fromBookingsDTOToViewModel(dto.completedBookings),
       favoriteSpots: this.fromFavoriteSpotsDTOToViewModel(dto.favoriteSpots),
       upcomingBookings: this.fromBookingsDTOToViewModel(dto.upcomingBookings),
+      currentBookings: this.fromBookingsDTOToViewModel(dto.currentBookings),
     };
   }
 }

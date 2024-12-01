@@ -125,7 +125,6 @@ export class ParkingSpotDetailsComponent {
         this.getUserLocation()
         this.initMap()
         this.addSpotLocationMarker()
-        console.log(this.bounds)
         this.map.fitBounds(this.bounds);
         // this.highlightFastestRoute()
       }
