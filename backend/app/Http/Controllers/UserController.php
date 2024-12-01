@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use \Illuminate\Validation\ValidationException;
 use App\Services\UserService; 
 use App\Services\SpotService;
+use Illuminate\Support\Facades\Validator;
+
 class UserController extends Controller
 {   
     protected $userService;
@@ -102,5 +104,34 @@ class UserController extends Controller
     public function userDetails(){
         $user = $this->userService->getUser();
         return response()->json($user, 200);
+    }
+
+    public function submitReview(Request $request)
+{
+    // Validate the incoming request
+    $validator = Validator::make($request->all(), [
+        'title' => 'required|string|max:255',
+        'comment' => 'required|string',
+        'rating' => 'required|numeric|min:1|max:5',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['message' => 'Invalid request'], 404);
+    }
+
+    $review = $this->userService->submitReview($request->route('bookingId'), $request->only(['title', 'comment', 'rating']));
+
+    if ($review === null) {
+        return response()->json(['message' => 'Booking not found or does not belong to the user'], 404);
+    }
+
+        return response()->json(['message' => 'Review submitted successfully', 'review' => $review], 201);
+    }
+
+    public function deleteBooking(Request $request){
+        $result = $this->userService->deleteBooking($request->route('bookingId'));
+        if ($result === null) {
+            return response()->json(['message' => 'Booking not found or does not belong to the user'], 404);
+        }
     }
 }
