@@ -3,6 +3,8 @@ import {ActivatedRoute} from "@angular/router";
 import {ParkingSpotsService} from "../../parking-spots/services/parking-spots.service";
 import {HelperFunctions} from "../../../../../common/helper-functions";
 import {MainService} from "../../../main/services/main.service";
+import {SnackbarService} from "../../../../../services/snack-bar/services/snackbar.service";
+import {SnackbarTypeEnums} from "../../../../../services/snack-bar/enum/snackbar-type.enums";
 
 @Component({
   selector: 'app-page',
@@ -14,6 +16,11 @@ export class ParkingSpotDetailsComponent {
   route = inject(ActivatedRoute)
   parkingSpotsService = inject(ParkingSpotsService)
   mainService = inject(MainService)
+  snackBarService = inject(SnackbarService)
+
+  map!: google.maps.Map;
+  markers: google.maps.Marker[] = [];
+  bounds = new google.maps.LatLngBounds();
 
   amenitiesIconMap: Record<string, string> = {
     Covered: "bi bi-droplet",
@@ -62,6 +69,8 @@ export class ParkingSpotDetailsComponent {
       endTime: this.selectedEndTime()!,
     }
   })
+  userPosition!: any
+  parkingSpotPosition!: any
 
   isModalVisible: boolean = false
 
@@ -112,6 +121,14 @@ export class ParkingSpotDetailsComponent {
         const endHour = parseInt(entry.end_time.split(':')[0], 10);
         this.availabilityMap.set(entry.day, { startHour, endHour });
       });
+      if (this.parkingSpot()) {
+        this.getUserLocation()
+        this.initMap()
+        this.addSpotLocationMarker()
+        console.log(this.bounds)
+        this.map.fitBounds(this.bounds);
+        this.highlightFastestRoute()
+      }
     })
   }
 
@@ -182,4 +199,91 @@ export class ParkingSpotDetailsComponent {
     return matchingKey ? this.amenitiesIconMap[matchingKey] : '';
   }
 
+  initMap(): void {
+    this.map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
+      center: { lat: 33.8547, lng: 35.8623 },
+      zoom: 9,
+    });
+  }
+
+  addSpotLocationMarker(): void {
+    const spotMarker = new google.maps.Marker({
+      position: { lat: this.parkingSpot()!.latitude!, lng: this.parkingSpot()!.longitude! },
+      map: this.map,
+      title: this.parkingSpot()!.title,
+    });
+    const position = new google.maps.LatLng(this.parkingSpot()!.latitude, this.parkingSpot()!.longitude);
+    this.parkingSpotPosition = position
+    this.bounds.extend(position);
+    this.markers.push(spotMarker);
+  }
+
+  addUserLocationMarker(latitude: number, longitude: number): void {
+    const userMarker = new google.maps.Marker({
+      position: { lat: latitude, lng: longitude },
+      map: this.map,
+      title: 'Your Location',
+      icon: {
+        url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+        scaledSize: new google.maps.Size(40, 40),
+      },
+    });
+    this.markers.push(userMarker);
+  }
+
+  getUserLocation(): void {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+
+          const userLocation = new google.maps.LatLng(
+            userLat,
+            userLng
+          );
+          this.userPosition = userLocation
+          this.addUserLocationMarker(userLat, userLng);
+          this.bounds.extend(userLocation);
+        },
+        (error) => {
+          this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, "Allow location to be able to view location based data")
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
+  }
+
+  highlightFastestRoute() {
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRenderer = new google.maps.DirectionsRenderer();
+
+    directionsRenderer.setMap(this.map);
+
+    this.calculateAndDisplayRoute(directionsService, directionsRenderer, this.userPosition, this.parkingSpotPosition);
+
+  }
+
+  calculateAndDisplayRoute(
+    directionsService: google.maps.DirectionsService,
+    directionsRenderer: google.maps.DirectionsRenderer,
+    userLocation: google.maps.LatLng,
+    parkingSpotPosition: google.maps.LatLng
+  ): void {
+    directionsService.route(
+      {
+        origin: userLocation,
+        destination: parkingSpotPosition,
+        travelMode: google.maps.TravelMode.DRIVING,
+      },
+      (response, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+          directionsRenderer.setDirections(response);
+        } else {
+          console.error('Directions request failed due to ' + status);
+        }
+      }
+    );
+  }
 }
