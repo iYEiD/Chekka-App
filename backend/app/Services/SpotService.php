@@ -166,7 +166,7 @@ class SpotService implements ISpotService
 
         //isfavouritebyuser
         $user = Auth::user();
-        $spot->is_favourite = $spot->isFavouriteForUser($user->user_id);
+        $spot->is_favorite = $spot->isFavouriteForUser($user->user_id);
         
         // Append Amenities
         $allAmenities = $spot->amenities()->first();
@@ -194,6 +194,8 @@ class SpotService implements ISpotService
         // Append Locations
         $location = $spot->location()->first();
         $spot->location = $location;
+        unset($spot->location->location_id);
+        unset($spot->location->spot_id); 
 
         // Get Reviews 
         $reviews = $spot->reviews()->with('user:user_id,first_name,last_name')->get();

@@ -9,4 +9,6 @@ interface IUserService
     public function updateUserDetails($request);
     public function getUser();
     public function fetchUserData();
+    public function submitReview($bookingId, $data);
+    public function deleteBooking($bookingId);
 }
