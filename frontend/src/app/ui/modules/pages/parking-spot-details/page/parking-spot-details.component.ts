@@ -285,4 +285,9 @@ export class ParkingSpotDetailsComponent {
       }
     );
   }
+
+  redirectToGoogleMaps() {
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${this.parkingSpot()?.latitude},${this.parkingSpot()?.longitude}`;
+    window.open(googleMapsUrl, '_blank');
+  }
 }

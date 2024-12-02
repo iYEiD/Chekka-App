@@ -124,7 +124,10 @@
 
   <nz-divider></nz-divider>
 
-  <div id="map" style="height: 600px; width: 100%;"></div>
+  <div class="relative h-[600px]">
+    <div id="map" style="height: 600px; width: 100%"></div>
+    <button (click)="redirectToGoogleMaps()" nz-button class="absolute bottom-10 left-[350px]">Open in Google Maps</button>
+  </div>
 
   <nz-divider></nz-divider>
 
