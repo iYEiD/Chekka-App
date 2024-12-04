@@ -11,17 +11,18 @@ class Booking extends Model
     protected $primaryKey = 'booking_id';
 
     protected $fillable = [
-        'user_id',
+        'guest_id',
         'spot_id',
         'start_time',
         'end_time',
         'status',
         'total_price',
+        'created_at',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        return $this->belongsTo(User::class, 'guest_id', 'user_id');
     }
 
     public function parkingSpot()
@@ -34,4 +35,5 @@ class Booking extends Model
         return $this->hasMany(Review::class, 'booking_id', 'booking_id');
     }   
     
+    public $timestamps = false; // Disable timestamps
 }

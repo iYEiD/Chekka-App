@@ -7,6 +7,7 @@ use \Illuminate\Validation\ValidationException;
 use App\Services\UserService; 
 use App\Services\SpotService;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {   
@@ -42,6 +43,12 @@ class UserController extends Controller
         }
 
         //Passed all tests, user exists, generate token and pass
+        //Create wallet for user
+        $wallet = $this->userService->createWallet($user->user_id);
+        if($wallet == null){
+            return response()->json(['message' => 'Unable to create wallet, please contact support'], 400);
+        }
+
         return response()->json(['message' => 'User created successfully'], 201);
     }
 

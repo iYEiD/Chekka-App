@@ -11,4 +11,5 @@ interface IUserService
     public function fetchUserData();
     public function submitReview($bookingId, $data);
     public function deleteBooking($bookingId);
+    public function createWallet($userId);
 }

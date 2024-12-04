@@ -30,5 +30,14 @@ class SpotsController extends Controller
         $spot = $this->spotService->fetchParkingSpotDetails($request);
         return response()->json($spot);
     }   
+
+    public function bookSpot(Request $request){
+       $booking = $this->spotService->bookSpot($request);
+       if($booking){
+        return response()->json(['message' => 'Spot booked successfully', 'booking' => $booking], 201);
+       }
+       return response()->json(['message' => 'Unable to book spot'], 400);
+    }
+
 }   
 
