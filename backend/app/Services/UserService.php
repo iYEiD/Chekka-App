@@ -8,9 +8,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Booking;
 use App\Models\Review;
+use Illuminate\Support\Facades\DB;
+use App\Services\SpotService;
+use App\Models\Wallets;
+use Carbon\Carbon;
 
 class UserService implements IuserService
 {
+
+    protected $spotService;
+
+    public function __construct(SpotService $spotService)
+    {
+        $this->spotService = $spotService;
+    }
 
     public function createUser($request)
     {
@@ -22,11 +33,16 @@ class UserService implements IuserService
         $user = new User();
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
-        $user->status = "pending"; //default pending
+        $user->status = "active"; //default pending - fix later
         $user->phone_number = $request->phone_number;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->save(); //save user to db
+
+        DB::table('user_roles')->insert([
+            'user_id' => $user->user_id,
+            'role_id' => 3 // Default as Guest
+        ]);
 
         return $user;
     }
@@ -36,6 +52,10 @@ class UserService implements IuserService
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
+            // Check if user is pending/blocked
+            if ($user->status === 'pending' || $user->status === 'blocked') {
+                return null;
+            }
             return $user;
         };
         return null;
@@ -188,14 +208,20 @@ class UserService implements IuserService
             // Create a new review
             $review = new Review();
             $review->booking_id = $bookingId;
-            $review->spot_id = $booking->spot_id; // Assuming you want to link the review to the spot
+            $review->spot_id = $booking->spot_id; 
             $review->user_id = $user->user_id;
             $review->title = $data['title'];
             $review->rating = $data['rating'];
             $review->comment = $data['comment'];
             $review->save();
         }
-        // TODO: Send email to host? update overall rating for spot
+
+        // Update the overall rating for the spot
+        $this->spotService->updateOverallRating($booking->spot_id);
+
+        // TODO: Send email to host
+
+
         return $review;
     }
 
@@ -207,5 +233,15 @@ class UserService implements IuserService
         }
         $booking->delete();
         return $booking;
+    }
+
+    public function createWallet($userId)
+    {
+        $wallet = new Wallets();
+        $wallet->user_id = $userId;
+        $wallet->balance = 1000; //default balance, to update later
+        $wallet->last_updated = Carbon::now();
+        $wallet->save();
+        return $wallet;
     }
 }

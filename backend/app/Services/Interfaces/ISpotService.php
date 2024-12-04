@@ -12,4 +12,7 @@ interface ISpotService{
     public function updateFavoriteSpot($request);
     public function fetchParkingSpotDetails($request);
     public function getDisabledDateTimes($bookings);
+    public function updateOverallRating($spotId);
+    public function bookSpot($request);
+    public function calculatePrice($spot, $start_time, $end_time);
 }
