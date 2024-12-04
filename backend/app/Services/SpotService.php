@@ -5,10 +5,12 @@ namespace App\Services;
 use App\Services\Interfaces\ISpotService;
 use App\Repositories\SpotRepo;
 use App\Models\ParkingSpot;
+use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\BookingRepo;
 use App\Models\Review;
-
+use Carbon\Carbon;
+use App\Models\Wallets;
 class SpotService implements ISpotService
 {
 
@@ -258,6 +260,74 @@ class SpotService implements ISpotService
         $spot->save();
     }
 
+    public function bookSpot($request){
+        $spotId = $request->route('spot_id');
+        $spot = $this->spotRepo->getSpotById($spotId);
+        $user = Auth::user();
+        $bookingCost = $this->calculatePrice($spot, $request->start_time, $request->end_time);
+
+        if($spot->status !== 'approved'){
+            error_log('Spot is not approved');
+            return null;
+        }
+
+        // Check if the user has enough balance
+        $wallet = Wallets::where('user_id', $user->user_id)->first();
+        if($wallet->balance < $bookingCost){
+            error_log('User does not have enough balance');
+            return null;
+        }
+    
+        
+        // Check if the requested times are within the spot's availability
+        $availability = $spot->availability()
+            ->where('day', Carbon::parse($request->start_time)->dayOfWeek)
+            ->where('start_time', '<=', Carbon::parse($request->start_time)->format('H:i:s'))
+            ->where('end_time', '>=', Carbon::parse($request->end_time)->format('H:i:s'))
+            ->exists();
+
+        if (!$availability) {
+            error_log('Spot is not available at the requested time');
+            return null;
+        }
+
+        // Check if the spot is already booked at the requested time
+        $existingBookings = Booking::where('spot_id', $spotId)
+            ->where('start_time', '<', $request->end_time)
+            ->where('end_time', '>', $request->start_time)
+            ->exists();
+
+        if ($existingBookings) {
+            error_log('Spot is already booked at the requested time');
+            return null;
+        }
+       
+        // Check if the booking time is in the past
+        if (Carbon::parse($request->start_time)->isPast() || Carbon::parse($request->end_time)->isPast()) {
+            error_log('Cannot book a spot in the past');
+            return null;
+        }
+        // Create Booking
+        $booking = new Booking();
+        $booking->guest_id = $user->user_id;
+        $booking->spot_id = $spotId;
+        $booking->start_time = $request->start_time;
+        $booking->end_time = $request->end_time;
+        $booking->status = 'upcoming';
+        $booking->total_price = $bookingCost;
+        $booking->created_at = Carbon::now();
+        $booking->save();
+
+        return $booking;
     }
+
+    public function calculatePrice($spot, $start_time, $end_time){
+        $start = Carbon::parse($start_time);
+        $end = Carbon::parse($end_time);
+        $hours = $start->diffInHours($end);
+        return $spot->price_per_hour * $hours;
+    }
+
+}
     
 

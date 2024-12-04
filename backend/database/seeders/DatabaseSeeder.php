@@ -27,5 +27,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(BookingsTableSeeder::class);
         // $this->call(FavouritesTableSeeder::class);
         // $this->call(ReviewsTableSeeder::class);
+        // $this->call(WalletsTableSeeder::class);
     }
 }
