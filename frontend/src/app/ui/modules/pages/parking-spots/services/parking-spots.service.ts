@@ -3,6 +3,8 @@ import {ParkingSpotViewModel, ReservationViewModel} from "../models/interfaces/p
 import {ParkingSpotsApiService} from "./parking-spots-api.service";
 import {ParkingSpotMapper} from "../mappers/parking-spot.mapper";
 import {Router} from "@angular/router";
+import {SnackbarService} from "../../../../../services/snack-bar/services/snackbar.service";
+import {SnackbarTypeEnums} from "../../../../../services/snack-bar/enum/snackbar-type.enums";
 
 export interface SortSettingsModel {
   column: string;
@@ -15,6 +17,7 @@ export interface SortSettingsModel {
 
 export class ParkingSpotsService {
   parkingSpotsApiService = inject(ParkingSpotsApiService)
+  snackBarService = inject(SnackbarService)
   router = inject(Router)
 
   parkingSpots = signal<ParkingSpotViewModel[]>([])
@@ -58,16 +61,21 @@ export class ParkingSpotsService {
   fetchParkingSpotById(id: number) {
     this.parkingSpotsApiService.fetchParkingSpotById(id).subscribe({
       next: res => {
+        console.log(res)
         this.selectedParkingSpot.set(ParkingSpotMapper.fromParkingSpotDtoToViewModel(res))
       }
     })
   }
 
-  reserveSpot(reservationDetails: ReservationViewModel) {
-    this.parkingSpotsApiService.reserveSpot(ParkingSpotMapper.fromReservationViewModelToDTOModel(reservationDetails)).subscribe({
+  bookSpot(reservationDetails: ReservationViewModel) {
+    this.parkingSpotsApiService.bookSpot(ParkingSpotMapper.fromReservationViewModelToDTOModel(reservationDetails)).subscribe({
       next: (res) => {
+        console.log(res)
+        this.snackBarService.openSnackBar(SnackbarTypeEnums.SUCCESS, "Spot booked successfully")
+        this.fetchParkingSpotById(reservationDetails.spotId)
       },
-        error: (err) => {
+      error: (err) => {
+        this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, "Failed to book spot. Please try again later.")
       }
     })
   }

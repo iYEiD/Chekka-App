@@ -59,4 +59,17 @@ export class HelperFunctions {
       .replace(/^./, char => char.toUpperCase())
       .trim();
   }
+
+  public static transformDate(inputDate: string): string {
+    const date = new Date(inputDate.replace('@', '').trim());
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add 1 because months are 0-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = '00';
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  }
 }

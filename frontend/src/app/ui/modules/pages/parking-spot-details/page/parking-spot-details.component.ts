@@ -65,8 +65,8 @@ export class ParkingSpotDetailsComponent {
   reservationDetails = computed(() => {
     return {
       spotId: this.parkingSpot()?.spotId!,
-      startTime: this.selectedStartTime()!,
-      endTime: this.selectedEndTime()!,
+      startTime: HelperFunctions.transformDate(this.selectedStartTime()!),
+      endTime: HelperFunctions.transformDate(this.selectedEndTime()!),
     }
   })
   userPosition!: any
@@ -95,7 +95,7 @@ export class ParkingSpotDetailsComponent {
     }
 
     const currentDate = current as Date;
-    const dayOfWeek = currentDate.getDay() || 7; // Convert Sunday (0) to 7
+    const dayOfWeek = currentDate.getDay() || 7;
 
     const availability = this.availabilityMap.get(dayOfWeek);
 
@@ -105,6 +105,7 @@ export class ParkingSpotDetailsComponent {
         disabledHours.push(hour);
       }
     }
+    console.log(disabledHours)
 
     return {
       nzDisabledHours: () => disabledHours,
@@ -146,7 +147,8 @@ export class ParkingSpotDetailsComponent {
 
   reserveSpot() {
     this.closeConfirmationModal()
-    this.parkingSpotsService.reserveSpot(this.reservationDetails())
+    this.parkingSpotsService.bookSpot(this.reservationDetails())
+    this.dateRange.set(null)
   }
 
   formatDate(date: Date): string {
