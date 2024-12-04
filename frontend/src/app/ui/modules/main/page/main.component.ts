@@ -10,10 +10,11 @@ import {
   ViewChild
 } from '@angular/core';
 import {AmenitiesFilterModel} from "../../pages/parking-spots/models/interfaces/parking-spots.model";
-import {ParkingSpotsService} from "../../pages/parking-spots/services/parking-spots.service";
+import {ParkingSpotsService, SortSettingsModel} from "../../pages/parking-spots/services/parking-spots.service";
 import {HelperFunctions} from "../../../../common/helper-functions";
 import {Router} from "@angular/router";
 import {AuthService} from "../../authentication/services/auth.service";
+import {MainService} from "../services/main.service";
 
 @Component({
   selector: 'app-page',
@@ -23,13 +24,14 @@ import {AuthService} from "../../authentication/services/auth.service";
 })
 export class MainComponent {
   parkingSpotService = inject(ParkingSpotsService)
+  mainService = inject(MainService)
   authService = inject(AuthService)
   router = inject(Router)
 
   @ViewChild('header') header!: ElementRef;
   isModalVisible = false;
   isDropdownOpen = false;
-  vehicleTypeOptions = ["any_type", "car", "motorcycle"]
+  vehicleTypeOptions = ["Any", "Car", "Bike", "Truck"]
   minPriceFilter = signal<number>(1)
   maxPriceFilter = signal<number>(100)
   priceRange = signal<number[] | null>([this.minPriceFilter(), this.maxPriceFilter()])
@@ -41,11 +43,11 @@ export class MainComponent {
 
   selectedFilters = computed(() => {
     return {
-      vehicle_type: this.vehicleType() !== "any_type" ? this.vehicleType() : null,
+      vehicle_type: this.vehicleType() !== "Any" ? this.vehicleType() : null,
       price_range: this.priceRange()![0] !== this.minPriceFilter() || this.priceRange()![1] !== this.maxPriceFilter() ? this.priceRange() : null,
       amenities: this.selectedAmenities().length !== 0 ? this.selectedAmenities() : null,
       search_value: this.debouncedSearchValue(),
-      // date_range: this.dateTimeRange() ? [HelperFunctions.formatFilterDate(this.dateTimeRange()![0]), HelperFunctions.formatFilterDate(this.dateTimeRange()![1])] : null
+      time_range: this.dateTimeRange() ? [HelperFunctions.formatFilterDate(this.dateTimeRange()![0]), HelperFunctions.formatFilterDate(this.dateTimeRange()![1])] : null
     }
   })
 
@@ -53,7 +55,7 @@ export class MainComponent {
 
   dateTimeRange = signal<any | null>(null)
 
-  vehicleType = signal<string>("any_type")
+  vehicleType = signal<string>("Any")
 
   amenities = signal<AmenitiesFilterModel[]>([
     {
@@ -90,6 +92,15 @@ export class MainComponent {
   selectedAmenities = computed(() => {
     return this.amenities().filter(amenity => amenity.isSelected)
       .map(amenity => amenity.value)
+  })
+  sortColumn = signal<string | null>(null)
+  sortOrder = signal<number | null>(null)
+  sortSettings = computed(() => {
+    let sortSettings: SortSettingsModel = {
+      column: this.sortColumn()!,
+      order: this.sortOrder()!
+    }
+    return sortSettings
   })
 
   constructor() {
@@ -143,22 +154,25 @@ export class MainComponent {
   fetchParkingSpots() {
     this.filterTagChips = []
     this.isModalVisible = false
-    this.vehicleType() !== "any_type" && this.vehicleType() ? this.filterTagChips.push(this.vehicleType()) : null
+    this.vehicleType() !== "Any" && this.vehicleType() ? this.filterTagChips.push(this.vehicleType()) : null
     this.priceRange()![0] !== this.minPriceFilter() || this.priceRange()![1] !== this.maxPriceFilter() ?
       this.filterTagChips.push("$" + this.minPriceFilter() + " - $" + this.maxPriceFilter()) : null
     this.selectedAmenities().length > 0 ?
       this.selectedAmenities().forEach(amenity => this.filterTagChips.push(amenity)) : null
-    this.parkingSpotService.fetchParkingSports(this.selectedFilters())
+    this.dateTimeRange() ? this.filterTagChips.push(this.dateTimeRange()) : null
+    this.parkingSpotService.fetchParkingSports(this.selectedFilters(), this.sortSettings()!)
   }
 
   clearAllFilters() {
     this.clearVehicleType()
     this.clearSelectedAmenities()
     this.clearPriceRange()
+    this.clearDateTimeRangeFilter()
+    this.clearSorting()
   }
 
   clearVehicleType() {
-    this.vehicleType.set("any_type")
+    this.vehicleType.set("Any")
   }
 
   clearSelectedAmenities() {
@@ -174,8 +188,16 @@ export class MainComponent {
     this.priceRange.set([this.minPriceFilter(), this.maxPriceFilter()])
   }
 
+  clearDateTimeRangeFilter() {
+    this.dateTimeRange.set(null)
+  }
+
+  clearSorting() {
+    this.sortColumn.set(null)
+    this.sortOrder.set(null)
+  }
+
   navigateToHomePage() {
     this.router.navigate(['/app/parking-spots'])
   }
-
 }

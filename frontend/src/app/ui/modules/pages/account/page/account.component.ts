@@ -5,6 +5,7 @@ import {SnackbarService} from "../../../../../services/snack-bar/services/snackb
 import {SnackbarTypeEnums} from "../../../../../services/snack-bar/enum/snackbar-type.enums";
 import {AccountService} from "../services/account.service";
 import {HelperFunctions} from "../../../../../common/helper-functions";
+import {MainService} from "../../../main/services/main.service";
 
 @Component({
   selector: 'app-page',
@@ -16,6 +17,7 @@ export class AccountComponent {
   authService = inject(AuthService);
   snackbarService = inject(SnackbarService);
   accountService = inject(AccountService);
+  mainService = inject(MainService)
 
   userDetails = computed(() => {
     const user = this.authService.user();
@@ -56,6 +58,10 @@ export class AccountComponent {
 
   oldPassword = signal<string | null>(null)
   newPassword = signal<string | null>(null)
+
+  ngOnInit() {
+    this.mainService.changeNavbarStatus()
+  }
 
   toggleIsBeingEdited(field: string) {
     const currentEditingField = this.editingField();

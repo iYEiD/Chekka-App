@@ -1,7 +1,8 @@
-import {Component, computed, inject} from '@angular/core';
+import {Component, computed, effect, inject} from '@angular/core';
 import {Router} from "@angular/router";
 import {ParkingSpotsService} from "../../parking-spots/services/parking-spots.service";
 import {ParkingSpotViewModel} from "../../parking-spots/models/interfaces/parking-spots.model";
+import {MainService} from "../../../main/services/main.service";
 
 @Component({
   selector: 'app-map',
@@ -12,29 +13,36 @@ import {ParkingSpotViewModel} from "../../parking-spots/models/interfaces/parkin
 export class MapComponent {
   router = inject(Router)
   parkingSpotsService = inject(ParkingSpotsService)
+  mainService = inject(MainService)
+
   parkingSpots = computed(() => {
     return this.parkingSpotsService.parkingSpots()
   })
 
-  private map!: google.maps.Map;
-  private markers: google.maps.Marker[] = [];
-  private zoomThreshold = 12;
+  map!: google.maps.Map;
+  markers: google.maps.Marker[] = [];
+  zoomThreshold = 12;
 
-  constructor() {}
-
-  ngOnInit(): void {
-    this.initMap();
-    this.addMarkers();
+  constructor() {
+    effect(() => {
+      let parkingSpots = this.parkingSpots()
+      this.initMap();
+      this.addMarkers();
+    });
   }
 
-  private initMap(): void {
+  ngOnInit(): void {
+    this.mainService.changeNavbarStatus()
+  }
+
+  initMap(): void {
     this.map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
       center: { lat: 33.8547, lng: 35.8623 },
       zoom: 9,
     });
   }
 
-  private addMarkers(): void {
+  addMarkers(): void {
     this.parkingSpots().forEach((spot) => {
       const marker = new google.maps.Marker({
         position: { lat: spot.latitude, lng: spot.longitude },
@@ -48,7 +56,7 @@ export class MapComponent {
     });
   }
 
-  private handleMarkerClick(marker: google.maps.Marker, spot: ParkingSpotViewModel): void {
+  handleMarkerClick(marker: google.maps.Marker, spot: ParkingSpotViewModel): void {
     const currentZoom = this.map.getZoom() || 8;
 
     if (currentZoom < this.zoomThreshold) {

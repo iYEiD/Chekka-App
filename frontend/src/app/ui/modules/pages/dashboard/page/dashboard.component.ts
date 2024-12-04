@@ -2,6 +2,7 @@ import {Component, computed, effect, inject, signal} from '@angular/core';
 import {DashboardService} from "../services/dashboard.service";
 import {ParkingSpotsService} from "../../parking-spots/services/parking-spots.service";
 import {BookingsViewModel} from "../models/interfaces/dashboard.models";
+import {MainService} from "../../../main/services/main.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -12,6 +13,8 @@ import {BookingsViewModel} from "../models/interfaces/dashboard.models";
 export class DashboardComponent {
   dashboardService = inject(DashboardService);
   parkingSpotsService = inject(ParkingSpotsService);
+  mainService = inject(MainService)
+
   dashboardData = computed(() => {
     return this.dashboardService.dashboardData()
   })
@@ -32,11 +35,13 @@ export class DashboardComponent {
 
   ngOnInit(): void {
     this.fetchDashboardData()
+    this.mainService.changeNavbarStatus()
   }
 
   updateDashboardIsFavorite(spotId: number, isFavorite: boolean, event: any) {
     event.stopPropagation()
     this.parkingSpotsService.updateIsFavorite(spotId, isFavorite)
+    this.fetchDashboardData()
   }
 
   fetchDashboardData() {
@@ -66,6 +71,8 @@ export class DashboardComponent {
 
   cancelBooking(bookingId: number) {
     this.dashboardService.cancelBooking(bookingId)
+    this.closeCancelBookingModal()
+    this.fetchDashboardData()
   }
 
   submitReview() {
@@ -74,6 +81,7 @@ export class DashboardComponent {
       comment: this.reviewComment(),
       rating: this.reviewRating(),
     })
+    this.fetchDashboardData()
     this.closeReviewModal()
   }
 }

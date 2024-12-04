@@ -1,6 +1,7 @@
 import {Component, computed, inject} from '@angular/core';
 import {ParkingSpotsService} from "../services/parking-spots.service";
 import {Router} from "@angular/router";
+import {MainService} from "../../../main/services/main.service";
 
 @Component({
   selector: 'app-page',
@@ -10,11 +11,16 @@ import {Router} from "@angular/router";
 })
 export class ParkingSpotsComponent {
   parkingSpotsService = inject(ParkingSpotsService)
+  mainService = inject(MainService)
   router = inject(Router)
 
   parkingSpots = computed(() => {
     return this.parkingSpotsService.parkingSpots();
   })
+
+  ngOnInit() {
+    this.mainService.changeNavbarStatus()
+  }
 
   navigateToDetailsPage(id: number) {
     this.parkingSpotsService.navigateToDetailsPage(id)

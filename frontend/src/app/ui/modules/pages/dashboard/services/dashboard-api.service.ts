@@ -11,8 +11,8 @@ export class DashboardApiService {
   http = inject(HttpClient)
   baseUrl = environment.backendUrl;
   fetchDashboardDataUrl = `${this.baseUrl}/user/user-dashboard`
-  submitReviewUrl = `${this.baseUrl}/user/submit-review`
-  cancelBookingUrl = `${this.baseUrl}/user/cancel-booking`
+  submitReviewUrl = `${this.baseUrl}/user/parking-spots/submit-review`
+  cancelBookingUrl = `${this.baseUrl}/user/parking-spots/delete-booking`
 
   constructor() { }
 
@@ -26,8 +26,7 @@ export class DashboardApiService {
   }
 
   cancelBooking(bookingId: number): Observable<any> {
-    return this.http.post(this.cancelBookingUrl, {
-      booking_id: bookingId
-    })
+    let updatedCancelBookingUrl = `${this.cancelBookingUrl}/${bookingId}`;
+    return this.http.delete(updatedCancelBookingUrl)
   }
 }

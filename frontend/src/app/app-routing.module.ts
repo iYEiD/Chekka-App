@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: 'app',
     component: MainComponent,
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     loadChildren: () => import('./ui/modules/main/main.module').then(m => m.MainModule)
   },
   { path: '**', redirectTo: 'auth'},

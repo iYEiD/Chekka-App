@@ -2,14 +2,22 @@ import {inject, Injectable, signal} from '@angular/core';
 import {ParkingSpotViewModel, ReservationViewModel} from "../models/interfaces/parking-spots.model";
 import {ParkingSpotsApiService} from "./parking-spots-api.service";
 import {ParkingSpotMapper} from "../mappers/parking-spot.mapper";
-import {error} from "@ant-design/icons-angular";
 import {Router} from "@angular/router";
+import {SnackbarService} from "../../../../../services/snack-bar/services/snackbar.service";
+import {SnackbarTypeEnums} from "../../../../../services/snack-bar/enum/snackbar-type.enums";
+
+export interface SortSettingsModel {
+  column: string;
+  order: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class ParkingSpotsService {
   parkingSpotsApiService = inject(ParkingSpotsApiService)
+  snackBarService = inject(SnackbarService)
   router = inject(Router)
 
   parkingSpots = signal<ParkingSpotViewModel[]>([])
@@ -23,19 +31,27 @@ export class ParkingSpotsService {
         this.parkingSpots.update((spots) =>
           spots.map((spot) =>
             spot.spotId === spotId
-              ? { ...spot, isFavorite: !spot.isFavorite }
+              ? { ...spot, isFavorite: status }
               : spot
           )
         );
+        this.fetchParkingSpotById(spotId)
       },
-      error: error => {}
-    })
+      error: (error) => {
+        console.error('Error updating favorite status:', error);
+      },
+    });
   }
 
-  fetchParkingSports(filters: any) {
+
+  fetchParkingSports(filters: any, sortSettings: SortSettingsModel) {
     this.parkingSpotsApiService.fetchParkingSpots(filters).subscribe({
       next: (res) => {
         this.parkingSpots.set(ParkingSpotMapper.fromParkingSpotsDtoToViewModel(res))
+        if (sortSettings.column && sortSettings.order) {
+          console.log(sortSettings)
+          this.sortParkingSpots(sortSettings)
+        }
       },
       error: (err) => {
       }
@@ -45,17 +61,21 @@ export class ParkingSpotsService {
   fetchParkingSpotById(id: number) {
     this.parkingSpotsApiService.fetchParkingSpotById(id).subscribe({
       next: res => {
+        console.log(res)
         this.selectedParkingSpot.set(ParkingSpotMapper.fromParkingSpotDtoToViewModel(res))
       }
     })
-    this.selectedParkingSpot.set(this.parkingSpots().filter(spot => spot.spotId === id)[0])
   }
 
-  reserveSpot(reservationDetails: ReservationViewModel) {
-    this.parkingSpotsApiService.reserveSpot(ParkingSpotMapper.fromReservationViewModelToDTOModel(reservationDetails)).subscribe({
+  bookSpot(reservationDetails: ReservationViewModel) {
+    this.parkingSpotsApiService.bookSpot(ParkingSpotMapper.fromReservationViewModelToDTOModel(reservationDetails)).subscribe({
       next: (res) => {
+        console.log(res)
+        this.snackBarService.openSnackBar(SnackbarTypeEnums.SUCCESS, "Spot booked successfully")
+        this.fetchParkingSpotById(reservationDetails.spotId)
       },
-        error: (err) => {
+      error: (err) => {
+        this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, "Failed to book spot. Please try again later.")
       }
     })
   }
@@ -64,5 +84,24 @@ export class ParkingSpotsService {
     let detailsPageUrl = '/app/parking-spots'
 
     this.router.navigate([detailsPageUrl, id]);
+  }
+
+  sortParkingSpots(
+    sortSettings: SortSettingsModel
+  ) {
+    const { column, order } = sortSettings;
+
+    this.parkingSpots.set([...this.parkingSpots()].sort((a, b) => {
+      const valueA = a[column as keyof ParkingSpotViewModel];
+      const valueB = b[column as keyof ParkingSpotViewModel];
+
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return order * -1;
+      if (valueB == null) return order;
+
+      if (valueA < valueB) return order * -1;
+      if (valueA > valueB) return order * 1;
+      return 0;
+    }));
   }
 }

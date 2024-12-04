@@ -1,9 +1,12 @@
+import {LocationDTOModel, LocationViewModel} from "../../../parking-spots/models/interfaces/parking-spots.model";
+
 export interface DashboardDTOModel {
   first_name: string;
   cancelledBookings: string[]
   completedBookings: BookingsDTOModel[]
   favoriteSpots: FavoriteSpotsDTOModel[]
   upcomingBookings: BookingsDTOModel[]
+  currentBookings: BookingsDTOModel[]
 }
 
 export interface BookingsDTOModel {
@@ -16,9 +19,8 @@ export interface BookingsDTOModel {
   total_price: string;
   created_at: string;
   is_reviewed?: boolean;
-  spotDetails: SpotDetailsDTOModel
+  spotDetails: SpotDetailsDTOModel;
 }
-
 
 export interface SpotDetailsDTOModel {
   spot_id: number;
@@ -31,6 +33,7 @@ export interface SpotDetailsDTOModel {
   price_per_hour: number;
   overall_rating: number;
   status: string;
+  location: LocationDTOModel;
 }
 
 export interface FavoriteSpotsDTOModel {
@@ -44,6 +47,7 @@ export interface FavoriteSpotsDTOModel {
   price_per_hour: number;
   overall_rating: number;
   status: string;
+  location: LocationDTOModel;
 }
 
 export interface DashboardViewModel {
@@ -52,6 +56,7 @@ export interface DashboardViewModel {
   completedBookings: BookingsViewModel[];
   favoriteSpots: FavoriteSpotsViewModel[];
   upcomingBookings: BookingsViewModel[];
+  currentBookings: BookingsViewModel[];
 }
 
 export interface BookingsViewModel {
@@ -78,6 +83,7 @@ export interface SpotDetailsViewModel {
   pricePerHour: number;
   overallRating: number;
   status: string;
+  location: LocationViewModel;
 }
 
 export interface FavoriteSpotsViewModel {
@@ -91,6 +97,7 @@ export interface FavoriteSpotsViewModel {
   pricePerHour: number;
   overallRating: number;
   status: string;
+  location: LocationViewModel;
 }
 
 
