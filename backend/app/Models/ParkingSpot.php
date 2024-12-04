@@ -68,4 +68,6 @@ class ParkingSpot extends Model
     public function location(){
         return $this->hasMany(Location::class,'spot_id');
     }   
+
+    public $timestamps = false; // Disable timestamps
 }
