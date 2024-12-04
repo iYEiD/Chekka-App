@@ -55,7 +55,7 @@ class SpotRepo implements ISpotRepo
             });
         }
 
-        // TIME RANGE TO BE ADDED
+     
         return $query->get();   
     }
 

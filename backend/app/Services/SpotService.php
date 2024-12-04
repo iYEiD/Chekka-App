@@ -7,6 +7,7 @@ use App\Repositories\SpotRepo;
 use App\Models\ParkingSpot;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\BookingRepo;
+use App\Models\Review;
 
 class SpotService implements ISpotService
 {
@@ -246,6 +247,15 @@ class SpotService implements ISpotService
         }
     
         return array_values($disabledDateTimes);
+    }
+
+    public function updateOverallRating($spotId)
+    {
+        $spot = ParkingSpot::find($spotId);
+        $reviews = Review::where('spot_id', $spot->spot_id)->get();
+        $averageRating = $reviews->avg('rating');
+        $spot->overall_rating = $averageRating;
+        $spot->save();
     }
 
     }
