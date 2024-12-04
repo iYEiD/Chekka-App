@@ -10,7 +10,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {AmenitiesFilterModel} from "../../pages/parking-spots/models/interfaces/parking-spots.model";
-import {ParkingSpotsService} from "../../pages/parking-spots/services/parking-spots.service";
+import {ParkingSpotsService, SortSettingsModel} from "../../pages/parking-spots/services/parking-spots.service";
 import {HelperFunctions} from "../../../../common/helper-functions";
 import {Router} from "@angular/router";
 import {AuthService} from "../../authentication/services/auth.service";
@@ -93,6 +93,15 @@ export class MainComponent {
     return this.amenities().filter(amenity => amenity.isSelected)
       .map(amenity => amenity.value)
   })
+  sortColumn = signal<string | null>(null)
+  sortOrder = signal<number | null>(null)
+  sortSettings = computed(() => {
+    let sortSettings: SortSettingsModel = {
+      column: this.sortColumn()!,
+      order: this.sortOrder()!
+    }
+    return sortSettings
+  })
 
   constructor() {
     effect(() => {
@@ -151,7 +160,7 @@ export class MainComponent {
     this.selectedAmenities().length > 0 ?
       this.selectedAmenities().forEach(amenity => this.filterTagChips.push(amenity)) : null
     this.dateTimeRange() ? this.filterTagChips.push(this.dateTimeRange()) : null
-    this.parkingSpotService.fetchParkingSports(this.selectedFilters())
+    this.parkingSpotService.fetchParkingSports(this.selectedFilters(), this.sortSettings()!)
   }
 
   clearAllFilters() {
@@ -159,6 +168,7 @@ export class MainComponent {
     this.clearSelectedAmenities()
     this.clearPriceRange()
     this.clearDateTimeRangeFilter()
+    this.clearSorting()
   }
 
   clearVehicleType() {
@@ -180,6 +190,11 @@ export class MainComponent {
 
   clearDateTimeRangeFilter() {
     this.dateTimeRange.set(null)
+  }
+
+  clearSorting() {
+    this.sortColumn.set(null)
+    this.sortOrder.set(null)
   }
 
   navigateToHomePage() {

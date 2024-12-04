@@ -16,6 +16,7 @@ import {NzInputNumberModule} from "ng-zorro-antd/input-number";
 import {NzBadgeModule} from "ng-zorro-antd/badge";
 import {SharedPipesModule} from "../../../common/pipes/shared-pipes.module";
 import {NzDatePickerModule} from "ng-zorro-antd/date-picker";
+import {NzSelectModule} from "ng-zorro-antd/select";
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import {NzDatePickerModule} from "ng-zorro-antd/date-picker";
     NzBadgeModule,
     NzDatePickerModule,
     SharedPipesModule,
+    NzSelectModule
   ]
 })
 export class MainModule { }

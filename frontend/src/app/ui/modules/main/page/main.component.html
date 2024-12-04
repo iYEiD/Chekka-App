@@ -21,6 +21,7 @@
           <div>Filters</div>
         </button>
       </nz-badge>
+
       <nz-modal
         [(nzVisible)]="isModalVisible"
         nzTitle="Filters"
@@ -90,6 +91,28 @@
                     {{amenity.label}}
                   </div>
                 }
+              </div>
+            </div>
+            <nz-divider></nz-divider>
+            <div>
+              <div class="text-xl font-medium text-secondary-10 mb-2">Sort</div>
+              <div class="flex">
+                <nz-select
+                  nzPlaceHolder="Sort Column"
+                  [(ngModel)]="sortColumn"
+                >
+                  <nz-option nzValue="pricePerHour" nzLabel="Price"></nz-option>
+                  <nz-option nzValue="overallRating" nzLabel="Rating"></nz-option>
+                  <nz-option nzValue="distance" nzLabel="Distance"></nz-option>
+                </nz-select>
+                <nz-select
+                  nzPlaceHolder="Sort Order"
+                  [(ngModel)]="sortOrder"
+                  class="!ml-2"
+                >
+                  <nz-option nzValue="1" nzLabel="Ascending"></nz-option>
+                  <nz-option nzValue="-1" nzLabel="Descending"></nz-option>
+                </nz-select>
               </div>
             </div>
           </div>

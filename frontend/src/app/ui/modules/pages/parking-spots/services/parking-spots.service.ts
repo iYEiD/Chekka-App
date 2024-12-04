@@ -4,9 +4,15 @@ import {ParkingSpotsApiService} from "./parking-spots-api.service";
 import {ParkingSpotMapper} from "../mappers/parking-spot.mapper";
 import {Router} from "@angular/router";
 
+export interface SortSettingsModel {
+  column: string;
+  order: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class ParkingSpotsService {
   parkingSpotsApiService = inject(ParkingSpotsApiService)
   router = inject(Router)
@@ -35,10 +41,14 @@ export class ParkingSpotsService {
   }
 
 
-  fetchParkingSports(filters: any) {
+  fetchParkingSports(filters: any, sortSettings: SortSettingsModel) {
     this.parkingSpotsApiService.fetchParkingSpots(filters).subscribe({
       next: (res) => {
         this.parkingSpots.set(ParkingSpotMapper.fromParkingSpotsDtoToViewModel(res))
+        if (sortSettings.column && sortSettings.order) {
+          console.log(sortSettings)
+          this.sortParkingSpots(sortSettings)
+        }
       },
       error: (err) => {
       }
@@ -66,5 +76,24 @@ export class ParkingSpotsService {
     let detailsPageUrl = '/app/parking-spots'
 
     this.router.navigate([detailsPageUrl, id]);
+  }
+
+  sortParkingSpots(
+    sortSettings: SortSettingsModel
+  ) {
+    const { column, order } = sortSettings;
+
+    this.parkingSpots.set([...this.parkingSpots()].sort((a, b) => {
+      const valueA = a[column as keyof ParkingSpotViewModel];
+      const valueB = b[column as keyof ParkingSpotViewModel];
+
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return order * -1;
+      if (valueB == null) return order;
+
+      if (valueA < valueB) return order * -1;
+      if (valueA > valueB) return order * 1;
+      return 0;
+    }));
   }
 }
