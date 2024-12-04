@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->hasMany(Booking::class, 'guest_id');
     }
 
+    public function wallet()
+    {
+        return $this->hasOne(Wallets::class, 'user_id');
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

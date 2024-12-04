@@ -10,6 +10,8 @@ use App\Models\Booking;
 use App\Models\Review;
 use Illuminate\Support\Facades\DB;
 use App\Services\SpotService;
+use App\Models\Wallets;
+use Carbon\Carbon;
 
 class UserService implements IuserService
 {
@@ -31,7 +33,7 @@ class UserService implements IuserService
         $user = new User();
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
-        $user->status = "activated"; //default pending - fix later
+        $user->status = "active"; //default pending - fix later
         $user->phone_number = $request->phone_number;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
@@ -231,5 +233,15 @@ class UserService implements IuserService
         }
         $booking->delete();
         return $booking;
+    }
+
+    public function createWallet($userId)
+    {
+        $wallet = new Wallets();
+        $wallet->user_id = $userId;
+        $wallet->balance = 1000; //default balance, to update later
+        $wallet->last_updated = Carbon::now();
+        $wallet->save();
+        return $wallet;
     }
 }
