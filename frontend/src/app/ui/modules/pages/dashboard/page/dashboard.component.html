@@ -161,7 +161,7 @@
     (nzOnCancel)="closeCancelBookingModal()"
   >
     <ng-container *nzModalContent>
-      <div>Are you sure you want to cancel booking at location from {{cancelBookingSpot?.startTime}} to {{cancelBookingSpot?.endTime}}?</div>
+      <div>Are you sure you want to cancel booking at {{cancelBookingSpot?.spotDetails!.location.district}}, {{cancelBookingSpot?.spotDetails!.location.city}} from {{cancelBookingSpot?.startTime}} to {{cancelBookingSpot?.endTime}}?</div>
       <div>Please note that this action CANNOT be reverted.</div>
     </ng-container>
 
