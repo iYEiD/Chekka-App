@@ -26,9 +26,11 @@ class User extends Authenticatable
         'status',
         'email',
         'password',
+        'google_id',
+        'is_valid',
     ];
     protected $primaryKey = 'user_id';
-
+    protected $table = 'users';
 
     public function favourites()
     {

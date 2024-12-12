@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SpotsController;
-
+use App\Http\Controllers\GoogleAuthController;
 
 // Users
 Route::post('/user/signup', [UserController::class, 'signup']);
@@ -12,6 +12,10 @@ Route::post('/user/update-details', [UserController::class, 'updateDetails'])->m
 Route::get('/user/user-details', [UserController::class, 'userDetails'])->middleware('auth:api');
 Route::get('/user/user-dashboard', [UserController::class, 'userDashboard'])->middleware('auth:api');
 Route::post('/user/logout', [UserController::class, 'logout'])->middleware('auth:api');
+
+// Google Auth
+Route::get('/auth/google', [GoogleAuthController::class, 'redirectToGoogle']);
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback']);
 
 
 // Parking Spots
