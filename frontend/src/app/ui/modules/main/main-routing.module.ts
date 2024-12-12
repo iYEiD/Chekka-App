@@ -5,6 +5,7 @@ import {ParkingSpotDetailsComponent} from "../pages/parking-spot-details/page/pa
 import {AccountComponent} from "../pages/account/page/account.component";
 import {MapComponent} from "../pages/map/page/map.component";
 import {DashboardComponent} from "../pages/dashboard/page/dashboard.component";
+import {HelpCenterComponent} from "../pages/help-center/page/help-center.component";
 
 const routes: Routes = [
   {
@@ -31,6 +32,11 @@ const routes: Routes = [
     path: 'map',
     component: MapComponent,
     loadChildren: () => import('../pages/map/map.module').then(m => m.MapModule)
+  },
+  {
+    path: 'help-center',
+    component: HelpCenterComponent,
+    loadChildren: () => import('../pages/help-center/help-center.module').then(m => m.HelpCenterModule)
   },
   { path: '**', redirectTo: 'parking-spots'},
 ];

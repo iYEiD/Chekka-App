@@ -1,0 +1,30 @@
+<div>
+  <div class="text-base">Title*</div>
+  <input nz-input placeholder="Review Title" [(ngModel)]="ticketTitle"/>
+</div>
+
+<div class="mt-5">
+  <div class="text-base">Comment*</div>
+  <textarea [(ngModel)]="ticketContent" nz-input placeholder="Review Comment" nzAutosize></textarea>
+</div>
+
+<div class="mt-5">
+  <div class="text-base">Type*</div>
+  <div
+    class="grid grid-rows-1 grid-cols-2 border border-secondary-2 rounded-lg px-1 py-1 text-center"
+  >
+    @for (option of ticketTypeOptions; track option) {
+    <button
+      class=" py-2 rounded-lg"
+      (click)="onTicketTypeChange(option)"
+      [ngClass]="option === ticketType() ? 'border border-black bg-secondary-1' : 'hover:bg-secondary-1 transition-colors duration-200 ease-in-out'"
+    >
+    {{option | camelToTitleCase}}
+    </button>
+    }
+  </div>
+</div>
+
+<div class="mt-5">
+  <button nz-button nzType="primary" (click)="submitTicket()">Submit</button>
+</div>
