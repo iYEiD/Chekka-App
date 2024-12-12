@@ -141,4 +141,19 @@ class UserController extends Controller
             return response()->json(['message' => 'Booking not found or does not belong to the user'], 404);
         }
     }
+
+    public function getUserWallet(Request $request)
+{
+    $user = $request->user();
+    $wallet = $this->userService->getUserWallet($user->user_id);
+
+    if (!$wallet) {
+        return response()->json(['message' => 'Wallet not found'], 404);
+    }
+
+    return response()->json([
+        'total_funds' => $wallet->balance,
+            'transaction_history' => $this->userService->getTransactionHistory($user->user_id)
+        ], 200);
+    }   
 }

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\SpotService;
 use App\Models\Wallets;
 use Carbon\Carbon;
+use App\Models\Transaction;
 
 class UserService implements IuserService
 {
@@ -244,4 +245,40 @@ class UserService implements IuserService
         $wallet->save();
         return $wallet;
     }
+
+    public function getUserWallet($userId)
+{
+    return Wallets::where('user_id', $userId)->first();
+}
+
+public function getTransactionHistory($userId)
+{
+    $transactions = Transaction::where('sender_wallet_id', function($query) use ($userId) {
+            $query->select('wallet_id')
+                  ->from('wallets')
+                  ->where('user_id', $userId);
+        })
+        ->orWhere('receiver_wallet_id', function($query) use ($userId) {
+            $query->select('wallet_id')
+                  ->from('wallets') 
+                  ->where('user_id', $userId);
+        })
+        ->orderBy('created_at', 'desc')
+        ->take(5)
+        ->get();
+
+    return $transactions->map(function ($transaction) use ($userId) {
+        $isReceiver = $transaction->receiverWallet->user_id == $userId;
+        return [
+            'second_user_firstName' => $isReceiver ? 
+                $transaction->senderWallet->user->first_name : 
+                $transaction->receiverWallet->user->first_name,
+            'second_user_lastName' => $isReceiver ? 
+                $transaction->senderWallet->user->last_name :
+                $transaction->receiverWallet->user->last_name,
+            'amount' => $transaction->received_amount,
+            'type' => $transaction->transaction_type,
+        ];
+    });
+}
 }
