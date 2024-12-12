@@ -1,5 +1,4 @@
 import {Component, computed, inject, signal} from '@angular/core';
-import {AuthService} from "../../../authentication/services/auth.service";
 import {UserViewModel} from "../../../../../models/authentication/interfaces/authentication.models";
 import {SnackbarService} from "../../../../../services/snack-bar/services/snackbar.service";
 import {SnackbarTypeEnums} from "../../../../../services/snack-bar/enum/snackbar-type.enums";
@@ -14,13 +13,16 @@ import {MainService} from "../../../main/services/main.service";
   styleUrl: './account.component.scss',
 })
 export class AccountComponent {
-  authService = inject(AuthService);
   snackbarService = inject(SnackbarService);
   accountService = inject(AccountService);
   mainService = inject(MainService)
 
+  wallet = computed(() => {
+    return this.accountService.userWallet()
+  })
+
   userDetails = computed(() => {
-    const user = this.authService.user();
+    const user = this.accountService.userInfo();
 
     if (!user) {
       return [];
@@ -49,7 +51,6 @@ export class AccountComponent {
       }
     ];
 
-    // Map details and update the `isBeingEdited` flag for each field
     return detailsWithPassword.map(detail => ({
       ...detail,
       isBeingEdited: detail.field === currentEditingField
@@ -59,8 +60,12 @@ export class AccountComponent {
   oldPassword = signal<string | null>(null)
   newPassword = signal<string | null>(null)
 
+  isModelOpen: boolean = false
+
   ngOnInit() {
     this.mainService.changeNavbarStatus()
+    this.accountService.getUserDetails()
+    this.accountService.getUserWallet()
   }
 
   toggleIsBeingEdited(field: string) {
@@ -122,4 +127,11 @@ export class AccountComponent {
     }
   }
 
+  openModal() {
+    this.isModelOpen = true
+  }
+
+  closeModal() {
+    this.isModelOpen = false
+  }
 }

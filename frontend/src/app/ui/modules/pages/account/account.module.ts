@@ -9,19 +9,24 @@ import {NzInputModule} from "ng-zorro-antd/input";
 import {NzButtonModule} from "ng-zorro-antd/button";
 import {FormsModule} from "@angular/forms";
 import {NzToolTipModule} from "ng-zorro-antd/tooltip";
+import {NzModalModule} from "ng-zorro-antd/modal";
+import {NzCollapseComponent, NzCollapsePanelComponent} from "ng-zorro-antd/collapse";
 
 
 @NgModule({
   declarations: [AccountComponent],
-    imports: [
-        CommonModule,
-        AccountRoutingModule,
-        SharedPipesModule,
-        NzDividerModule,
-        NzInputModule,
-        NzButtonModule,
-        FormsModule,
-        NzToolTipModule
-    ]
+  imports: [
+    CommonModule,
+    AccountRoutingModule,
+    SharedPipesModule,
+    NzDividerModule,
+    NzInputModule,
+    NzButtonModule,
+    FormsModule,
+    NzToolTipModule,
+    NzModalModule,
+    NzCollapseComponent,
+    NzCollapsePanelComponent
+  ]
 })
 export class AccountModule { }

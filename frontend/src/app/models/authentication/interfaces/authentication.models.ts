@@ -62,3 +62,27 @@ export interface ParsedTokenDtoModel {
   iss: string;
   username?: string;
 }
+
+export interface WalletDtoModel {
+  total_funds: number;
+  transaction_history: WalletTransactionDtoModel[]
+}
+
+export interface WalletTransactionDtoModel {
+  second_user_firstName: string;
+  second_user_lastName: string;
+  amount: number;
+  type: string
+}
+
+export interface WalletViewModel {
+  totalFunds: number;
+  transactionHistory: WalletTransactionViewModel[]
+}
+
+export interface WalletTransactionViewModel {
+  secondUserFirstName: string;
+  secondUserLastName: string;
+  amount: number;
+  type: string
+}
