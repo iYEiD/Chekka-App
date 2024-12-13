@@ -14,7 +14,8 @@ class ReviewsTableSeeder extends Seeder
     {
         DB::table('reviews')->insert([
             [
-                'booking_id' => 1,
+                'review_id' => 100,
+                'booking_id' => 100,
                 'spot_id' => 100,
                 'user_id' => 106,
                 'title' => 'Fantastic Stay',
@@ -22,7 +23,8 @@ class ReviewsTableSeeder extends Seeder
                 'comment' => 'Exceeded expectations. Host was accommodating.'
             ],
             [
-                'booking_id' => 2,
+                'review_id' => 101,
+                'booking_id' => 101,
                 'spot_id' => 101,
                 'user_id' => 106,
                 'title' => 'Great Location',
@@ -30,7 +32,8 @@ class ReviewsTableSeeder extends Seeder
                 'comment' => 'Perfect location. Spot was clean and comfortable.'
             ],
             [
-                'booking_id' => 3,
+                'review_id' => 102,
+                'booking_id' => 102,
                 'spot_id' => 100,
                 'user_id' => 106,
                 'title' => 'Excellent Host',

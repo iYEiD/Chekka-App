@@ -153,7 +153,11 @@ class UserController extends Controller
 
     return response()->json([
         'total_funds' => $wallet->balance,
-            'transaction_history' => $this->userService->getTransactionHistory($user->user_id)
-        ], 200);
-    }   
+        'transaction_history' => $this->userService->getTransactionHistory($user->user_id)
+    ], 200);
+}   
+
+    public function getAllTransactions(){
+        return $this->userService->getAllTransactions();
+    }
 }

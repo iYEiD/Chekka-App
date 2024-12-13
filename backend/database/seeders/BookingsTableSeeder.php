@@ -16,6 +16,7 @@ class BookingsTableSeeder extends Seeder
         DB::table('bookings')->insert([
             // Spot 1
             [
+                'booking_id' => 100,
                 'spot_id' => 100,
                 'guest_id' => 105,
                 'start_time' => Carbon::now()->subDays(1)->setTime(8, 0),
@@ -24,6 +25,7 @@ class BookingsTableSeeder extends Seeder
                 'total_price' => 20.00,
             ],
             [
+                'booking_id' => 101,
                 'spot_id' => 100,
                 'guest_id' => 105,
                 'start_time' => Carbon::now()->subDays(2)->setTime(8, 0),
@@ -32,6 +34,7 @@ class BookingsTableSeeder extends Seeder
                 'total_price' => 20.00,
             ],
             [
+                'booking_id' => 102,
                 'spot_id' => 100,
                 'guest_id' => 105,
                 'start_time' => Carbon::now()->addDays(2)->setTime(10, 0),
@@ -41,6 +44,7 @@ class BookingsTableSeeder extends Seeder
             ],
             // Spot 2
             [
+                'booking_id' => 103,
                 'spot_id' => 101,
                 'guest_id' => 105,
                 'start_time' => Carbon::now()->addDays(3)->setTime(9, 0),
@@ -49,6 +53,7 @@ class BookingsTableSeeder extends Seeder
                 'total_price' => 50.00,
             ],
             [
+                'booking_id' => 104,
                 'spot_id' => 101,
                 'guest_id' => 106,
                 'start_time' => Carbon::now()->addDays(4)->setTime(11, 0),
@@ -58,6 +63,7 @@ class BookingsTableSeeder extends Seeder
             ],
             // Spot 3
             [
+                'booking_id' => 105,
                 'spot_id' => 102,
                 'guest_id' => 106,
                 'start_time' => Carbon::now()->addDays(5)->setTime(8, 0),
@@ -66,6 +72,7 @@ class BookingsTableSeeder extends Seeder
                 'total_price' => 130.00,
             ],
             [
+                'booking_id' => 106,
                 'spot_id' => 102,
                 'guest_id' => 106,
                 'start_time' => Carbon::now()->addDays(6)->setTime(9, 0),
@@ -75,6 +82,7 @@ class BookingsTableSeeder extends Seeder
             ],
             // Spot 4
             [
+                'booking_id' => 107,
                 'spot_id' => 103,
                 'guest_id' => 105,
                 'start_time' => Carbon::now(),
@@ -83,6 +91,7 @@ class BookingsTableSeeder extends Seeder
                 'total_price' => 90.00,
             ],
             [
+                'booking_id' => 108,
                 'spot_id' => 103,
                 'guest_id' => 105,
                 'start_time' => Carbon::now()->addDays(8)->setTime(12, 0),
