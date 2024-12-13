@@ -28,6 +28,7 @@ Route::get('/parking-spots/fetch-parking-spot-details/{spot_id}', [SpotsControll
 Route::post('/user/parking-spots/book-spot/{spot_id}', [SpotsController::class, 'bookSpot'])->middleware('auth:api');
 Route::delete('/user/parking-spots/delete-booking/{bookingId}', [UserController::class, 'deleteBooking'])->middleware('auth:api');
 Route::post('/user/parking-spots/submit-review/{bookingId}', [UserController::class, 'submitReview'])->middleware('auth:api');
+Route::get('/user/parking-spots/gate/{spot_id}', [SpotsController::class, 'getGateCode'])->middleware('auth:api');
 
 // Tickets
 Route::post('/user/help-center/tickets', [TicketController::class, 'createTicket'])->middleware('auth:api');
