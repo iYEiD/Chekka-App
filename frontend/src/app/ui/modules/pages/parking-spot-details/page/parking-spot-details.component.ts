@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, signal} from '@angular/core';
+import {Component, computed, effect, inject, signal, untracked} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ParkingSpotsService} from "../../parking-spots/services/parking-spots.service";
 import {HelperFunctions} from "../../../../../common/helper-functions";
@@ -130,6 +130,14 @@ export class ParkingSpotDetailsComponent {
         // this.highlightFastestRoute()
       }
     })
+    effect(() => {
+      const userLat = this.parkingSpotsService.userLat()
+      const userLong = this.parkingSpotsService.userLong()
+      this.parkingSpotsService.getUserLocation()
+      untracked(() => {
+        this.parkingSpotsService.fetchParkingSpotById(parseInt(this.parkingSpotId()!, 10))
+      })
+    });
   }
 
   ngOnInit(): void {
@@ -246,6 +254,8 @@ export class ParkingSpotDetailsComponent {
           this.userPosition = userLocation
           this.addUserLocationMarker(userLat, userLng);
           this.bounds.extend(userLocation);
+          this.parkingSpotsService.userLat.set(userLat)
+          this.parkingSpotsService.userLong.set(userLng)
         },
         (error) => {
           this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, "Allow location to be able to view location based data")

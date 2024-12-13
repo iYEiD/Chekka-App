@@ -103,9 +103,13 @@ export class MainComponent {
     return sortSettings
   })
 
+
   constructor() {
     effect(() => {
       const debouncedValue = this.debouncedSearchValue()
+      const userLat = this.parkingSpotService.userLat()
+      const userLong = this.parkingSpotService.userLong()
+      this.parkingSpotService.getUserLocation()
       untracked(() => {
         this.fetchParkingSpots()
       })
