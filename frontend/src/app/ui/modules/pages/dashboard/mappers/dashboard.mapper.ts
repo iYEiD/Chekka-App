@@ -65,6 +65,8 @@ export class DashboardMapper {
       favoriteSpots: this.fromFavoriteSpotsDTOToViewModel(dto.favoriteSpots),
       upcomingBookings: this.fromBookingsDTOToViewModel(dto.upcomingBookings),
       currentBookings: this.fromBookingsDTOToViewModel(dto.currentBookings),
+      pendingBookings: this.fromBookingsDTOToViewModel(dto.pendingBookings),
+      rejectedBookings: this.fromBookingsDTOToViewModel(dto.rejectedBookings)
     };
   }
 }

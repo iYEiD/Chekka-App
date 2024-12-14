@@ -113,7 +113,7 @@
               <i class="bi bi-arrow-right ml-1.5 mr-1.5"></i>
               <div>{{spot.endTime}}</div>
             </div>
-            <div>${{spot.totalPrice}} per hour</div>
+            <div>Total: ${{spot.totalPrice}}</div>
           </div>
           <nz-divider></nz-divider>
         }
@@ -151,6 +151,65 @@
         }
       }@else {
         <div>No Upcoming Bookings</div>
+      }
+    </nz-collapse-panel>
+  </nz-collapse>
+
+  <nz-collapse class="!mt-5">
+    <nz-collapse-panel nzHeader="Pending Bookings" [nzActive]="dashboardData()?.pendingBookings!.length > 0">
+      @if (dashboardData()?.pendingBookings!.length > 0) {
+      @for (spot of dashboardData()?.pendingBookings; track spot) {
+      <div class="flex justify-between items-center cursor-pointer" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
+        <div>
+          <div class="flex">
+            <div class="mr-3">{{spot.spotDetails.location.district}}, {{spot.spotDetails.location.city}}</div>
+            <div class="flex">
+              <i class="bi bi-star-fill"></i>
+              <div class="ml-1">{{spot.spotDetails.overallRating}}</div>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div>{{spot.startTime}}</div>
+            <i class="bi bi-arrow-right ml-1.5 mr-1.5"></i>
+            <div>{{spot.endTime}}</div>
+          </div>
+          <div>Total: ${{spot.totalPrice}}</div>
+        </div>
+        <button class="flex cursor-pointer hover:bg-secondary-1 rounded-md py-1.5 px-2" (click)="openCancelBookingModal(spot, $event)">
+          Cancel Booking
+        </button>
+      </div>
+      <nz-divider></nz-divider>
+      }
+      }@else {
+      <div>No Pending Bookings</div>
+      }
+    </nz-collapse-panel>
+  </nz-collapse>
+
+  <nz-collapse class="!mt-5">
+    <nz-collapse-panel nzHeader="Rejected Bookings" [nzActive]="dashboardData()?.rejectedBookings!.length > 0">
+      @if (dashboardData()?.rejectedBookings!.length > 0) {
+      @for (spot of dashboardData()?.rejectedBookings; track spot) {
+      <div class="cursor-pointer" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
+        <div class="flex">
+          <div class="mr-3">{{spot.spotDetails.location.district}}, {{spot.spotDetails.location.city}}</div>
+          <div class="flex">
+            <i class="bi bi-star-fill"></i>
+            <div class="ml-1">{{spot.spotDetails.overallRating}}</div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div>{{spot.startTime}}</div>
+          <i class="bi bi-arrow-right ml-1.5 mr-1.5"></i>
+          <div>{{spot.endTime}}</div>
+        </div>
+        <div>Total: ${{spot.totalPrice}}</div>
+      </div>
+      <nz-divider></nz-divider>
+      }
+      }@else {
+      <div>No Rejected Bookings</div>
       }
     </nz-collapse-panel>
   </nz-collapse>
