@@ -39,5 +39,12 @@ class SpotsController extends Controller
        return response()->json(['message' => 'Unable to book spot'], 400);
     }
 
+    public function getGateCode(Request $request){
+        $gateCode = $this->spotService->getGateCode($request);
+        if($gateCode){
+            return response()->json($gateCode);
+        }
+        return response()->json(['message' => 'No valid booking found for this spot'], 403);
+    }
 }   
 

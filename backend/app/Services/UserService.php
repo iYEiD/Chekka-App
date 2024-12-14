@@ -34,7 +34,7 @@ class UserService implements IuserService
         $user = new User();
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
-        $user->status = "active"; //default pending - fix later
+        $user->status = "pending"; //default pending 
         $user->phone_number = $request->phone_number;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
@@ -112,7 +112,7 @@ class UserService implements IuserService
     public function fetchUserData()
     { //USER DASHBOARD
         $user = Auth::user();
-
+        error_log(Carbon::now()->setTimezone('Asia/Beirut'));
         // Create a simplified user object
         $response = [
             'first_name' => $user->first_name,
@@ -123,41 +123,51 @@ class UserService implements IuserService
             $spot = $favourite->parkingSpot;
             $spot->location = $spot->location()->first();
             unset($spot->location->location_id);
-            unset($spot->location->spot_id); 
+            unset($spot->location->spot_id);
+            unset($spot->verification_documents);
+            unset($spot->key_box);
             return $spot;
         })->values();
        
         // Set Pending Bookings
-        $response['upcomingBookings'] = $user->bookings->where('status', 'upcoming')->filter(function ($booking) {
+        $response['upcomingBookings'] = $user->bookings->where('status', 'accepted')->filter(function ($booking) {
             return $booking->start_time > now()->setTimezone('Asia/Beirut') && $booking->end_time > now()->setTimezone('Asia/Beirut');
         })->map(function ($booking) {
             $spot = $booking->parkingSpot;
             $spot->location = $spot->location()->first();
             unset($spot->location->location_id);
             unset($spot->location->spot_id);
+            unset($spot->verification_documents);
+            unset($spot->key_box);
             $booking->spotDetails = $spot;
             unset($booking->parkingSpot);
             return $booking;
         })->values();
 
-        $response['currentBookings'] = $user->bookings->where('status', 'upcoming')->filter(function ($booking) {
+        $response['currentBookings'] = $user->bookings->where('status', 'accepted')->filter(function ($booking) {
             return $booking->start_time <= now()->setTimezone('Asia/Beirut') && $booking->end_time >= now()->setTimezone('Asia/Beirut');
         })->map(function ($booking) {
             $spot = $booking->parkingSpot;
             $spot->location = $spot->location()->first();
             unset($spot->location->location_id);
-            unset($spot->location->spot_id); 
+            unset($spot->location->spot_id);
+            unset($spot->verification_documents);
+            unset($spot->key_box);
             $booking->spotDetails = $spot;
             unset($booking->parkingSpot);
             return $booking;
         })->values();
 
         // Set Completed Bookings
-        $response['completedBookings'] = $user->bookings->where('status', 'completed')->map(function ($booking) {
+        $response['completedBookings'] = $user->bookings->where('status', 'accepted')->filter(function ($booking) {
+            return $booking->end_time < now()->setTimezone('Asia/Beirut');
+        })->map(function ($booking) {
             $spot = $booking->parkingSpot;
             $spot->location = $spot->location()->first();
             unset($spot->location->location_id);
-            unset($spot->location->spot_id); 
+            unset($spot->location->spot_id);
+            unset($spot->verification_documents);
+            unset($spot->key_box);
             $booking->is_reviewed = $booking->reviews()->where('user_id', $booking->guest_id)->exists();
             $booking->spotDetails = $spot;
             unset($booking->parkingSpot);
@@ -170,6 +180,34 @@ class UserService implements IuserService
             $spot->location = $spot->location()->first();
             unset($spot->location->location_id);
             unset($spot->location->spot_id);
+            unset($spot->verification_documents);
+            unset($spot->key_box);
+            $booking->spotDetails = $spot;
+            unset($booking->parkingSpot);
+            return $booking;
+        })->values();
+
+        $response['pendingBookings'] = $user->bookings->where('status', 'pending')->filter(function ($booking) {
+            return $booking->start_time > now()->setTimezone('Asia/Beirut');
+        })->map(function ($booking) {
+            $spot = $booking->parkingSpot;
+            $spot->location = $spot->location()->first();
+            unset($spot->location->location_id);
+            unset($spot->location->spot_id);
+            unset($spot->verification_documents);
+            unset($spot->key_box);
+            $booking->spotDetails = $spot;
+            unset($booking->parkingSpot);
+            return $booking;
+        })->values();
+
+        $response['rejectedBookings'] = $user->bookings->where('status', 'rejected')->map(function ($booking) {
+            $spot = $booking->parkingSpot;
+            $spot->location = $spot->location()->first();
+            unset($spot->location->location_id);
+            unset($spot->location->spot_id);
+            unset($spot->verification_documents);
+            unset($spot->key_box);
             $booking->spotDetails = $spot;
             unset($booking->parkingSpot);
             return $booking;
@@ -190,8 +228,8 @@ class UserService implements IuserService
         if (!$booking) {
             return null; // Booking not found or does not belong to the user
         }
-        if ($booking->status !== 'completed') {
-            return null; // Cannot review a booking that is not completed
+        if ($booking->status !== 'accepted' || Carbon::parse($booking->end_time)->isFuture()) {
+            return null; // Cannot review a booking that is not completed or hasn't ended yet
         }
         // Create the review
         // Check if a review already exists for this booking
@@ -278,7 +316,26 @@ public function getTransactionHistory($userId)
                 $transaction->receiverWallet->user->last_name,
             'amount' => $transaction->received_amount,
             'type' => $transaction->transaction_type,
+            'date' => $transaction->created_at,
         ];
     });
 }
+
+public function getAllTransactions()
+{
+    $user = Auth::user();
+    return Transaction::where('sender_wallet_id', function($query) use ($user) {
+            $query->select('wallet_id')
+                  ->from('wallets')
+                  ->where('user_id', $user->user_id);
+        })
+        ->orWhere('receiver_wallet_id', function($query) use ($user) {
+            $query->select('wallet_id')
+                  ->from('wallets')
+                  ->where('user_id', $user->user_id);
+        })
+        ->get();
+}
+
+
 }

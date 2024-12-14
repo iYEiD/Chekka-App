@@ -20,7 +20,12 @@ class Transaction extends Model
         'deducted_amount',
         'received_amount',
         'commission_amount',
-        'created_at'
+        'created_at',
+        'ticket_id'
+    ];
+
+    protected $attributes = [
+        'ticket_id' => null
     ];
 
     protected $casts = [
@@ -44,5 +49,10 @@ class Transaction extends Model
     public function booking()
     {
         return $this->belongsTo(Booking::class, 'booking_id');
+    }
+
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 }

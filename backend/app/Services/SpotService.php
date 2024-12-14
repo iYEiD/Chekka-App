@@ -49,17 +49,31 @@ class SpotService implements ISpotService
         // Pass filtered spots to apply favourites for the user 
         $favourites = $this->applyFavourites($filteredSpots, $user->user_id);
         // Transform/Map spots to the desired format
-        $transformedSpots = $this->transformSpots($favourites);
+        $transformedSpots = $this->transformSpots($favourites, $request);
 
         return $transformedSpots;
     }
 
+    private function calculateHaversineDistance($userLat, $userLong, $spotLat, $spotLong) 
+    {
+        $earthRadius = 6371; // km
+        $latDelta = deg2rad($spotLat - $userLat);
+        $longDelta = deg2rad($spotLong - $userLong);
+        
+        $a = sin($latDelta/2) * sin($latDelta/2) +
+             cos(deg2rad($userLat)) * cos(deg2rad($spotLat)) *
+             sin($longDelta/2) * sin($longDelta/2);
+        
+        $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+        $distance = $earthRadius * $c;
+        
+        return round($distance, 2);
+    }
 
     // FINAL MAPPER
-    public function transformSpots($spots)
+    public function transformSpots($spots, $request)
     {
-
-        $transformedSpots = $spots->map(function ($spot) {
+        $transformedSpots = $spots->map(function ($spot) use ($request) {
             $amenities = [];
 
             // Check each amenity and add it to the array if it's true
@@ -82,7 +96,11 @@ class SpotService implements ISpotService
             if ($spot->has_cctv) {
                 $amenities[] = 'has_cctv';
             }
-            return [
+            if ($spot->is_gated) {
+                $amenities[] = 'is_gated';
+            }
+
+            $transformedSpot = [
                 'spot_id' => $spot->spot_id,
                 'host_id' => $spot->host_id,
                 'longitude' => $spot->longitude,
@@ -99,8 +117,20 @@ class SpotService implements ISpotService
                     'address' => $spot->address,
                 ],
                 'amenities' => $amenities,
-                'is_favorite' => $spot->is_favourite, //Intentionally favOrite since frontend receives o not favOUrite
+                'is_favorite' => $spot->is_favourite //Intentionally favOrite since frontend receives o not favOUrite
             ];
+
+            // Calculate distance if user coordinates provided
+            if ($request->has(['longitude', 'latitude'])) {
+                $transformedSpot['distance'] = $this->calculateHaversineDistance(
+                    $request->latitude,
+                    $request->longitude,
+                    $spot->latitude,
+                    $spot->longitude
+                );
+            }
+
+            return $transformedSpot;
         });
 
         return $transformedSpots;
@@ -166,7 +196,8 @@ class SpotService implements ISpotService
         $spot->host_firstname = $host->first_name;
         $spot->host_lastname = $host->last_name;
         unset($spot->host);
-
+        unset($spot->verification_documents);
+        unset($spot->key_box);
         //isfavouritebyuser
         $user = Auth::user();
         $spot->is_favorite = $spot->isFavouriteForUser($user->user_id);
@@ -192,6 +223,9 @@ class SpotService implements ISpotService
         if($allAmenities->has_cctv){
             $amenities[] = 'CCTV';
         }   
+        if($allAmenities->is_gated){
+            $amenities[] = 'Gated';
+        }
         $spot->amenities = $amenities;
 
         // Append Locations
@@ -199,6 +233,16 @@ class SpotService implements ISpotService
         $spot->location = $location;
         unset($spot->location->location_id);
         unset($spot->location->spot_id); 
+
+        // Calculate distance if lat/long provided
+        if ($request->has(['longitude', 'latitude'])) {
+            $spot->distance = $this->calculateHaversineDistance(
+                $request->latitude,
+                $request->longitude,
+                $spot->latitude,
+                $spot->longitude
+            );
+        }
 
         // Get Reviews 
         $reviews = $spot->reviews()->with('user:user_id,first_name,last_name')->get();
@@ -221,6 +265,7 @@ class SpotService implements ISpotService
 
         // Generate disabled date times
         $spot->disabledDateTimes = $this->getDisabledDateTimes($bookings);
+        
         return $spot;
     }
 
@@ -313,7 +358,7 @@ class SpotService implements ISpotService
         $booking->spot_id = $spotId;
         $booking->start_time = $request->start_time;
         $booking->end_time = $request->end_time;
-        $booking->status = 'upcoming';
+        $booking->status = 'pending';
         $booking->total_price = $bookingCost;
         $booking->created_at = Carbon::now();
         $booking->save();
@@ -328,6 +373,31 @@ class SpotService implements ISpotService
         return $spot->price_per_hour * $hours;
     }
 
-}
-    
+    public function getGateCode($request){
+        $user = Auth::user();
+        $spotId = $request->route('spot_id');
+      
+        $spot = $this->spotRepo->getSpotById($spotId);
 
+        // Check if spot has gate access
+        $spotAmenities = $spot->amenities;
+        if (!$spotAmenities->is_gated) {
+            return null;
+        }
+
+        $now = Carbon::now('Asia/Beirut');
+   
+        // Check if user has a valid booking for this spot at current time
+        $validBooking = Booking::where('guest_id', $user->user_id)
+            ->where('spot_id', $spotId)
+            ->where('start_time', '<=', $now)
+            ->where('end_time', '>=', $now)
+            ->exists();
+            
+        if (!$validBooking) {
+            return null;
+        }
+        
+        return $spot->key_box;
+    }
+}
