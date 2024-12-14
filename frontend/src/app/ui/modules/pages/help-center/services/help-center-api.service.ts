@@ -1,21 +1,29 @@
 import {inject, Injectable} from '@angular/core';
 import {environment} from "../../../../../../environments/environment";
-import {TicketModel} from "../models/interfaces/ticket.models";
+import {GetTicketsResponseDtoModel, SubmitTicketModel} from "../models/interfaces/ticket.models";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class HelpCenterApiService {
   http = inject(HttpClient)
-  baseURL = `${environment.backendUrl}/help-center`;
-  submitTicketUrl = `${this.baseURL}/submit-ticket`
+  baseURL = `${environment.backendUrl}/user/help-center`;
+  ticketUrl = `${this.baseURL}/tickets`
 
   constructor() { }
 
-  submitTicket(ticket: TicketModel): Observable<any> {
-    console.log(ticket)
-    return this.http.post(this.submitTicketUrl, ticket)
+  getTickets(): Observable<GetTicketsResponseDtoModel> {
+    return this.http.get<GetTicketsResponseDtoModel>(this.ticketUrl)
+  }
+
+  submitTicket(ticket: SubmitTicketModel): Observable<any> {
+    return this.http.post(this.ticketUrl, ticket)
+  }
+
+  markTicketAsSeen(ticketId: number): Observable<any> {
+    let updatedTicketUrl = `${this.ticketUrl}/${ticketId}`;
+    return this.http.put(updatedTicketUrl, null)
   }
 }

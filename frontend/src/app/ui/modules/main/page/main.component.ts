@@ -47,7 +47,7 @@ export class MainComponent {
       price_range: this.priceRange()![0] !== this.minPriceFilter() || this.priceRange()![1] !== this.maxPriceFilter() ? this.priceRange() : null,
       amenities: this.selectedAmenities().length !== 0 ? this.selectedAmenities() : null,
       search_value: this.debouncedSearchValue(),
-      time_range: this.dateTimeRange() ? [HelperFunctions.formatFilterDate(this.dateTimeRange()![0]), HelperFunctions.formatFilterDate(this.dateTimeRange()![1])] : null
+      time_range: this.dateTimeRange() && this.dateTimeRange()[0] && this.dateTimeRange()[1] ? [HelperFunctions.formatFilterDate(this.dateTimeRange()![0]), HelperFunctions.formatFilterDate(this.dateTimeRange()![1])] : null
     }
   })
 
@@ -107,6 +107,7 @@ export class MainComponent {
   constructor() {
     effect(() => {
       const debouncedValue = this.debouncedSearchValue()
+      const dateTimeRange = this.dateTimeRange()
       const userLat = this.parkingSpotService.userLat()
       const userLong = this.parkingSpotService.userLong()
       this.parkingSpotService.getUserLocation()
@@ -163,7 +164,6 @@ export class MainComponent {
       this.filterTagChips.push("$" + this.minPriceFilter() + " - $" + this.maxPriceFilter()) : null
     this.selectedAmenities().length > 0 ?
       this.selectedAmenities().forEach(amenity => this.filterTagChips.push(amenity)) : null
-    this.dateTimeRange() ? this.filterTagChips.push(this.dateTimeRange()) : null
     this.parkingSpotService.fetchParkingSports(this.selectedFilters(), this.sortSettings()!)
   }
 

@@ -46,7 +46,7 @@ export class HelperFunctions {
     const year = date.getFullYear(); // Get year
     const hour = String(date.getHours()).padStart(2, '0'); // Get hour with leading zero
 
-    return `${day}/${month}/${year}:${hour}:00`;
+    return dateString ? `${day}/${month}/${year}:${hour}:00` : null;
   }
 
   public static fromCamelToSnakeCase(value: string) {

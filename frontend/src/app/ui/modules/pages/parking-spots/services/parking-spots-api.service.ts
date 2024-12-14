@@ -18,10 +18,7 @@ export class ParkingSpotsApiService {
   constructor() { }
 
   fetchParkingSpots(filters: any, userLocation: any): Observable<ParkingSpotDTOModel[]> {
-    return this.http.post<ParkingSpotDTOModel[]>(this.fetchParkingSpotsUrl, {
-      filters: filters,
-      user_location: userLocation
-    })
+    return this.http.post<ParkingSpotDTOModel[]>(this.fetchParkingSpotsUrl, filters)
   }
 
   fetchParkingSpotById(spotId: number, userLocation: any): Observable<ParkingSpotDTOModel> {
@@ -35,9 +32,7 @@ export class ParkingSpotsApiService {
   }
 
   bookSpot(reservationDetails: ReservationDTOModel): Observable<any> {
-    console.log(reservationDetails);
     let updatedBookSpotUrl = `${this.bookSpotUrl}/${reservationDetails.spot_id}`
-    console.log(updatedBookSpotUrl)
     return this.http.post(updatedBookSpotUrl, reservationDetails)
   }
 }

@@ -5,7 +5,7 @@ import {Router} from "@angular/router";
   providedIn: 'root'
 })
 export class MainService {
-  isNavbarFunctioningDisabled = signal<boolean>(false)
+  isNavbarFunctioningDisabled = signal<boolean>(true)
   router = inject(Router)
 
   constructor() { }

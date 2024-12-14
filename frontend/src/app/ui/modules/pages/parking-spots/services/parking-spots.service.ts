@@ -47,7 +47,7 @@ export class ParkingSpotsService {
       },
       error: (error) => {
         console.error('Error updating favorite status:', error);
-      },
+      }
     });
   }
 
@@ -58,7 +58,6 @@ export class ParkingSpotsService {
         next: (res) => {
           this.parkingSpots.set(ParkingSpotMapper.fromParkingSpotsDtoToViewModel(res))
           if (sortSettings.column && sortSettings.order) {
-            console.log(sortSettings)
             this.sortParkingSpots(sortSettings)
           }
         },
@@ -81,7 +80,6 @@ export class ParkingSpotsService {
   bookSpot(reservationDetails: ReservationViewModel) {
     this.parkingSpotsApiService.bookSpot(ParkingSpotMapper.fromReservationViewModelToDTOModel(reservationDetails)).subscribe({
       next: (res) => {
-        console.log(res)
         this.snackBarService.openSnackBar(SnackbarTypeEnums.SUCCESS, "Spot booked successfully")
         this.fetchParkingSpotById(reservationDetails.spotId)
       },

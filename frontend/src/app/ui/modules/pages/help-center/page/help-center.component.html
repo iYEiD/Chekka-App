@@ -1,30 +1,117 @@
-<div>
-  <div class="text-base">Title*</div>
-  <input nz-input placeholder="Review Title" [(ngModel)]="ticketTitle"/>
+<div class="flex justify-between items-center">
+  <div class="text-3xl text-secondary-10">Tickets</div>
+  <button nz-button nzType="primary" (click)="openSubmitTicketModal()">+ New Ticket</button>
 </div>
 
-<div class="mt-5">
-  <div class="text-base">Comment*</div>
-  <textarea [(ngModel)]="ticketContent" nz-input placeholder="Review Comment" nzAutosize></textarea>
-</div>
+<nz-modal
+  [(nzVisible)]="isSubmitTicketModalVisible"
+  nzTitle="Submit Ticket"
+  (nzOnCancel)="closeSubmitTicketModal()">
+  <ng-container *nzModalContent>
+    <div>
+      <div class="text-base">Title*</div>
+      <input nz-input placeholder="Review Title" [(ngModel)]="ticketTitle"/>
+    </div>
 
-<div class="mt-5">
-  <div class="text-base">Type*</div>
-  <div
-    class="grid grid-rows-1 grid-cols-2 border border-secondary-2 rounded-lg px-1 py-1 text-center"
-  >
-    @for (option of ticketTypeOptions; track option) {
+    <div class="mt-5">
+      <div class="text-base">Comment*</div>
+      <textarea [(ngModel)]="ticketContent" nz-input placeholder="Review Comment" nzAutosize></textarea>
+    </div>
+
+    <div class="mt-5">
+      <div class="text-base">Type*</div>
+      <nz-select
+        nzPlaceHolder="Select Ticket Type"
+        [(ngModel)]="ticketType"
+      >
+        <nz-option nzValue="Account Issues" nzLabel="Account Issues"></nz-option>
+        <nz-option nzValue="Refund" nzLabel="Request a Refund"></nz-option>
+        <nz-option nzValue="Cancellation" nzLabel="Request a Cancellation"></nz-option>
+        <nz-option nzValue="Other" nzLabel="Other"></nz-option>
+      </nz-select>
+    </div>
+  </ng-container>
+
+  <div *nzModalFooter class="flex justify-between">
     <button
-      class=" py-2 rounded-lg"
-      (click)="onTicketTypeChange(option)"
-      [ngClass]="option === ticketType() ? 'border border-black bg-secondary-1' : 'hover:bg-secondary-1 transition-colors duration-200 ease-in-out'"
+      (click)="closeSubmitTicketModal()"
+      class="py-1 px-[15px] h-8 rounded-md
+          bg-transparent hover:bg-secondary-1 transition-colors duration-200 ease-in-out"
     >
-    {{option | camelToTitleCase}}
+      Cancel
     </button>
-    }
+    <button nz-button nzType="primary" (click)="submitTicket()">Submit</button>
   </div>
-</div>
+</nz-modal>
 
-<div class="mt-5">
-  <button nz-button nzType="primary" (click)="submitTicket()">Submit</button>
-</div>
+<nz-collapse class="!mt-5">
+  <nz-collapse-panel nzHeader="Pending Tickets" [nzActive]="tickets()?.pendingTickets!.length > 0">
+    @for (ticket of tickets()?.pendingTickets; track ticket) {
+    <div class="flex justify-between items-center cursor-pointer" (click)="openViewTicketModal(ticket)">
+      <div>
+        <div>Title: {{ticket.title}}</div>
+        <div>Description: {{ticket.description}}</div>
+        <div>Response: {{ticket.response}}</div>
+      </div>
+      <div>{{ticket.type}}</div>
+    </div>
+    <nz-divider></nz-divider>
+    }
+  </nz-collapse-panel>
+</nz-collapse>
+
+<nz-collapse class="!mt-5">
+  <nz-collapse-panel nzHeader="Seen Tickets" [nzActive]="tickets()?.seenTickets!.length > 0">
+    @for (ticket of tickets()?.seenTickets; track ticket) {
+    <div class="flex justify-between items-center cursor-pointer" (click)="openViewTicketModal(ticket)">
+      <div>
+        <div>Title: {{ticket.title}}</div>
+        <div>Description: {{ticket.description}}</div>
+        <div>Response: {{ticket.response}}</div>
+      </div>
+      <div>{{ticket.type}}</div>
+    </div>
+    <nz-divider></nz-divider>
+    }
+  </nz-collapse-panel>
+</nz-collapse>
+
+<nz-collapse class="!mt-5">
+  <nz-collapse-panel nzHeader="Done Tickets" [nzActive]="tickets()?.doneTickets!.length > 0">
+    @for (ticket of tickets()?.doneTickets; track ticket) {
+    <div class="flex justify-between items-center cursor-pointer" (click)="openViewTicketModal(ticket)">
+      <div>
+        <div>Title: {{ticket.title}}</div>
+        <div>Description: {{ticket.description}}</div>
+        <div>Response: {{ticket.response}}</div>
+      </div>
+      <div>{{ticket.type}}</div>
+    </div>
+    <nz-divider></nz-divider>
+    }
+  </nz-collapse-panel>
+</nz-collapse>
+
+<nz-modal
+  [(nzVisible)]="isViewTicketModalVisible"
+  nzTitle="Submit Ticket"
+  (nzOnCancel)="closeViewTicketModal()">
+  <ng-container *nzModalContent>
+    <div>Title: {{viewTicket()?.title}}</div>
+    <div>Description: {{viewTicket()?.description}}</div>
+    <div>Type: {{viewTicket()?.type}}</div>
+    <div>Response: {{viewTicket()?.response}}</div>
+  </ng-container>
+
+  <div *nzModalFooter class="flex justify-between">
+    <div></div>
+    <button
+      (click)="closeViewTicketModal()"
+      class="py-1 px-[15px] h-8 rounded-md
+          bg-transparent hover:bg-secondary-1 transition-colors duration-200 ease-in-out"
+    >
+      Close
+    </button>
+  </div>
+</nz-modal>
+

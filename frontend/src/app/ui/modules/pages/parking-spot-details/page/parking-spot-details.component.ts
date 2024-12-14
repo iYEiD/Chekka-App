@@ -105,7 +105,6 @@ export class ParkingSpotDetailsComponent {
         disabledHours.push(hour);
       }
     }
-    console.log(disabledHours)
 
     return {
       nzDisabledHours: () => disabledHours,
