@@ -21,6 +21,7 @@ class ParkingSpot extends Model
         'main_description',
         'status',
         'overall_rating',
+        'key_box',
     ];
     protected $primaryKey = 'spot_id';
 

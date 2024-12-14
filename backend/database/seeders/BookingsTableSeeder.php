@@ -21,7 +21,7 @@ class BookingsTableSeeder extends Seeder
                 'guest_id' => 105,
                 'start_time' => Carbon::now()->subDays(1)->setTime(8, 0),
                 'end_time' => Carbon::now()->subDays(1)->setTime(20, 0),
-                'status' => 'completed',
+                'status' => 'accepted',
                 'total_price' => 20.00,
             ],
             [
@@ -30,7 +30,7 @@ class BookingsTableSeeder extends Seeder
                 'guest_id' => 105,
                 'start_time' => Carbon::now()->subDays(2)->setTime(8, 0),
                 'end_time' => Carbon::now()->subDays(2)->setTime(20, 0),
-                'status' => 'completed',
+                'status' => 'accepted',
                 'total_price' => 20.00,
             ],
             [
@@ -39,7 +39,7 @@ class BookingsTableSeeder extends Seeder
                 'guest_id' => 105,
                 'start_time' => Carbon::now()->addDays(2)->setTime(10, 0),
                 'end_time' => Carbon::now()->addDays(2)->setTime(18, 0),
-                'status' => 'upcoming',
+                'status' => 'pending',
                 'total_price' => 30.00,
             ],
             // Spot 2
@@ -49,7 +49,7 @@ class BookingsTableSeeder extends Seeder
                 'guest_id' => 105,
                 'start_time' => Carbon::now()->addDays(3)->setTime(9, 0),
                 'end_time' => Carbon::now()->addDays(3)->setTime(17, 0),
-                'status' => 'upcoming',
+                'status' => 'rejected',
                 'total_price' => 50.00,
             ],
             [
@@ -58,7 +58,7 @@ class BookingsTableSeeder extends Seeder
                 'guest_id' => 106,
                 'start_time' => Carbon::now()->addDays(4)->setTime(11, 0),
                 'end_time' => Carbon::now()->addDays(4)->setTime(15, 0),
-                'status' => 'upcoming',
+                'status' => 'rejected',
                 'total_price' => 40.00,
             ],
             // Spot 3
@@ -68,7 +68,7 @@ class BookingsTableSeeder extends Seeder
                 'guest_id' => 106,
                 'start_time' => Carbon::now()->addDays(5)->setTime(8, 0),
                 'end_time' => Carbon::now()->addDays(5)->setTime(17, 0),
-                'status' => 'upcoming',
+                'status' => 'pending',
                 'total_price' => 130.00,
             ],
             [
@@ -77,7 +77,7 @@ class BookingsTableSeeder extends Seeder
                 'guest_id' => 106,
                 'start_time' => Carbon::now()->addDays(6)->setTime(9, 0),
                 'end_time' => Carbon::now()->addDays(6)->setTime(13, 0),
-                'status' => 'upcoming',
+                'status' => 'pending',
                 'total_price' => 70.00,
             ],
             // Spot 4
@@ -87,7 +87,7 @@ class BookingsTableSeeder extends Seeder
                 'guest_id' => 105,
                 'start_time' => Carbon::now(),
                 'end_time' => Carbon::now()->addHours(2),
-                'status' => 'upcoming',
+                'status' => 'accepted',
                 'total_price' => 90.00,
             ],
             [
@@ -96,7 +96,7 @@ class BookingsTableSeeder extends Seeder
                 'guest_id' => 105,
                 'start_time' => Carbon::now()->addDays(8)->setTime(12, 0),
                 'end_time' => Carbon::now()->addDays(8)->setTime(14, 0),
-                'status' => 'upcoming',
+                'status' => 'rejected',
                 'total_price' => 50.00,
             ],
             // Add more sample data as needed
