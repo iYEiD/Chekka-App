@@ -12,6 +12,7 @@ class SpotLocationsTableSeeder extends Seeder
     {
         DB::table('spot_locations')->insert([
             [
+                'location_id' => 100,
                 'spot_id' => 100,
                 'address' => 'Beirut Downtown',
                 'city' => 'Beirut',
@@ -19,6 +20,7 @@ class SpotLocationsTableSeeder extends Seeder
 
             ],
             [
+                'location_id' => 101,
                 'spot_id' => 101,
                 'address' => 'Jounieh',
                 'city' => 'Beirut',
@@ -27,6 +29,7 @@ class SpotLocationsTableSeeder extends Seeder
             ]
             ,
             [
+                'location_id' => 102,
                 'spot_id' => 102,
                 'address' => 'Bay Area',
                 'city' => 'Beirut',
@@ -35,6 +38,7 @@ class SpotLocationsTableSeeder extends Seeder
             ]
             ,
             [
+                'location_id' => 103,
                 'spot_id' => 103,
                 'address' => 'Byblos Downtown',
                 'city' => 'Byblos',

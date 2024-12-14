@@ -278,7 +278,26 @@ public function getTransactionHistory($userId)
                 $transaction->receiverWallet->user->last_name,
             'amount' => $transaction->received_amount,
             'type' => $transaction->transaction_type,
+            'date' => $transaction->created_at,
         ];
     });
 }
+
+public function getAllTransactions()
+{
+    $user = Auth::user();
+    return Transaction::where('sender_wallet_id', function($query) use ($user) {
+            $query->select('wallet_id')
+                  ->from('wallets')
+                  ->where('user_id', $user->user_id);
+        })
+        ->orWhere('receiver_wallet_id', function($query) use ($user) {
+            $query->select('wallet_id')
+                  ->from('wallets')
+                  ->where('user_id', $user->user_id);
+        })
+        ->get();
+}
+
+
 }

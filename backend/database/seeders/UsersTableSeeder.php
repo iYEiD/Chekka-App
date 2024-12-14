@@ -24,6 +24,7 @@ class UsersTableSeeder extends Seeder
                 'password' => bcrypt('password'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
+                'is_valid'=>1,
             ],
             [   'user_id' => 106,   
                 'first_name' => 'Jane',
@@ -34,7 +35,15 @@ class UsersTableSeeder extends Seeder
                 'password' => bcrypt('password'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
+                'is_valid'=>1,
             ],
+        ]);
+
+
+        DB::table('user_roles')->insert([
+            ['userrole_id' => 100, 'user_id' => 105, 'role_id' => 3],
+            ['userrole_id' => 101, 'user_id' => 106, 'role_id' => 3],
+            ['userrole_id' => 102, 'user_id' => 106, 'role_id' => 2],
         ]);
     }
 }

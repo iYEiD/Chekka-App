@@ -19,15 +19,15 @@ class DatabaseSeeder extends Seeder
         // php artisan db:seed --class=ParkingSpotsTableSeeder 
 
         // Apply Local Seeders
-        // $this->call(UsersTableSeeder::class); // If already ran user demo seeders don't uncomment
-        // $this->call(ParkingSpotsTableSeeder::class);
-        // $this->call(SpotLocationsTableSeeder::class);
-        // $this->call(AvailabilityTableSeeder::class);
-        // $this->call(SpotAmenitiesTableSeeder::class);
-        // $this->call(BookingsTableSeeder::class);
-        // $this->call(FavouritesTableSeeder::class);
-        // $this->call(ReviewsTableSeeder::class);
-        // $this->call(WalletsTableSeeder::class);
+        $this->call(UsersTableSeeder::class); 
+        $this->call(ParkingSpotsTableSeeder::class);
+        $this->call(SpotLocationsTableSeeder::class);
+        $this->call(AvailabilityTableSeeder::class);
+        $this->call(SpotAmenitiesTableSeeder::class);
+        $this->call(BookingsTableSeeder::class);
+        $this->call(FavouritesTableSeeder::class);
+        $this->call(ReviewsTableSeeder::class);
+        $this->call(WalletsTableSeeder::class);
         $this->call(TransactionsTableSeeder::class);
 
     }

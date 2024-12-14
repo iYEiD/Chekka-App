@@ -82,6 +82,9 @@ class SpotService implements ISpotService
             if ($spot->has_cctv) {
                 $amenities[] = 'has_cctv';
             }
+            if ($spot->is_gated) {
+                $amenities[] = 'is_gated';
+            }
             return [
                 'spot_id' => $spot->spot_id,
                 'host_id' => $spot->host_id,
@@ -192,6 +195,9 @@ class SpotService implements ISpotService
         if($allAmenities->has_cctv){
             $amenities[] = 'CCTV';
         }   
+        if($allAmenities->is_gated){
+            $amenities[] = 'Gated';
+        }
         $spot->amenities = $amenities;
 
         // Append Locations

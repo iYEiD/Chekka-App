@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SpotsController;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\TicketController;
+
 
 // Users
 Route::post('/user/signup', [UserController::class, 'signup']);
@@ -26,3 +28,11 @@ Route::get('/parking-spots/fetch-parking-spot-details/{spot_id}', [SpotsControll
 Route::post('/user/parking-spots/book-spot/{spot_id}', [SpotsController::class, 'bookSpot'])->middleware('auth:api');
 Route::delete('/user/parking-spots/delete-booking/{bookingId}', [UserController::class, 'deleteBooking'])->middleware('auth:api');
 Route::post('/user/parking-spots/submit-review/{bookingId}', [UserController::class, 'submitReview'])->middleware('auth:api');
+
+// Tickets
+Route::post('/user/help-center/tickets', [TicketController::class, 'createTicket'])->middleware('auth:api');
+Route::put('/user/help-center/tickets/{ticketId}', [TicketController::class, 'updateTicket'])->middleware('auth:api');
+Route::get('/user/help-center/tickets', [TicketController::class, 'getTickets'])->middleware('auth:api');
+
+// Transactions
+Route::get('/user/transactions', [UserController::class, 'getAllTransactions'])->middleware('auth:api');
