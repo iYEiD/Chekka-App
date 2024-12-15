@@ -54,7 +54,7 @@ export class ParkingSpotsService {
 
   fetchParkingSports(filters: any, sortSettings: SortSettingsModel) {
     if (this.userLat() && this.userLong()) {
-      this.parkingSpotsApiService.fetchParkingSpots(filters, this.userLocation()).subscribe({
+      this.parkingSpotsApiService.fetchParkingSpots(filters).subscribe({
         next: (res) => {
           this.parkingSpots.set(ParkingSpotMapper.fromParkingSpotsDtoToViewModel(res))
           if (sortSettings.column && sortSettings.order) {

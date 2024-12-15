@@ -47,7 +47,9 @@ export class MainComponent {
       price_range: this.priceRange()![0] !== this.minPriceFilter() || this.priceRange()![1] !== this.maxPriceFilter() ? this.priceRange() : null,
       amenities: this.selectedAmenities().length !== 0 ? this.selectedAmenities() : null,
       search_value: this.debouncedSearchValue(),
-      time_range: this.dateTimeRange() && this.dateTimeRange()[0] && this.dateTimeRange()[1] ? [HelperFunctions.formatFilterDate(this.dateTimeRange()![0]), HelperFunctions.formatFilterDate(this.dateTimeRange()![1])] : null
+      time_range: this.dateTimeRange() && this.dateTimeRange()[0] && this.dateTimeRange()[1] ? [HelperFunctions.formatFilterDate(this.dateTimeRange()![0]), HelperFunctions.formatFilterDate(this.dateTimeRange()![1])] : null,
+      longitude: this.parkingSpotService.userLong(),
+      latitude: this.parkingSpotService.userLat(),
     }
   })
 

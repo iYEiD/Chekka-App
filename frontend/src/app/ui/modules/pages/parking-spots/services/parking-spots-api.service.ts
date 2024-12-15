@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../../../../../environments/environment";
 import {ParkingSpotDTOModel, ReservationDTOModel} from "../models/interfaces/parking-spots.model";
@@ -17,13 +17,18 @@ export class ParkingSpotsApiService {
 
   constructor() { }
 
-  fetchParkingSpots(filters: any, userLocation: any): Observable<ParkingSpotDTOModel[]> {
+  fetchParkingSpots(filters: any): Observable<ParkingSpotDTOModel[]> {
     return this.http.post<ParkingSpotDTOModel[]>(this.fetchParkingSpotsUrl, filters)
   }
 
   fetchParkingSpotById(spotId: number, userLocation: any): Observable<ParkingSpotDTOModel> {
     let updatedFetchParkingSpotByIdUrl = `${this.fetchParkingSpotByIdUrl}/${spotId}`
-    return this.http.post<ParkingSpotDTOModel>(updatedFetchParkingSpotByIdUrl, userLocation)
+
+    const params = new HttpParams()
+      .set('longitude', userLocation.longitude.toString())
+      .set('latitude', userLocation.latitude.toString());
+
+    return this.http.get<ParkingSpotDTOModel>(updatedFetchParkingSpotByIdUrl, { params })
   }
 
   updateSpotFavoriteStatus(spotId: number, status: boolean): Observable<any> {
