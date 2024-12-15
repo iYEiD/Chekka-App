@@ -23,8 +23,13 @@ export class DashboardComponent {
   reviewRating = signal<number | null>(null)
   reviewBookingId = signal<number | null>(null)
 
+  gateCode = computed(() => {
+    return this.dashboardService.spotGateCode()
+  })
+
   isReviewModalVisible: boolean = false
   isCancelBookingModalVisible: boolean = false
+  isViewGateCodeModalVisible: boolean = false
   cancelBookingSpot: BookingsViewModel | null = null
 
   constructor() {
@@ -67,6 +72,16 @@ export class DashboardComponent {
   closeCancelBookingModal() {
     this.isCancelBookingModalVisible = false
     this.cancelBookingSpot = null
+  }
+
+  openViewGateCodeModal(spotId: number, event: any) {
+    event.stopPropagation()
+    this.dashboardService.getGateCode(spotId)
+    this.isViewGateCodeModalVisible = true
+  }
+
+  closeViewGateCodeModal() {
+    this.isViewGateCodeModalVisible = false
   }
 
   cancelBooking(bookingId: number) {

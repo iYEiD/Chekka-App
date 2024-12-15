@@ -100,20 +100,25 @@
     <nz-collapse-panel nzHeader="Current Bookings" [nzActive]="dashboardData()?.currentBookings!.length > 0">
       @if (dashboardData()?.currentBookings!.length > 0) {
         @for (spot of dashboardData()?.currentBookings; track spot) {
-          <div class="cursor-pointer" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
-            <div class="flex">
-              <div class="mr-3">{{spot.spotDetails.location.district}}, {{spot.spotDetails.location.city}}</div>
+          <div class="flex justify-between items-center cursor-pointer" (click)="parkingSpotsService.navigateToDetailsPage(spot.spotId)">
+            <div>
               <div class="flex">
-                <i class="bi bi-star-fill"></i>
-                <div class="ml-1">{{spot.spotDetails.overallRating}}</div>
+                <div class="mr-3">{{spot.spotDetails.location.district}}, {{spot.spotDetails.location.city}}</div>
+                <div class="flex">
+                  <i class="bi bi-star-fill"></i>
+                  <div class="ml-1">{{spot.spotDetails.overallRating}}</div>
+                </div>
               </div>
+              <div class="flex items-center">
+                <div>{{spot.startTime}}</div>
+                <i class="bi bi-arrow-right ml-1.5 mr-1.5"></i>
+                <div>{{spot.endTime}}</div>
+              </div>
+              <div>Total: ${{spot.totalPrice}}</div>
             </div>
-            <div class="flex items-center">
-              <div>{{spot.startTime}}</div>
-              <i class="bi bi-arrow-right ml-1.5 mr-1.5"></i>
-              <div>{{spot.endTime}}</div>
-            </div>
-            <div>Total: ${{spot.totalPrice}}</div>
+            <button class="flex cursor-pointer hover:bg-secondary-1 rounded-md py-1.5 px-2" (click)="openViewGateCodeModal(spot.spotId, $event)">
+              View Gate Code
+            </button>
           </div>
           <nz-divider></nz-divider>
         }
@@ -122,6 +127,29 @@
       }
     </nz-collapse-panel>
   </nz-collapse>
+
+  <nz-modal
+    [(nzVisible)]="isViewGateCodeModalVisible"
+    nzTitle="Gate Code"
+    (nzOnCancel)="closeViewGateCodeModal()"
+  >
+    <ng-container *nzModalContent>
+      <div class="flex justify-center items-center">
+        <div class="font-bold text-3xl">{{gateCode()}}</div>
+      </div>
+    </ng-container>
+
+    <div *nzModalFooter class="flex justify-between">
+      <div></div>
+      <button
+        (click)="closeViewGateCodeModal()"
+        class="py-1 px-[15px] h-8 rounded-md mr-3
+            bg-transparent hover:bg-secondary-1 transition-colors duration-200 ease-in-out"
+      >
+        Close
+      </button>
+    </div>
+  </nz-modal>
 
   <nz-collapse class="!mt-5">
     <nz-collapse-panel nzHeader="Upcoming Bookings" [nzActive]="dashboardData()?.upcomingBookings!.length > 0">
