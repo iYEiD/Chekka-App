@@ -21,7 +21,7 @@ class BookingsTableSeeder extends Seeder
                 'guest_id' => 105,
                 'start_time' => Carbon::now()->subDays(1)->setTime(8, 0),
                 'end_time' => Carbon::now()->subDays(1)->setTime(20, 0),
-                'status' => 'accepted',
+                'status' => 'completed',
                 'total_price' => 20.00,
             ],
             [
@@ -30,7 +30,7 @@ class BookingsTableSeeder extends Seeder
                 'guest_id' => 105,
                 'start_time' => Carbon::now()->subDays(2)->setTime(8, 0),
                 'end_time' => Carbon::now()->subDays(2)->setTime(20, 0),
-                'status' => 'accepted',
+                'status' => 'upcoming',
                 'total_price' => 20.00,
             ],
             [
@@ -87,7 +87,7 @@ class BookingsTableSeeder extends Seeder
                 'guest_id' => 105,
                 'start_time' => Carbon::now(),
                 'end_time' => Carbon::now()->addHours(2),
-                'status' => 'accepted',
+                'status' => 'upcoming',
                 'total_price' => 90.00,
             ],
             [

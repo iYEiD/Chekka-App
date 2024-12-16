@@ -48,17 +48,16 @@ class TicketService implements ITicketService
        return $ticket;
     }
 
-    public function updateTicket($request, $ticketId)
+    public function updateTicket($request)
     {
         $user = Auth::user();
-        $ticket = Ticket::where('ticket_id', $ticketId)
+        $ticket = Ticket::where('ticket_id', $request->route('ticketId'))
             ->where('user_id', $user->user_id)
+            ->whereIn('status', ['seen', 'done'])
             ->first();
-
         if (!$ticket) {
             return null;
         }
-        
         $ticket->status = 'seen';
         $ticket->save();
         return $ticket;

@@ -39,7 +39,7 @@ public function handleGoogleCallback()
         
             Auth::login($user);
             $token = $user->createToken('access_token')->accessToken;
-            return response()->json([
+            return redirect()->away('http://localhost:4200/auth/google-login?' . http_build_query([
                 'access_token' => $token,
                 'user' => [
                     'id' => $user->user_id,
@@ -47,13 +47,13 @@ public function handleGoogleCallback()
                     'last_name' => $user->last_name,
                     'email' => $user->email,
                     'phone_number' => $user->phone_number,
-                ],
-            ], 200);
+                ]
+            ]));
         }
         else {
             Auth::login($user);
             $token = $user->createToken('access_token')->accessToken;
-            return response()->json([
+            return redirect()->away('http://localhost:4200/auth/google-login?' . http_build_query([
                 'access_token' => $token,
                 'user' => [
                     'id' => $user->user_id,
@@ -61,8 +61,8 @@ public function handleGoogleCallback()
                     'last_name' => $user->last_name,
                     'email' => $user->email,
                     'phone_number' => $user->phone_number,
-                ],
-            ], 200);
+                ]
+            ]));
         }
 
     } catch (Exception $e) {
