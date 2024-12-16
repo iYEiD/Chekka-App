@@ -25,7 +25,8 @@ class SpotRepo implements ISpotRepo
         $query = ParkingSpot::query()
             ->join('spot_locations', 'parking_spots.spot_id', '=', 'spot_locations.spot_id')
             ->join('spot_amenities', 'parking_spots.spot_id', '=', 'spot_amenities.spot_id')
-            ->select('parking_spots.*', 'spot_locations.city', 'spot_locations.address', 'spot_locations.district', 'spot_amenities.*');
+            ->select('parking_spots.*', 'spot_locations.city', 'spot_locations.address', 'spot_locations.district', 'spot_amenities.*')
+            ->where('parking_spots.status', 'approved');
         //possible filters: vehicle_type, price_range, search_value,amenities[], time_range[]   
      
         if (isset($filters['vehicle_type'])) {
