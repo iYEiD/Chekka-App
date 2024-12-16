@@ -19,6 +19,7 @@ export class HelpCenterApiService {
   }
 
   submitTicket(ticket: SubmitTicketModel): Observable<any> {
+    console.log(ticket)
     return this.http.post(this.ticketUrl, ticket)
   }
 

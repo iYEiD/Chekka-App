@@ -2,6 +2,7 @@ export interface SubmitTicketModel {
   title: string;
   description: string;
   type: string;
+  transaction_id? : number
 }
 
 export interface TicketDtoModel {

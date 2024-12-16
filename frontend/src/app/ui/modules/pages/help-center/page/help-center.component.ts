@@ -40,11 +40,22 @@ export class HelpCenterComponent {
       (this.ticketType() && (this.ticketType() === "Refund" || this.ticketType() === "Cancellation") && !this.transactionId())) {
       this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, 'Please fill all fields before submission')
     } else {
-      this.helpCenterService.submitTicket({
-        title: this.ticketTitle()!,
-        description: this.ticketContent()!,
-        type: this.ticketType()!
-      })
+      let ticket
+      if (this.transactionId()) {
+        ticket = {
+          title: this.ticketTitle()!,
+          description: this.ticketContent()!,
+          type: this.ticketType()!,
+          transaction_id: this.transactionId()!
+        }
+      } else {
+        ticket = {
+          title: this.ticketTitle()!,
+          description: this.ticketContent()!,
+          type: this.ticketType()!,
+        }
+      }
+      this.helpCenterService.submitTicket(ticket)
       setTimeout(() => {
         this.helpCenterService.getTickets();
       }, 100);
@@ -59,6 +70,7 @@ export class HelpCenterComponent {
 
   closeSubmitTicketModal() {
     this.isSubmitTicketModalVisible = false
+    this.clearTicket()
   }
 
   openViewTicketModal(ticket: TicketViewModel) {
@@ -71,6 +83,12 @@ export class HelpCenterComponent {
 
   closeViewTicketModal() {
     this.isViewTicketModalVisible = false
-    this.helpCenterService.getTickets()
+  }
+
+  clearTicket() {
+    this.ticketType.set(null)
+    this.ticketContent.set(null)
+    this.ticketTitle.set(null)
+    this.transactionId.set(null)
   }
 }
