@@ -37,7 +37,6 @@ export class HelpCenterService {
   markTicketAsSeen(ticketId: number) {
     this.helpCenterApiService.markTicketAsSeen(ticketId).subscribe({
       next: res => {
-        console.log("ticket set as seen")
       }
     })
   }

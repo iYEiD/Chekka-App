@@ -42,4 +42,8 @@ export class LoginComponent {
       this.authService.login(loginCredentials)
     }
   }
+
+  onLoginWithGoogle() {
+    this.authService.authenticateWithGoogle()
+  }
 }
