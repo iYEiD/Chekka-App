@@ -1,5 +1,8 @@
 <div #header class="flex justify-between items-center h-24 border-b border-secondary-2 sticky-header sticky top-0 bg-white z-10 px-16">
-  <div class="cursor-pointer" (click)="navigateToHomePage()">LOGO and APP NAME</div>
+  <div class="cursor-pointer flex items-center" (click)="navigateToHomePage()">
+    <img src="assets/images/logo.png" width="70px" height="70px">
+    <div class="text-[26px] text-primary-5">Chekka</div>
+  </div>
 
   @if (!mainService.isNavbarFunctioningDisabled()) {
     <div class="flex search-and-filter">
@@ -9,136 +12,35 @@
       <ng-template #prefixIconSearch>
         <span nz-icon nzType="search"></span>
       </ng-template>
-      <nz-badge [nzCount]="filterTagChips.length"
-                class="!flex !items-center !ml-2 !px-2 border rounded-md border-secondary-2 cursor-pointer
-                hover:border-[var(--primary-color-6)]
-                hover:text-[var(--primary-color-6)]
-                transition-colors duration-200 ease-in-out"
-                (click)="openModal()"
-      >
-        <button class="!flex !items-center">
-          <i class="bi bi-sliders mr-2"></i>
-          <div>Filters</div>
-        </button>
-      </nz-badge>
 
-      <nz-modal
-        [(nzVisible)]="isModalVisible"
-        nzTitle="Filters"
-        (nzOnCancel)="closeModal()"
-      >
-        <ng-container *nzModalContent>
-          <div>
-            <div>
-              <div class="text-xl font-medium text-secondary-10 mb-2">Type of vehicle</div>
-              <div
-                class="grid grid-rows-1 grid-cols-3 border border-secondary-2 rounded-lg px-1 py-1 text-center"
-              >
-                @for (option of vehicleTypeOptions; track option) {
-                  <button
-                    class=" py-2 rounded-lg"
-                    (click)="onVehicleTypeChange(option)"
-                    [ngClass]="option === vehicleType() ? 'border border-black bg-secondary-1' : 'hover:bg-secondary-1 transition-colors duration-200 ease-in-out'"
-                  >
-                    {{option}}
-                  </button>
-                }
-              </div>
-            </div>
-            <nz-divider></nz-divider>
-            <div class="text-xl font-medium text-secondary-10 mb-2">Time Range</div>
-            <nz-range-picker
-              [nzShowTime]="{ nzFormat: 'HH' }"
-              nzFormat="yyyy-MM-dd HH"
-              [(ngModel)]="dateTimeRange"
-              class="!w-full"
-            ></nz-range-picker>
-            <nz-divider></nz-divider>
-            <div class="text-xl font-medium text-secondary-10 mb-1">Price Range</div>
-            <div class="text-secondary-6 mb-8">Hourly prices in US dollars ($) before fees and taxes</div>
-            <nz-slider nzRange [(ngModel)]="priceRange" [nzMin]="minPriceFilter()" [nzMax]="maxPriceFilter()"></nz-slider>
-
-            <div class="flex justify-between mt-4">
-              <div class="flex flex-col justify-center items-center">
-                <div class="text-xs text-secondary-8">Minimum</div>
-                <nz-input-number
-                  class="!w-20"
-                  [ngModel]="priceRange()![0]"
-                  (ngModelChange)="onPriceChange(0, $event)"
-                  [nzFormatter]="formatterDollar"
-                ></nz-input-number>
-              </div>
-
-              <div class="flex flex-col justify-center items-center">
-                <div class="text-xs text-secondary-8">Maximum</div>
-                <nz-input-number
-                  class="!w-20"
-                  [ngModel]="priceRange()![1]"
-                  [nzFormatter]="priceRange()![1] === maxPriceFilter() ? formatterMaxDollar : formatterDollar"
-                  (ngModelChange)="onPriceChange(1, $event)"
-                ></nz-input-number>
-              </div>
-            </div>
-            <nz-divider></nz-divider>
-            <div>
-              <div class="text-xl font-medium text-secondary-10 mb-2">Amenities</div>
-              <div class="flex flex-wrap gap-y-3 gap-x-1.5">
-                @for (amenity of amenities(); track amenity) {
-                  <div
-                    (click)="updateAmenityIsSelectedStatus(amenity.value)"
-                    class="flex items-center rounded-3xl py-1.5 px-4 !cursor-pointer h-[46px] border border-secondary-2 hover:border-black transition-colors duration-200 ease-in-out"
-                    [ngClass]="amenity.isSelected ? 'border-2 !border-black !bg-secondary-1' : null">
-                    {{amenity.label}}
-                  </div>
-                }
-              </div>
-            </div>
-            <nz-divider></nz-divider>
-            <div>
-              <div class="text-xl font-medium text-secondary-10 mb-2">Sort</div>
-              <div class="flex">
-                <nz-select
-                  nzPlaceHolder="Sort Column"
-                  [(ngModel)]="sortColumn"
-                >
-                  <nz-option nzValue="pricePerHour" nzLabel="Price"></nz-option>
-                  <nz-option nzValue="overallRating" nzLabel="Rating"></nz-option>
-                  <nz-option nzValue="distance" nzLabel="Distance"></nz-option>
-                </nz-select>
-                <nz-select
-                  nzPlaceHolder="Sort Order"
-                  [(ngModel)]="sortOrder"
-                  class="!ml-2"
-                >
-                  <nz-option nzValue="1" nzLabel="Ascending"></nz-option>
-                  <nz-option nzValue="-1" nzLabel="Descending"></nz-option>
-                </nz-select>
-              </div>
-            </div>
-          </div>
-        </ng-container>
-
-        <div *nzModalFooter class="flex justify-between">
-          <button
-            (click)="clearAllFilters()"
-            class="py-1 px-[15px] h-8 rounded-md
-          bg-transparent hover:bg-secondary-1 transition-colors duration-200 ease-in-out"
-          >
-            Clear All
-          </button>
-          <button nz-button nzType="primary" (click)="fetchParkingSpots()">Show Spots</button>
-        </div>
-      </nz-modal>
+      <nz-range-picker
+        [nzShowTime]="{ nzFormat: 'HH' }"
+        nzFormat="yyyy-MM-dd HH"
+        [(ngModel)]="dateTimeRange"
+        class="!w-full !ml-1.5"
+      ></nz-range-picker>
     </div>
   }
 
   <div class="flex items-center">
-    <div class="flex items-center justify-center rounded-3xl py-1.5 px-3 !cursor-pointer ml-4 h-[46px]
-          bg-transparent hover:bg-[var(--secondary-color-1)] transition-colors duration-200 ease-in-out">
-      Switch to hosting
-    </div>
+    @if (!mainService.isNavbarFunctioningDisabled()) {
+      <div class="flex items-center justify-center rounded-3xl py-1.5 px-3 !cursor-pointer h-[46px] bg-transparent">
+        <nz-badge [nzCount]="filterTagChips.length"
+                  class="!flex !items-center !h-full !py-3.5 !px-2 border rounded-md border-secondary-2 cursor-pointer
+                  hover:border-[var(--primary-color-6)]
+                  hover:text-[var(--primary-color-6)]
+                  transition-colors duration-200 ease-in-out"
+                  (click)="openModal()"
+        >
+          <button class="!flex !items-center">
+            <i class="bi bi-sliders mr-2"></i>
+            <div>Filters</div>
+          </button>
+        </nz-badge>
+      </div>
+    }
     <div
-      class="flex items-center border border-secondary-2 rounded-3xl p-1.5 cursor-pointer ml-4 user-dropdown"
+      class="flex items-center border border-secondary-2 rounded-3xl p-1.5 cursor-pointer user-dropdown"
       nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" [(nzVisible)]="isDropdownOpen" (nzVisibleChange)="onDropdownVisibleChange($event)"
       [class.open]="isDropdownOpen" nzPlacement="bottomRight"
     >
@@ -152,7 +54,8 @@
         <li nz-menu-item routerLink="/app/dashboard">Dashboard</li>
         <li nz-menu-item routerLink="/app/account">Account</li>
         <div nz-menu-divider></div>
-        <li nz-menu-item routerLink="">Help Center</li>
+        <li nz-menu-item routerLink="" nzDisabled>Host Your Spot</li>
+        <li nz-menu-item routerLink="/app/help-center">Help Center</li>
         <li class="!text-error" nz-menu-item (click)="authService.logout()">Logout</li>
       </ul>
     </nz-dropdown-menu>
@@ -162,3 +65,104 @@
 <div class="h-[calc(100%-96px)] px-16 py-6">
   <router-outlet></router-outlet>
 </div>
+
+
+
+
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  nzTitle="Filters"
+  (nzOnCancel)="closeModal()"
+>
+  <ng-container *nzModalContent>
+    <div>
+      <div>
+        <div class="text-xl font-medium text-secondary-10 mb-2">Type of vehicle</div>
+        <nz-select
+          nzPlaceHolder="Select Vehicle Type"
+          [(ngModel)]="vehicleType"
+          class="!w-1/2"
+        >
+          <nz-option nzValue="Any" nzLabel="Any"></nz-option>
+          <nz-option nzValue="2wheeler" nzLabel="2 Wheeler"></nz-option>
+          <nz-option nzValue="4wheeler" nzLabel="4 Wheeler"></nz-option>
+          <nz-option nzValue="6wheeler" nzLabel="6 Wheeler"></nz-option>
+          <nz-option nzValue="8wheeler" nzLabel="8 Wheeler"></nz-option>
+        </nz-select>
+      </div>
+      <nz-divider></nz-divider>
+      <div class="text-xl font-medium text-secondary-10 mb-1">Price Range</div>
+      <div class="text-secondary-6 mb-8">Hourly prices in US dollars ($) before fees and taxes</div>
+      <nz-slider nzRange [(ngModel)]="priceRange" [nzMin]="minPriceFilter()" [nzMax]="maxPriceFilter()"></nz-slider>
+
+      <div class="flex justify-between mt-4">
+        <div class="flex flex-col justify-center items-center">
+          <div class="text-xs text-secondary-8">Minimum</div>
+          <nz-input-number
+            class="!w-20"
+            [ngModel]="priceRange()![0]"
+            (ngModelChange)="onPriceChange(0, $event)"
+            [nzFormatter]="formatterDollar"
+          ></nz-input-number>
+        </div>
+
+        <div class="flex flex-col justify-center items-center">
+          <div class="text-xs text-secondary-8">Maximum</div>
+          <nz-input-number
+            class="!w-20"
+            [ngModel]="priceRange()![1]"
+            [nzFormatter]="priceRange()![1] === maxPriceFilter() ? formatterMaxDollar : formatterDollar"
+            (ngModelChange)="onPriceChange(1, $event)"
+          ></nz-input-number>
+        </div>
+      </div>
+      <nz-divider></nz-divider>
+      <div>
+        <div class="text-xl font-medium text-secondary-10 mb-2">Amenities</div>
+        <div class="flex flex-wrap gap-y-3 gap-x-1.5">
+          @for (amenity of amenities(); track amenity) {
+          <div
+            (click)="updateAmenityIsSelectedStatus(amenity.value)"
+            class="flex items-center rounded-3xl py-1.5 px-4 !cursor-pointer h-[46px] border border-secondary-2 hover:border-black transition-colors duration-200 ease-in-out"
+            [ngClass]="amenity.isSelected ? 'border-2 !border-black !bg-secondary-1' : null">
+          {{amenity.label}}
+          </div>
+          }
+        </div>
+      </div>
+      <nz-divider></nz-divider>
+      <div>
+        <div class="text-xl font-medium text-secondary-10 mb-2">Sort</div>
+        <div class="flex">
+          <nz-select
+            nzPlaceHolder="Sort Column"
+            [(ngModel)]="sortColumn"
+          >
+            <nz-option nzValue="pricePerHour" nzLabel="Price"></nz-option>
+            <nz-option nzValue="overallRating" nzLabel="Rating"></nz-option>
+            <nz-option nzValue="distance" nzLabel="Distance"></nz-option>
+          </nz-select>
+          <nz-select
+            nzPlaceHolder="Sort Order"
+            [(ngModel)]="sortOrder"
+            class="!ml-2"
+          >
+            <nz-option nzValue="1" nzLabel="Ascending"></nz-option>
+            <nz-option nzValue="-1" nzLabel="Descending"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <div *nzModalFooter class="flex justify-between">
+    <button
+      (click)="clearAllFilters()"
+      class="py-1 px-[15px] h-8 rounded-md
+          bg-transparent hover:bg-secondary-1 transition-colors duration-200 ease-in-out"
+    >
+      Clear All
+    </button>
+    <button nz-button nzType="primary" (click)="fetchParkingSpots()">Show Spots</button>
+  </div>
+</nz-modal>

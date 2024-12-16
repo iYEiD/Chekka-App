@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, signal} from '@angular/core';
+import {Component, computed, effect, inject, signal, untracked} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ParkingSpotsService} from "../../parking-spots/services/parking-spots.service";
 import {HelperFunctions} from "../../../../../common/helper-functions";
@@ -28,7 +28,8 @@ export class ParkingSpotDetailsComponent {
     Security: "bi bi-shield",
     Lighting: "bi bi-lightbulb",
     CCTV: "bi bi-camera-video",
-    EV: "bi bi-ev-station"
+    EV: "bi bi-ev-station",
+    Gated: "bi bi-bricks"
   };
 
   parkingSpot = computed(() => {
@@ -79,6 +80,11 @@ export class ParkingSpotDetailsComponent {
   disabledDate = (current: Date): boolean => {
     if (!current) return false;
 
+    const today = new Date();
+    if (current < new Date(today.setHours(0, 0, 0, 0))) {
+      return true;
+    }
+
     const formattedDate = this.formatDate(current);
     const disabledEntry = this.parkingSpot()?.disabledDateTimes?.find((entry) => entry.date === formattedDate);
 
@@ -94,25 +100,39 @@ export class ParkingSpotDetailsComponent {
       };
     }
 
+    const now = new Date();
     const currentDate = current as Date;
     const dayOfWeek = currentDate.getDay() || 7;
 
+    const isToday = currentDate.toDateString() === now.toDateString();
+
     const availability = this.availabilityMap.get(dayOfWeek);
 
-    const disabledHours: any = [];
+    const disabledHours: number[] = [];
     for (let hour = 0; hour < 24; hour++) {
-      if (availability && (hour < availability.startHour || hour > availability.endHour)) {
+      if (
+        availability &&
+        (hour < availability.startHour || hour > availability.endHour || (isToday && hour <= now.getHours()))
+      ) {
         disabledHours.push(hour);
       }
     }
-    console.log(disabledHours)
+
+    const disabledMinutes =
+      isToday && disabledHours.includes(now.getHours())
+        ? [...Array(now.getMinutes() + 1).keys()]
+        : [];
+
+    const disabledSeconds = isToday ? [...Array(now.getSeconds() + 1).keys()] : [];
 
     return {
       nzDisabledHours: () => disabledHours,
-      nzDisabledMinutes: () => [],
-      nzDisabledSeconds: () => [],
+      nzDisabledMinutes: () => disabledMinutes,
+      nzDisabledSeconds: () => disabledSeconds,
     };
   };
+
+
 
   constructor() {
     effect(() => {
@@ -130,6 +150,14 @@ export class ParkingSpotDetailsComponent {
         // this.highlightFastestRoute()
       }
     })
+    effect(() => {
+      const userLat = this.parkingSpotsService.userLat()
+      const userLong = this.parkingSpotsService.userLong()
+      this.parkingSpotsService.getUserLocation()
+      untracked(() => {
+        this.parkingSpotsService.fetchParkingSpotById(parseInt(this.parkingSpotId()!, 10))
+      })
+    });
   }
 
   ngOnInit(): void {
@@ -246,6 +274,8 @@ export class ParkingSpotDetailsComponent {
           this.userPosition = userLocation
           this.addUserLocationMarker(userLat, userLng);
           this.bounds.extend(userLocation);
+          this.parkingSpotsService.userLat.set(userLat)
+          this.parkingSpotsService.userLong.set(userLng)
         },
         (error) => {
           this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, "Allow location to be able to view location based data")

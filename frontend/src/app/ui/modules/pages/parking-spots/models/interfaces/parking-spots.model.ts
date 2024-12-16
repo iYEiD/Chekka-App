@@ -20,6 +20,7 @@ export interface ParkingSpotViewModel {
   availability?: ParkingSpotAvailabilityViewModel[]
   disabledDateTimes?: DisabledDateTimesModel[]
   reviews?: ReviewViewModel[]
+  distance: number
 }
 
 export interface ParkingSpotDTOModel {
@@ -41,6 +42,7 @@ export interface ParkingSpotDTOModel {
   availability: ParkingSpotAvailabilityDTOModel[]
   disabledDateTimes: DisabledDateTimesModel[]
   reviews: ReviewDTOModel[]
+  distance: number;
 }
 
 export interface ParkingSpotAvailabilityDTOModel {

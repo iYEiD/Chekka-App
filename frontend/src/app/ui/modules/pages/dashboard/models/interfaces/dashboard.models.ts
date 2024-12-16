@@ -7,6 +7,8 @@ export interface DashboardDTOModel {
   favoriteSpots: FavoriteSpotsDTOModel[]
   upcomingBookings: BookingsDTOModel[]
   currentBookings: BookingsDTOModel[]
+  pendingBookings: BookingsDTOModel[]
+  rejectedBookings: BookingsDTOModel[]
 }
 
 export interface BookingsDTOModel {
@@ -57,6 +59,8 @@ export interface DashboardViewModel {
   favoriteSpots: FavoriteSpotsViewModel[];
   upcomingBookings: BookingsViewModel[];
   currentBookings: BookingsViewModel[];
+  pendingBookings: BookingsViewModel[]
+  rejectedBookings: BookingsViewModel[]
 }
 
 export interface BookingsViewModel {

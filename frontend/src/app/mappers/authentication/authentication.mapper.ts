@@ -1,5 +1,13 @@
 import {
-  DecodedTokenDTOModel, LoginDTOModel, LoginViewModel, ParsedTokenDtoModel, UserDTOModel, UserSignupInfoDTOModel, UserSignupInfoViewModel, UserViewModel
+  DecodedTokenDTOModel,
+  LoginDTOModel,
+  LoginViewModel,
+  ParsedTokenDtoModel,
+  UserDTOModel,
+  UserSignupInfoDTOModel,
+  UserSignupInfoViewModel,
+  UserViewModel,
+  WalletDtoModel, WalletTransactionDtoModel, WalletTransactionViewModel, WalletViewModel
 } from "../../models/authentication/interfaces/authentication.models";
 
 
@@ -39,5 +47,23 @@ export class AuthenticationMapper {
         phone_number: user.phoneNumber,
         password_confirmation: user.confirmPassword
       }
+  }
+
+  public static fromWalletDtoToViewModel(wallet: WalletDtoModel): WalletViewModel {
+      return {
+        totalFunds: wallet.total_funds,
+        transactionHistory: this.fromWalletTransactionsDtoToViewModel(wallet.transaction_history)
+      }
+  }
+
+  public static fromWalletTransactionsDtoToViewModel(transactions: WalletTransactionDtoModel[]): WalletTransactionViewModel[] {
+      return transactions.map(transaction => {
+        return {
+          secondUserFirstName: transaction.second_user_firstName,
+          secondUserLastName: transaction.second_user_lastName,
+          amount: transaction.amount,
+          type: transaction.type,
+        }
+      })
   }
 }

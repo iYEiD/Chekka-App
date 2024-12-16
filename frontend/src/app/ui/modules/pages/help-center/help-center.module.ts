@@ -1,32 +1,34 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AccountRoutingModule } from './account-routing.module';
-import {AccountComponent} from "./page/account.component";
+import { HelpCenterRoutingModule } from './help-center-routing.module';
+import {FormsModule} from "@angular/forms";
+import {HelpCenterComponent} from "./page/help-center.component";
+import {NzAutosizeDirective, NzInputModule} from "ng-zorro-antd/input";
 import {SharedPipesModule} from "../../../../common/pipes/shared-pipes.module";
 import {NzDividerModule} from "ng-zorro-antd/divider";
-import {NzInputModule} from "ng-zorro-antd/input";
 import {NzButtonModule} from "ng-zorro-antd/button";
-import {FormsModule} from "@angular/forms";
-import {NzToolTipModule} from "ng-zorro-antd/tooltip";
 import {NzModalModule} from "ng-zorro-antd/modal";
+import {NzSelectModule} from "ng-zorro-antd/select";
 import {NzCollapseComponent, NzCollapsePanelComponent} from "ng-zorro-antd/collapse";
 
 
 @NgModule({
-  declarations: [AccountComponent],
+  declarations: [HelpCenterComponent],
   imports: [
     CommonModule,
-    AccountRoutingModule,
+    HelpCenterRoutingModule,
+    FormsModule,
+    CommonModule,
+    NzInputModule,
+    NzAutosizeDirective,
     SharedPipesModule,
     NzDividerModule,
-    NzInputModule,
     NzButtonModule,
-    FormsModule,
-    NzToolTipModule,
     NzModalModule,
+    NzSelectModule,
     NzCollapseComponent,
     NzCollapsePanelComponent
   ]
 })
-export class AccountModule { }
+export class HelpCenterModule { }

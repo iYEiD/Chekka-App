@@ -1,4 +1,4 @@
-import {inject, Injectable, signal} from '@angular/core';
+import {computed, inject, Injectable, signal} from '@angular/core';
 import {ParkingSpotViewModel, ReservationViewModel} from "../models/interfaces/parking-spots.model";
 import {ParkingSpotsApiService} from "./parking-spots-api.service";
 import {ParkingSpotMapper} from "../mappers/parking-spot.mapper";
@@ -22,6 +22,14 @@ export class ParkingSpotsService {
 
   parkingSpots = signal<ParkingSpotViewModel[]>([])
   selectedParkingSpot = signal<ParkingSpotViewModel | null>(null)
+  userLat = signal<number | null>(null)
+  userLong = signal<number | null>(null)
+  userLocation = computed(() => {
+    return {
+      latitude: this.userLat(),
+      longitude: this.userLong()
+    }
+  })
 
   constructor() { }
 
@@ -39,38 +47,39 @@ export class ParkingSpotsService {
       },
       error: (error) => {
         console.error('Error updating favorite status:', error);
-      },
+      }
     });
   }
 
 
   fetchParkingSports(filters: any, sortSettings: SortSettingsModel) {
-    this.parkingSpotsApiService.fetchParkingSpots(filters).subscribe({
-      next: (res) => {
-        this.parkingSpots.set(ParkingSpotMapper.fromParkingSpotsDtoToViewModel(res))
-        if (sortSettings.column && sortSettings.order) {
-          console.log(sortSettings)
-          this.sortParkingSpots(sortSettings)
+    if (this.userLat() && this.userLong()) {
+      this.parkingSpotsApiService.fetchParkingSpots(filters).subscribe({
+        next: (res) => {
+          this.parkingSpots.set(ParkingSpotMapper.fromParkingSpotsDtoToViewModel(res))
+          if (sortSettings.column && sortSettings.order) {
+            this.sortParkingSpots(sortSettings)
+          }
+        },
+        error: (err) => {
         }
-      },
-      error: (err) => {
-      }
-    })
+      })
+    }
   }
 
   fetchParkingSpotById(id: number) {
-    this.parkingSpotsApiService.fetchParkingSpotById(id).subscribe({
-      next: res => {
-        console.log(res)
-        this.selectedParkingSpot.set(ParkingSpotMapper.fromParkingSpotDtoToViewModel(res))
-      }
-    })
+    if (this.userLat() && this.userLong()) {
+      this.parkingSpotsApiService.fetchParkingSpotById(id, this.userLocation()).subscribe({
+        next: res => {
+          this.selectedParkingSpot.set(ParkingSpotMapper.fromParkingSpotDtoToViewModel(res))
+        }
+      })
+    }
   }
 
   bookSpot(reservationDetails: ReservationViewModel) {
     this.parkingSpotsApiService.bookSpot(ParkingSpotMapper.fromReservationViewModelToDTOModel(reservationDetails)).subscribe({
       next: (res) => {
-        console.log(res)
         this.snackBarService.openSnackBar(SnackbarTypeEnums.SUCCESS, "Spot booked successfully")
         this.fetchParkingSpotById(reservationDetails.spotId)
       },
@@ -103,5 +112,24 @@ export class ParkingSpotsService {
       if (valueA > valueB) return order * 1;
       return 0;
     }));
+  }
+
+  getUserLocation(): void {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+
+          this.userLat.set(userLat);
+          this.userLong.set(userLng);
+        },
+        (error) => {
+          this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, "Allow location to be able to view location based data")
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
   }
 }

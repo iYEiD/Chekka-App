@@ -12,6 +12,7 @@ export class DashboardService {
   dashboardApiService = inject(DashboardApiService)
   snackbarService = inject(SnackbarService)
   dashboardData = signal<DashboardViewModel | null>(null)
+  spotGateCode = signal<string | null>(null)
 
   constructor() { }
 
@@ -40,6 +41,14 @@ export class DashboardService {
         this.fetchDashboardData()
       },
       error: (err) => {}
+    })
+  }
+
+  getGateCode(spotId: number) {
+    this.dashboardApiService.getSpotGateCode(spotId).subscribe({
+      next: res => {
+        this.spotGateCode.set(res)
+      }
     })
   }
 }

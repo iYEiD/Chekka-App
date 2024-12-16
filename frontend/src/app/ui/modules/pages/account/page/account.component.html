@@ -1,11 +1,63 @@
 <div class="page-content">
-  <div class="text-3xl text-secondary-10 mb-1">Account</div>
-  <div class="flex">
-    <div class="text-lg mr-1">{{authService.user()?.firstName}},</div>
-    <div class="text-lg font-light">{{authService.user()?.email}}</div>
+  <div class="flex justify-between items-center">
+    <div>
+      <div class="text-3xl text-secondary-10 mb-1">Account</div>
+      <div class="flex">
+        <div class="text-lg mr-1">{{accountService.userInfo()?.firstName}},</div>
+        <div class="text-lg font-light">{{accountService.userInfo()?.email}}</div>
+      </div>
+    </div>
+
+    <div>
+      <button nz-button nzType="primary" (click)="openModal()">Wallet</button>
+    </div>
   </div>
 
-  <div class="text-xl mt-14">Personal Information</div>
+  <nz-modal
+    [(nzVisible)]="isModelOpen"
+    nzTitle="Wallet"
+    (nzOnCancel)="closeModal()"
+  >
+    <ng-container *nzModalContent>
+      <div class="flex items-center">
+        <div>Total Funds:</div>
+        <div class="ml-1.5">${{wallet()?.totalFunds}}</div>
+      </div>
+
+      <nz-collapse class="!mt-5">
+        <nz-collapse-panel nzHeader="Recent Transactions" [nzActive]="wallet()?.transactionHistory!.length > 0">
+          @if (wallet()?.transactionHistory!.length > 0) {
+          @for (transaction of wallet()?.transactionHistory; track transaction) {
+          <div class="flex justify-between items-center">
+            <div>
+              <div>With: {{transaction.secondUserFirstName}} {{transaction.secondUserLastName}}</div>
+              <div>Amount: {{transaction.amount}}</div>
+            </div>
+           <div>{{transaction.type}}</div>
+          </div>
+          <nz-divider></nz-divider>
+          }
+          }@else {
+            <div>No Recent Transactions</div>
+          }
+        </nz-collapse-panel>
+      </nz-collapse>
+    </ng-container>
+
+    <div *nzModalFooter >
+      <button
+        (click)="closeModal()"
+        class="py-1 px-[15px] h-8 rounded-md
+          bg-transparent hover:bg-secondary-1 transition-colors duration-200 ease-in-out"
+      >
+        Close
+      </button>
+    </div>
+  </nz-modal>
+
+
+
+  <div class="text-xl mt-10">Personal Information</div>
   <div class="mt-4">
     @for (detail of userDetailsWithEditing(); track detail) {
       <div
@@ -14,12 +66,14 @@
         [class.pointer-events-none]="editingField() && !detail.isBeingEdited"
       >
         <div class="text-base">{{ detail.field | camelToTitleCase }}</div>
-        <div
-          class="text-sm underline cursor-pointer"
-          (click)="!editingField() || detail.isBeingEdited ? toggleIsBeingEdited(detail.field) : null"
-        >
-          {{ detail.isBeingEdited ? 'Cancel' : 'Edit' }}
-        </div>
+        @if (detail.field !== 'email') {
+          <div
+            class="text-sm underline cursor-pointer"
+            (click)="!editingField() || detail.isBeingEdited ? toggleIsBeingEdited(detail.field) : null"
+          >
+            {{ detail.isBeingEdited ? 'Cancel' : 'Edit' }}
+          </div>
+        }
       </div>
       @if (!detail.isBeingEdited) {
         <div class="text-sm text-secondary-6"

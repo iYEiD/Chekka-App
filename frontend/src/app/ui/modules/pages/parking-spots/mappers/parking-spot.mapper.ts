@@ -47,6 +47,7 @@ export class ParkingSpotMapper {
       isFavorite: parkingSpot.is_favorite,
       disabledDateTimes: parkingSpot.disabledDateTimes ? parkingSpot.disabledDateTimes : [],
       reviews: parkingSpot.reviews ? this.fromReviewDtoToViewModel(parkingSpot.reviews) : [],
+      distance: parkingSpot.distance,
       availability: parkingSpot.availability ? this.fromAvailabilityDtoToViewModel(parkingSpot.availability) : [],
       images: [
         'assets/images/test.png',

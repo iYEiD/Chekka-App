@@ -3,6 +3,8 @@ import {DashboardService} from "../services/dashboard.service";
 import {ParkingSpotsService} from "../../parking-spots/services/parking-spots.service";
 import {BookingsViewModel} from "../models/interfaces/dashboard.models";
 import {MainService} from "../../../main/services/main.service";
+import {SnackbarService} from "../../../../../services/snack-bar/services/snackbar.service";
+import {SnackbarTypeEnums} from "../../../../../services/snack-bar/enum/snackbar-type.enums";
 
 @Component({
   selector: 'app-dashboard',
@@ -14,6 +16,7 @@ export class DashboardComponent {
   dashboardService = inject(DashboardService);
   parkingSpotsService = inject(ParkingSpotsService);
   mainService = inject(MainService)
+  snackbarService = inject(SnackbarService)
 
   dashboardData = computed(() => {
     return this.dashboardService.dashboardData()
@@ -23,8 +26,13 @@ export class DashboardComponent {
   reviewRating = signal<number | null>(null)
   reviewBookingId = signal<number | null>(null)
 
+  gateCode = computed(() => {
+    return this.dashboardService.spotGateCode()
+  })
+
   isReviewModalVisible: boolean = false
   isCancelBookingModalVisible: boolean = false
+  isViewGateCodeModalVisible: boolean = false
   cancelBookingSpot: BookingsViewModel | null = null
 
   constructor() {
@@ -69,6 +77,16 @@ export class DashboardComponent {
     this.cancelBookingSpot = null
   }
 
+  openViewGateCodeModal(spotId: number, event: any) {
+    event.stopPropagation()
+    this.dashboardService.getGateCode(spotId)
+    this.isViewGateCodeModalVisible = true
+  }
+
+  closeViewGateCodeModal() {
+    this.isViewGateCodeModalVisible = false
+  }
+
   cancelBooking(bookingId: number) {
     this.dashboardService.cancelBooking(bookingId)
     this.closeCancelBookingModal()
@@ -83,5 +101,10 @@ export class DashboardComponent {
     })
     this.fetchDashboardData()
     this.closeReviewModal()
+  }
+
+  cancelUpcomingBooking(event: any) {
+    event.stopPropagation()
+    this.snackbarService.openSnackBar(SnackbarTypeEnums.INFO, "Please go to help center page and send a cancellation request to cancel an upcoming booking.", 10000)
   }
 }

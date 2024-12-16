@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../../../../../environments/environment";
 import {ParkingSpotDTOModel, ReservationDTOModel} from "../models/interfaces/parking-spots.model";
@@ -21,9 +21,14 @@ export class ParkingSpotsApiService {
     return this.http.post<ParkingSpotDTOModel[]>(this.fetchParkingSpotsUrl, filters)
   }
 
-  fetchParkingSpotById(spotId: number): Observable<ParkingSpotDTOModel> {
+  fetchParkingSpotById(spotId: number, userLocation: any): Observable<ParkingSpotDTOModel> {
     let updatedFetchParkingSpotByIdUrl = `${this.fetchParkingSpotByIdUrl}/${spotId}`
-    return this.http.get<ParkingSpotDTOModel>(updatedFetchParkingSpotByIdUrl)
+
+    const params = new HttpParams()
+      .set('longitude', userLocation.longitude.toString())
+      .set('latitude', userLocation.latitude.toString());
+
+    return this.http.get<ParkingSpotDTOModel>(updatedFetchParkingSpotByIdUrl, { params })
   }
 
   updateSpotFavoriteStatus(spotId: number, status: boolean): Observable<any> {
@@ -32,9 +37,7 @@ export class ParkingSpotsApiService {
   }
 
   bookSpot(reservationDetails: ReservationDTOModel): Observable<any> {
-    console.log(reservationDetails);
     let updatedBookSpotUrl = `${this.bookSpotUrl}/${reservationDetails.spot_id}`
-    console.log(updatedBookSpotUrl)
     return this.http.post(updatedBookSpotUrl, reservationDetails)
   }
 }

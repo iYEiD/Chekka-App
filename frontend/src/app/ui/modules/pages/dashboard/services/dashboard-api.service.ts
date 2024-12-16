@@ -29,4 +29,9 @@ export class DashboardApiService {
     let updatedCancelBookingUrl = `${this.cancelBookingUrl}/${bookingId}`;
     return this.http.delete(updatedCancelBookingUrl)
   }
+
+  getSpotGateCode(spotId: number): Observable<string> {
+    let getGateCodeUrl = `${this.baseUrl}/user/parking-spots/gate/${spotId}`
+    return this.http.get<string>(getGateCodeUrl)
+  }
 }

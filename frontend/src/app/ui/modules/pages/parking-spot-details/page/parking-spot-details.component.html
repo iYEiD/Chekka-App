@@ -31,6 +31,7 @@
     <div>
       <div>
         <div class="text-xl text-secondary-10">Parking spot in {{parkingSpot()?.location!.city!}}, {{parkingSpot()?.location!.district!}}</div>
+        <div>{{parkingSpot()?.distance || "-"}} km away</div>
         <div class="text-md text-secondary-7">{{parkingSpot()?.mainDescription}}</div>
         <div class="flex items-center text-secondary-10">
           <i class="bi bi-star-fill"></i>
