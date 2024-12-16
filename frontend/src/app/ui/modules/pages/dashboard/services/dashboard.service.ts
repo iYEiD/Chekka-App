@@ -47,7 +47,6 @@ export class DashboardService {
   getGateCode(spotId: number) {
     this.dashboardApiService.getSpotGateCode(spotId).subscribe({
       next: res => {
-        console.log(res)
         this.spotGateCode.set(res)
       }
     })
