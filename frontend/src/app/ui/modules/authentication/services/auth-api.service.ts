@@ -16,6 +16,7 @@ export class AuthApiService {
   baseUrl = `${environment.backendUrl}`
   signupUrl = `${this.baseUrl}/user/signup`;
   loginUrl = `${this.baseUrl}/user/login`;
+  authenticateWithGoogleUrl = `${this.baseUrl}/auth/google`;
 
   constructor() { }
 
@@ -25,5 +26,9 @@ export class AuthApiService {
 
   login(loginCredentials: LoginCredentialsModel): Observable<LoginDTOModel> {
     return this.http.post<LoginDTOModel>(this.loginUrl, loginCredentials)
+  }
+
+  authenticateWithGoogle(): Observable<LoginDTOModel> {
+    return this.http.get<LoginDTOModel>(this.authenticateWithGoogleUrl)
   }
 }

@@ -66,4 +66,20 @@ export class AuthService {
     localStorage.removeItem('user')
     this.router.navigateByUrl('auth').then(() => {});
   }
+
+  authenticateWithGoogle() {
+    this.authApiService.authenticateWithGoogle().subscribe({
+      next: (res) => {
+        let mappedRes = AuthenticationMapper.fromLoginDTOModelToViewModel(res)
+        this.isLoggedIn.set(true);
+        this.jwtService.setTokens(mappedRes.accessToken);
+        this.user.set(mappedRes.user);
+        localStorage.setItem('user', JSON.stringify(mappedRes.user))
+        this.router.navigateByUrl('/app').then(() => {});
+      },
+      error: (error) => {
+        this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, 'Error authenticating with Google.')
+      }
+    })
+  }
 }
