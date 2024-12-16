@@ -130,7 +130,7 @@ class UserService implements IuserService
         })->values();
        
         // Set Pending Bookings
-        $response['upcomingBookings'] = $user->bookings->where('status', 'accepted')->filter(function ($booking) {
+        $response['upcomingBookings'] = $user->bookings->where('status', 'upcoming')->filter(function ($booking) {
             return $booking->start_time > now()->setTimezone('Asia/Beirut') && $booking->end_time > now()->setTimezone('Asia/Beirut');
         })->map(function ($booking) {
             $spot = $booking->parkingSpot;
@@ -144,7 +144,7 @@ class UserService implements IuserService
             return $booking;
         })->values();
 
-        $response['currentBookings'] = $user->bookings->where('status', 'accepted')->filter(function ($booking) {
+        $response['currentBookings'] = $user->bookings->where('status', 'upcoming')->filter(function ($booking) {
             return $booking->start_time <= now()->setTimezone('Asia/Beirut') && $booking->end_time >= now()->setTimezone('Asia/Beirut');
         })->map(function ($booking) {
             $spot = $booking->parkingSpot;
@@ -159,8 +159,8 @@ class UserService implements IuserService
         })->values();
 
         // Set Completed Bookings
-        $response['completedBookings'] = $user->bookings->where('status', 'accepted')->filter(function ($booking) {
-            return $booking->end_time < now()->setTimezone('Asia/Beirut');
+        $response['completedBookings'] = $user->bookings->filter(function ($booking) {
+            return $booking->status === 'completed' || ($booking->status === 'upcoming' && $booking->end_time < now()->setTimezone('Asia/Beirut'));
         })->map(function ($booking) {
             $spot = $booking->parkingSpot;
             $spot->location = $spot->location()->first();
@@ -228,7 +228,7 @@ class UserService implements IuserService
         if (!$booking) {
             return null; // Booking not found or does not belong to the user
         }
-        if ($booking->status !== 'accepted' || Carbon::parse($booking->end_time)->isFuture()) {
+        if (($booking->status === 'upcoming' && Carbon::parse($booking->end_time)->isFuture()) || $booking->status !== 'completed') {
             return null; // Cannot review a booking that is not completed or hasn't ended yet
         }
         // Create the review
@@ -266,11 +266,15 @@ class UserService implements IuserService
 
     public function deleteBooking($bookingId)
     {
-        $booking = Booking::where('booking_id', $bookingId)->where('guest_id', Auth::user()->user_id)->first();
+        $booking = Booking::where('booking_id', $bookingId)
+            ->where('guest_id', Auth::user()->user_id)
+            ->where('status', 'pending')
+            ->first();
         if (!$booking) {
             return null; // Booking is not his
         }
         $booking->delete();
+        error_log('Booking deleted: ' . $bookingId);
         return $booking;
     }
 

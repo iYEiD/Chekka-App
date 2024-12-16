@@ -376,12 +376,14 @@ class SpotService implements ISpotService
     public function getGateCode($request){
         $user = Auth::user();
         $spotId = $request->route('spot_id');
-      
         $spot = $this->spotRepo->getSpotById($spotId);
-
         // Check if spot has gate access
-        $spotAmenities = $spot->amenities;
-        if (!$spotAmenities->is_gated) {
+        if ($spot) {
+            $spotAmenities = $spot->amenities()->first();
+            if (!$spotAmenities->is_gated) {
+                return null;
+            }
+        } else {
             return null;
         }
 

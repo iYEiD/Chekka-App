@@ -38,10 +38,10 @@ class TicketController extends Controller
         return response()->json(['message' => 'Failed to create ticket'], 400);
     }
 
-    public function updateTicket(Request $request, $ticketId)
+    public function updateTicket(Request $request)
     {   
         // To set the ticket status to seen
-        $ticket = $this->ticketService->updateTicket($request, $ticketId);
+        $ticket = $this->ticketService->updateTicket($request);
         if($ticket){
             return response()->json(['message' => 'Ticket updated successfully'], 200);
         }
