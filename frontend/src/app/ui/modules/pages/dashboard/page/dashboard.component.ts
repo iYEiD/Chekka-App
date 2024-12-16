@@ -103,7 +103,8 @@ export class DashboardComponent {
     this.closeReviewModal()
   }
 
-  cancelUpcomingBooking() {
+  cancelUpcomingBooking(event: any) {
+    event.stopPropagation()
     this.snackbarService.openSnackBar(SnackbarTypeEnums.INFO, "Please go to help center page and send a cancellation request to cancel an upcoming booking.", 10000)
   }
 }

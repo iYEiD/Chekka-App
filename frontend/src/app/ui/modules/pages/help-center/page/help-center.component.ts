@@ -58,7 +58,7 @@ export class HelpCenterComponent {
       this.helpCenterService.submitTicket(ticket)
       setTimeout(() => {
         this.helpCenterService.getTickets();
-      }, 100);
+      }, 3000);
 
       this.closeSubmitTicketModal()
     }
@@ -83,6 +83,9 @@ export class HelpCenterComponent {
 
   closeViewTicketModal() {
     this.isViewTicketModalVisible = false
+    setTimeout(() => {
+      this.helpCenterService.getTickets();
+    }, 3000);
   }
 
   clearTicket() {
