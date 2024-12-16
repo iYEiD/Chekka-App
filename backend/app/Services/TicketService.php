@@ -15,7 +15,9 @@ class TicketService implements ITicketService
 
        // Check if transaction belongs to user before proceeding
        if ($request->has('transaction_id')) {
-           $transaction = Transaction::where('transaction_id', $request->transaction_id)->first();
+           $transaction = Transaction::where('transaction_id', $request->transaction_id)
+                                     ->where('status', 'transferred')
+                                     ->first();
            if (!$transaction) {
                return null;
            }
