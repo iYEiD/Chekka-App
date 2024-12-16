@@ -3,6 +3,8 @@ import {DashboardService} from "../services/dashboard.service";
 import {ParkingSpotsService} from "../../parking-spots/services/parking-spots.service";
 import {BookingsViewModel} from "../models/interfaces/dashboard.models";
 import {MainService} from "../../../main/services/main.service";
+import {SnackbarService} from "../../../../../services/snack-bar/services/snackbar.service";
+import {SnackbarTypeEnums} from "../../../../../services/snack-bar/enum/snackbar-type.enums";
 
 @Component({
   selector: 'app-dashboard',
@@ -14,6 +16,7 @@ export class DashboardComponent {
   dashboardService = inject(DashboardService);
   parkingSpotsService = inject(ParkingSpotsService);
   mainService = inject(MainService)
+  snackbarService = inject(SnackbarService)
 
   dashboardData = computed(() => {
     return this.dashboardService.dashboardData()
@@ -98,5 +101,9 @@ export class DashboardComponent {
     })
     this.fetchDashboardData()
     this.closeReviewModal()
+  }
+
+  cancelUpcomingBooking() {
+    this.snackbarService.openSnackBar(SnackbarTypeEnums.INFO, "Please go to help center page and send a cancellation request to cancel an upcoming booking.", 10000)
   }
 }
