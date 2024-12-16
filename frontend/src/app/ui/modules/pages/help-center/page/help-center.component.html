@@ -30,6 +30,13 @@
         <nz-option nzValue="Other" nzLabel="Other"></nz-option>
       </nz-select>
     </div>
+
+    @if (ticketType() && (ticketType() === "Refund" || ticketType() === "Cancellation")) {
+      <div class="mt-5">
+        <div class="text-base">Transaction ID*</div>
+        <input nz-input placeholder="Enter transaction id" type="number" [(ngModel)]="transactionId">
+      </div>
+    }
   </ng-container>
 
   <div *nzModalFooter class="flex justify-between">

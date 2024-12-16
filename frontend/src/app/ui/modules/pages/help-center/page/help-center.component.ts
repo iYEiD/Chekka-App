@@ -26,6 +26,7 @@ export class HelpCenterComponent {
   ticketTitle = signal<string | null>(null)
   ticketContent = signal<string | null>(null)
   ticketType = signal<string | null>(null)
+  transactionId = signal<number | null>(null)
 
   viewTicket = signal<TicketViewModel | null>(null)
 
@@ -35,7 +36,8 @@ export class HelpCenterComponent {
   }
 
   submitTicket() {
-    if (!this.ticketTitle() || !this.ticketContent() || !this.ticketType()) {
+    if (!this.ticketTitle() || !this.ticketContent() || !this.ticketType() ||
+      (this.ticketType() && (this.ticketType() === "Refund" || this.ticketType() === "Cancellation") && !this.transactionId())) {
       this.snackBarService.openSnackBar(SnackbarTypeEnums.ERROR, 'Please fill all fields before submission')
     } else {
       this.helpCenterService.submitTicket({
@@ -43,7 +45,10 @@ export class HelpCenterComponent {
         description: this.ticketContent()!,
         type: this.ticketType()!
       })
-      this.helpCenterService.getTickets()
+      setTimeout(() => {
+        this.helpCenterService.getTickets();
+      }, 100);
+
       this.closeSubmitTicketModal()
     }
   }
