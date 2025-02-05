@@ -1,0 +1,33 @@
+input, nz-input-group {
+  width: 280px !important;
+}
+
+.back-button {
+  color: var(--secondary-color-9);
+  background-color: var(--secondary-color-1);
+  border: none
+}
+
+.back-button:hover {
+  background-color: var(--secondary-color-2);
+}
+
+.back-button, .signin-button {
+  width: 280px !important;
+}
+
+.toggle-password-icon {
+  transition: color 0.4s ease;
+}
+
+.toggle-password-icon:hover {
+  color: var(--primary-color-6)
+}
+
+.password-div ::ng-deep .ant-input-affix-wrapper {
+  height: 40px !important;
+}
+
+.input-height {
+  height: 40px !important;
+}

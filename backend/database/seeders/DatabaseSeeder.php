@@ -13,11 +13,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // php artisan db:seed to run all these seeders
+        
+        // for individual seeder use the fct below
+        // php artisan db:seed --class=ParkingSpotsTableSeeder 
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Apply Local Seeders
+        $this->call(UsersTableSeeder::class); 
+        $this->call(ParkingSpotsTableSeeder::class);
+        $this->call(SpotLocationsTableSeeder::class);
+        $this->call(AvailabilityTableSeeder::class);
+        $this->call(SpotAmenitiesTableSeeder::class);
+        $this->call(BookingsTableSeeder::class);
+        $this->call(FavouritesTableSeeder::class);
+        $this->call(ReviewsTableSeeder::class);
+        $this->call(WalletsTableSeeder::class);
+        $this->call(TransactionsTableSeeder::class);
+
     }
 }

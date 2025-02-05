@@ -1,0 +1,22 @@
+<div class="flex flex-col items-center bg-white rounded-lg px-16 py-12">
+  <div class="mb-14 flex flex-col items-center">
+    <div class="text-2xl font-medium">Get Started</div>
+    <div class="text-sm text-secondary-7">Choose your desired sign up method</div>
+  </div>
+
+  <div class="mb-12">
+    <button nz-button nzSize="large" class="!flex items-center justify-center !text-base mb-2.5 !w-80">
+      <i class="bi bi-google"></i>
+      <div class="ml-2.5">Continue with Gmail</div>
+    </button>
+    <button routerLink="/auth/signup" nz-button nzSize="large" class="!flex items-center justify-center !text-base !w-80">
+      <i class="bi bi-envelope"></i>
+      <div class="ml-2.5">Continue with Email</div>
+    </button>
+  </div>
+
+  <div class="flex items-center justify-center mt-3">
+    <div class="text-secondary-7">Already have an account?</div>
+    <a routerLink="auth/login" class="ml-1">Log in</a>
+  </div>
+</div>

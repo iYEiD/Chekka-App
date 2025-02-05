@@ -1,0 +1,103 @@
+<div class="page-content">
+  <div class="flex justify-between items-center">
+    <div>
+      <div class="text-3xl text-secondary-10 mb-1">Account</div>
+      <div class="flex">
+        <div class="text-lg mr-1">{{accountService.userInfo()?.firstName}},</div>
+        <div class="text-lg font-light">{{accountService.userInfo()?.email}}</div>
+      </div>
+    </div>
+
+    <div>
+      <button nz-button nzType="primary" (click)="openModal()">Wallet</button>
+    </div>
+  </div>
+
+  <nz-modal
+    [(nzVisible)]="isModelOpen"
+    nzTitle="Wallet"
+    (nzOnCancel)="closeModal()"
+  >
+    <ng-container *nzModalContent>
+      <div class="flex items-center">
+        <div>Total Funds:</div>
+        <div class="ml-1.5">${{wallet()?.totalFunds}}</div>
+      </div>
+
+      <nz-collapse class="!mt-5">
+        <nz-collapse-panel nzHeader="Recent Transactions" [nzActive]="wallet()?.transactionHistory!.length > 0">
+          @if (wallet()?.transactionHistory!.length > 0) {
+          @for (transaction of wallet()?.transactionHistory; track transaction) {
+          <div class="flex justify-between items-center">
+            <div>
+              <div>With: {{transaction.secondUserFirstName}} {{transaction.secondUserLastName}}</div>
+              <div>Amount: {{transaction.amount}}</div>
+            </div>
+           <div>{{transaction.type}}</div>
+          </div>
+          <nz-divider></nz-divider>
+          }
+          }@else {
+            <div>No Recent Transactions</div>
+          }
+        </nz-collapse-panel>
+      </nz-collapse>
+    </ng-container>
+
+    <div *nzModalFooter >
+      <button
+        (click)="closeModal()"
+        class="py-1 px-[15px] h-8 rounded-md
+          bg-transparent hover:bg-secondary-1 transition-colors duration-200 ease-in-out"
+      >
+        Close
+      </button>
+    </div>
+  </nz-modal>
+
+
+
+  <div class="text-xl mt-10">Personal Information</div>
+  <div class="mt-4">
+    @for (detail of userDetailsWithEditing(); track detail) {
+      <div
+        class="flex justify-between items-center"
+        [class.opacity-20]="editingField() && !detail.isBeingEdited"
+        [class.pointer-events-none]="editingField() && !detail.isBeingEdited"
+      >
+        <div class="text-base">{{ detail.field | camelToTitleCase }}</div>
+        @if (detail.field !== 'email') {
+          <div
+            class="text-sm underline cursor-pointer"
+            (click)="!editingField() || detail.isBeingEdited ? toggleIsBeingEdited(detail.field) : null"
+          >
+            {{ detail.isBeingEdited ? 'Cancel' : 'Edit' }}
+          </div>
+        }
+      </div>
+      @if (!detail.isBeingEdited) {
+        <div class="text-sm text-secondary-6"
+             [class.opacity-20]="editingField() && !detail.isBeingEdited"
+        >{{ detail.value }}</div>
+      } @else {
+        @if (detail.field !== 'password') {
+          <input class="!mt-2 !h-[40px]" nz-input [(ngModel)]="detail.value">
+        } @else {
+          <div class="!mt-2">Old Password</div>
+          <input class="!mt-2 !mb-4 !h-[40px]" nz-input [(ngModel)]="oldPassword">
+          <div class="flex items-center !mt-2">
+            <div>New Password</div>
+            <i
+              class="bi bi-info-circle ml-2"
+              nz-tooltip="Passord should be at least 8 characters long, contain at least 1 capital letter, 1 special character and 1 number">
+            </i>
+          </div>
+          <input class="!mt-2 !h-[40px]" nz-input [(ngModel)]="newPassword">
+        }
+        <button class="mt-5" nz-button nzType="primary" nzSize="large" (click)="updateDetails()">Save</button>
+      }
+      <nz-divider></nz-divider>
+    }
+  </div>
+
+</div>

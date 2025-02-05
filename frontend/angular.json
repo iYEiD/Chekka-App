@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "frontend": {
+    "iw_health_frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -15,9 +15,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "outputPath": "dist/frontend",
+            "customWebpackConfig": {
+              "path": "src/custom-webpack.config.ts"
+            },
+            "outputPath": "dist/iw_health_frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -27,10 +30,21 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.scss",
+              "node_modules/ng-zorro-antd/src/ng-zorro-antd.min.css",
+              "node_modules/ng-zorro-antd/resizable/style/index.min.css",
+              "node_modules/ng-zorro-antd/code-editor/style/index.min.css",
+              "node_modules/ng-zorro-antd/graph/style/index.min.css",
+              "src/theme.less"
             ],
             "scripts": []
           },
@@ -39,13 +53,19 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumError": "5kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
                 }
               ],
               "outputHashing": "all"
@@ -62,13 +82,13 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "frontend:build:production"
+              "browserTarget": "iw_health_frontend:build:production"
             },
             "development": {
-              "browserTarget": "frontend:build:development"
+              "browserTarget": "iw_health_frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +96,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "frontend:build"
+            "browserTarget": "iw_health_frontend:build"
           }
         },
         "test": {
@@ -93,12 +113,21 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/theme.less",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.scss",
+              "node_modules/ng-zorro-antd/src/ng-zorro-antd.min.css",
+              "node_modules/ng-zorro-antd/resizable/style/index.min.css",
+              "node_modules/ng-zorro-antd/code-editor/style/index.min.css",
+              "node_modules/ng-zorro-antd/graph/style/index.min.css"
             ],
             "scripts": []
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

@@ -1,0 +1,111 @@
+<div class="flex flex-col bg-white rounded-lg p-12">
+  <div class="mb-6">
+    <div class="text-2xl font-medium">Sign up</div>
+    <div class="text-sm text-secondary-7">Enter your details below to create your account and get started</div>
+  </div>
+
+  <div>
+    <div class="flex justify-between mb-4">
+      <div class="mr-5">
+        <div class="text-sm mb-1">First Name*</div>
+        <input class="input-height" [ngClass]="!isFirstNameValid() ? '!border-error': null" nz-input [value]="firstName()" (input)="onInputChange($event, firstName)" placeholder="Enter your first name" />
+        @if (!isFirstNameValid()) {
+          <div class="flex text-error text-xs mt-0.5">
+            <i class="bi bi-exclamation-circle-fill mr-1"></i>
+            <div>Invalid first name</div>
+          </div>
+        }
+      </div>
+      <div>
+        <div class="text-sm mb-1">Last Name*</div>
+        <input class="input-height" [ngClass]="!isLastNameValid() ? '!border-error': null" nz-input [value]="lastName()" (input)="onInputChange($event, lastName)" placeholder="Enter your last name" />
+        @if (!isLastNameValid()) {
+          <div class="flex text-error text-xs mt-0.5">
+            <i class="bi bi-exclamation-circle-fill mr-1"></i>
+            <div>Invalid last name</div>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="flex justify-between mb-4">
+      <div class="mr-5">
+        <div class="text-sm mb-1">Email*</div>
+        <input class="input-height" [ngClass]="!isEmailValid() ? '!border-error': null" nz-input [value]="email()" (input)="onInputChange($event, email)" type="email" placeholder="Enter your email" />
+        @if (!isEmailValid()) {
+          <div class="flex text-error text-xs mt-0.5">
+            <i class="bi bi-exclamation-circle-fill mr-1"></i>
+            <div>Invalid email format</div>
+          </div>
+        }
+      </div>
+      <div>
+        <div class="text-sm mb-1">Phone Number</div>
+        <input class="input-height" [ngClass]="!isPhoneValid() ? '!border-error': null" nz-input [value]="phone()" (input)="onInputChange($event, phone)" placeholder="Enter your phone number" />
+        @if (!isPhoneValid()) {
+          <div class="flex text-error text-xs mt-0.5">
+            <i class="bi bi-exclamation-circle-fill mr-1"></i>
+            <div>Invalid phone number format</div>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="flex justify-between mb-8 password-div">
+      <div class="mr-5">
+        <div class="flex">
+          <div class="text-sm mb-1 mr-1.5">Password*</div>
+          <i
+            class="bi bi-info-circle"
+            nz-tooltip="Passord should be at least 8 characters long, contain at least 1 capital letter, 1 special character and 1 number">
+          </i>
+        </div>
+
+        <nz-input-group [ngClass]="!isPasswordValid() ? '!border-error': null" [nzSuffix]="passwordToggle">
+          <input
+            nz-input
+            nzSize="large"
+            [value]="password()"
+            (input)="onInputChange($event, password)"
+            [type]="passwordVisible ? 'text' : 'password'"
+            placeholder="Enter your password"
+          />
+        </nz-input-group>
+        <ng-template #passwordToggle>
+          <i
+            [class]="!passwordVisible ? 'bi bi-eye-slash' : 'bi bi-eye'"
+            (click)="togglePasswordVisibility()"
+            class="cursor-pointer toggle-password-icon"
+          ></i>
+        </ng-template>
+        @if (!isPasswordValid()) {
+          <div class="flex text-error text-xs mt-0.5">
+            <i class="bi bi-exclamation-circle-fill mr-1"></i>
+            <div>Invalid password format</div>
+          </div>
+        }
+      </div>
+      <div>
+        <div class="text-sm mb-1">Confirm Password*</div>
+        <input class="input-height" [ngClass]="!doPasswordsMatch() && isPasswordValid() ? '!border-error': null" nz-input [value]="confirmPassword()" (input)="onInputChange($event, confirmPassword)" type="password" placeholder="Confirm password" />
+        @if (!doPasswordsMatch() && isPasswordValid()) {
+          <div class="flex text-error text-xs mt-0.5">
+            <i class="bi bi-exclamation-circle-fill mr-1"></i>
+            <div>Password and Confirm Password do not match</div>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="flex justify-between">
+      <div class="mr-5">
+        <button routerLink="/auth/choose-signup-method" nz-button class="back-button !h-10">Back</button>
+      </div>
+      <div>
+        <button (click)="onSignUpClick()" nz-button nzType="primary" class="signin-button !h-10">Sign up</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-center mt-3">
+    <div class="text-secondary-7">Already have an account?</div>
+    <a routerLink="/auth/login" class="ml-1">Log in</a>
+  </div>
+</div>

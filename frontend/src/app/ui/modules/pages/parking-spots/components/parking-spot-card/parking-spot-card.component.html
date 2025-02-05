@@ -1,0 +1,23 @@
+<div (click)="cardClickEmitterFunction($event)" class="w-full h-full rounded-3xl cursor-pointer relative">
+  <div class="image-div">
+    <nz-carousel class="rounded-lg carousel">
+      <div nz-carousel-content *ngFor="let image of parkingSpot.images">
+        <img class="h-full" [src]='image' alt=""/>
+      </div>
+    </nz-carousel>
+  </div>
+
+  <div class="h-20">
+    <div class="flex justify-between items-center">
+      <div class="text-secondary-10 font-medium">{{parkingSpot.location.district}}, {{parkingSpot.location.city}}</div>
+      <div class="flex items-center text-secondary-10">
+        <i class="bi bi-star-fill"></i>
+        <div class="ml-1">{{parkingSpot.overallRating}}</div>
+      </div>
+    </div>
+    <div>{{parkingSpot.distance || "-"}} km away</div>
+    <div class="text-secondary-6 mb-3">{{parkingSpot.title}}</div>
+    <div class="text-secondary-10 font-medium">${{parkingSpot.pricePerHour}} per hour</div>
+  </div>
+  <i [ngClass]="parkingSpot.isFavorite ? 'text-favorite' : 'text-secondary-10'" class="bi bi-heart-fill absolute top-3 right-3 text-base cursor-pointer" (click)="favoriteClickEmitterFunction($event)"></i>
+</div>

@@ -1,0 +1,21 @@
+<div class="page-content">
+  @if (parkingSpots().length !== 0) {
+    <div class="grid-container">
+      @for (parkingSpot of parkingSpots(); track parkingSpot) {
+        <app-parking-spot-card class="grid-item"
+                               (cardClickEmitter)="navigateToDetailsPage($event)"
+                               (favoriteClickEmitter)="updateIsFavorite($event)"
+                               [parkingSpot]="parkingSpot"
+        >
+        </app-parking-spot-card>
+      }
+    </div>
+  } @else {
+    <div class="text-[22px] !w-full !h-full flex items-center justify-center text-secondary-6 ">
+      No Parking Spots
+    </div>
+  }
+</div>
+
+
+

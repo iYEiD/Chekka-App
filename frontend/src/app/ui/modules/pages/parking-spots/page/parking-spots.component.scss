@@ -1,0 +1,17 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  column-gap: 24px;
+  row-gap: 45px;
+  margin-top: 16px;
+}
+
+.grid-item {
+  aspect-ratio: 1/1;
+  max-width: 430px;
+  width: 100%;
+}
+
+.page-content {
+  padding-bottom: 40px !important;
+}

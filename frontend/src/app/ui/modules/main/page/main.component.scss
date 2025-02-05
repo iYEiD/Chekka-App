@@ -1,0 +1,64 @@
+.sticky-header {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.sticky-header.scrolled {
+  box-shadow: 0 5px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-dropdown {
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.user-dropdown:hover,
+.user-dropdown.open {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+::ng-deep .ant-dropdown {
+  width: 250px;
+}
+
+li {
+  height: 40px !important;
+  padding-left: 20px !important;
+}
+
+::ng-deep .ant-modal-header {
+  text-align: center !important;
+}
+
+::ng-deep .ant-modal-footer {
+  border-color: var(--secondary-color-2);
+}
+
+::ng-deep .ant-modal-content {
+  max-height: calc(100vh - 7em);
+  overflow: scroll;
+}
+
+.clear-all-button {
+  transition: background-color 0.2s ease-in-out;
+}
+
+.clear-all-button:hover {
+  background-color: var(--secondary-color-1) !important;
+}
+
+::ng-deep .ant-input-number-handler-wrap {
+  display: none;
+}
+
+::ng-deep .ant-segmented-item, .ant-segmented-item:hover {
+  padding: 8px 4px;
+}
+
+::ng-deep .ant-modal {
+  padding: 0 !important;
+  top: 50px !important;
+}
+
+::ng-deep .ant-input-number-input {
+  text-align: center;
+}
+
