@@ -1,1 +1,1 @@
-Fullstack AirBNB Clone. Laravel PHP + React
+Fullstack AirBNB Clone. Laravel PHP + Angular
